@@ -9,16 +9,16 @@
 <main>
     <div class="container-fluid">
         <h1 class="mt-4">Dashboard</h1>
-        <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item active">Dashboard</li>
+        <!-- wait! <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item active">Dashboard</li>-->
         </ol>
         <div class="card mb-4">
-            <div class="card-header">Products</div>
-            <div class="card-body">
+            <div class="card-header">Assets</div>
+            <div class="card-body"> 
                 <div class="card mb-4">
-                <div class="card-header">
+                <div class="card-header"> 
                     <i class="fas fa-table mr-1"></i>
-                    Products Table
+                    Consolidated Assets Table
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -28,28 +28,34 @@
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th>Product Name</th>
-                                    <th>Date</th>
-                                    <th>Actions</th>
+                                    <th>Site</th>
+                                    <th>Asset Type</th>
+                                    <th>Brand</th>
+                                    <th>Asset Tag</th>
+                                    <th>Serial Number</th>
+                                    <th>Location/User</th>
+                                    <th>Campaign/Vendor</th>
+                                    <th>Station Number</th>
+
+
                                 </tr>
                             </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>Product Name</th>
-                                    <th>Date</th>
-                                    <th>Actions</th>
-                                </tr>
+                           
                             </tfoot>
                             <tbody>
                                 {% for product in products %}
+                                
+                                <!-- This is for the table-->
                                 <tr>
-                                    <td>{{ product.product_id }}</td>
-                                    <td>{{ product.date_created.date() }}</td>
-                                    <td>
-                                        <a href="/delete-product/{{ product.product_id }}">Delete</a>
-                                        <br>
-                                        <a href="/update-product/{{ product.product_id }}">Update</a>  
-                                    </td>
+                                <!-- Site-->        <td>Makati</td>
+                                <!-- Asset Type-->  <td>Monitors</td>
+                                <!-- Brand-->       <td>Acer</td>
+                                <!-- Asset Tag-->   <td>Acer</td>
+                                <!-- Serial No.-->  <td> V1232Fs</td>
+                                <!--Location-->     <td> Storage Room</td>
+                                <!--Campaign-->     <td> IT</td>
+                                <!--Station Number--> <td>N/A</td>
+
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -60,54 +66,7 @@
                 </div>
             </div>
         </div>
-        <div class="card mb-4">
-            <div class="card-header">Locations</div>
-            <div class="card-body">
-                <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-table mr-1"></i>
-                    Locations Table
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        {% if locations|length < 1 %}
-                        <h4>There are no Locations, add one above</h4>
-                        {% else %}
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>Location Name</th>
-                                    <th>Date</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>Location Name</th>
-                                    <th>Date</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </tfoot>
-                            <tbody>
-                                {% for location in locations %}
-                                <tr>
-                                    <td>{{ location.location_id }}</td>
-                                    <td>{{ location.date_created.date() }}</td>
-                                    <td>
-                                        <a href="/delete-location/{{ location.location_id }}">Delete</a>
-                                        <br>
-                                        <a href="/update-location/{{ location.location_id }}">Update</a>  
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                        {% endif %}
-                </div>
-            </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
+       
 </main>
 {% endblock %}
