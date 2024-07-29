@@ -50,9 +50,19 @@
 
 .logo {
   width: 150px; /* Adjust width to fit your navbar */
-  height: 150px;
-  margin-left: calc(-50vw + (768px/2));
-  margin-right: calc(-50vw + (768px/2));
+}
+
+.header1 {
+  display: grid;
+  justify-content: space-between;
+}
+
+.headerInv {
+  grid-column: 1;
+}
+
+.submitCSV {
+  grid-column: 3;
 }
 
 .ml-auto {
