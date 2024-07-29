@@ -42,8 +42,59 @@ def assets():
     return render_template('assets.html')
 
 @app.route('/audit/', methods=["POST", "GET"])
-def assets():
+def audit():
     return render_template('audit.html')
+
+@app.route('/systemusers/', methods=["POST", "GET"])
+def system_users():
+    conn = get_db_connection()
+    users = conn.execute('SELECT * FROM user_accounts').fetchall()
+    conn.close()
+    return render_template('systemusers.html', users=users)
+
+@app.route("/add-user", methods=["POST"])
+def add_user():
+    email = request.form.get('email')
+    name = request.form.get('name')
+    password = request.form.get('password')
+    role = request.form.get('role')
+    
+    conn = get_db_connection()
+    conn.execute('INSERT INTO user_accounts (email, name, password, role) VALUES (?, ?, ?, ?)',
+                 (email, name, password, role))
+    conn.commit()
+    conn.close()
+    return redirect(url_for('systemusers'))
+
+
+@app.route("/delete-user/<email>")
+def delete_user(email):
+    conn = get_db_connection()
+    conn.execute('DELETE FROM user_accounts WHERE email = ?', (email,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for('systemusers'))
+
+
+@app.route("/edit-user/<email>", methods=["GET", "POST"])
+def edit_user(email):
+    conn = get_db_connection()
+    user = conn.execute('SELECT * FROM user_accounts WHERE email = ?', (email,)).fetchone()
+    
+    if request.method == "POST":
+        new_email = request.form.get('email')
+        name = request.form.get('name')
+        password = request.form.get('password')
+        role = request.form.get('role')
+        
+        conn.execute('UPDATE user_accounts SET email = ?, name = ?, password = ?, role = ? WHERE email = ?',
+                     (new_email, name, password, role, email))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('systemusers'))
+    
+    conn.close()
+    return render_template('edit_user.html', user=user)
 
 if __name__ == "__main__":
     app.run(debug=True)
