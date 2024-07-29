@@ -48,6 +48,21 @@
   box-sizing: border-box;
 }
 
+.logo {
+  width: 150px; /* Adjust width to fit your navbar */
+  height: 150px;
+  margin-left: calc(-50vw + (768px/2));
+  margin-right: calc(-50vw + (768px/2));
+}
+
+.ml-auto {
+  display: flex;
+  justify-content: space-between;
+  margin-left: auto; /* This pushes the logo to the far right */
+  align-items: end; /* Aligns the logo vertically in the center */
+}
+
+
 html {
   font-family: sans-serif;
   line-height: 1.15;

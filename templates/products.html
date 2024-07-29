@@ -8,7 +8,7 @@
 {% block content %}
 <main>
     <div class="container-fluid">
-        <h1 class="mt-4">Dashboard</h1>
+        <h1 class="mt-4">Inventory</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
             <li class="breadcrumb-item active">Inventory</li>
@@ -17,12 +17,12 @@
             <div class="card-header">Inventory</div>
             <div class="card-body">
                 <div class="card mb-4">
-                    <div class="card-header">New Product</div>
+                    <div class="card-header">New Asset</div>
                     <div class="card-body">
                         <form action="/products/" method="POST" id="product_form">
-                            <label for="product_name" class="col-form-label">Product Name</label>
+                            <label for="product_name" class="col-form-label">Asset Name</label>
                             <input type="text" name="product_name" id="product_name">
-                            <input id="submitProduct" value="Add Product" class="btn btn-primary">
+                            <input id="submitProduct" value="Add Asset" class="btn btn-primary">
                         </form>
                     </div>
                 </div>
@@ -34,23 +34,16 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         {% if products|length < 1 %}
-                        <h4>There are no Products, add one above</h4>
+                        <h4>There are no assets, add one above</h4>
                         {% else %}
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th>Product Name</th>
+                                    <th>Asset Name</th>
                                     <th>Date</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>Product Name</th>
-                                    <th>Date</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </tfoot>
                             <tbody>
                                 {% for product in products %}
                                 <tr>
