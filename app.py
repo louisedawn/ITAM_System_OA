@@ -1,5 +1,6 @@
-from flask import Flask, render_template, url_for, request, redirect
-
+from flask import Flask, render_template, url_for, request, redirect, flash
+import sqlite3
+import os
 
 app = Flask(__name__)
 
@@ -35,6 +36,14 @@ def login():
 @app.route("/index")
 def index():
     return render_template('index.html')
+
+@app.route('/assets/', methods=["POST", "GET"])
+def assets():
+    return render_template('assets.html')
+
+@app.route('/audit/', methods=["POST", "GET"])
+def assets():
+    return render_template('audit.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
