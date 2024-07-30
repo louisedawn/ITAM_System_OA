@@ -22,44 +22,44 @@
                 <div class="card mb-4">
                     <div class="card-header">New Asset</div>
                     <div class="inventory-assets">
-                        <form action="/products/" method="POST" id="product_form">
-                            <label for="site" class="col-form-label">Site</label>
+                        <form action="/add-asset/" method="POST" id="product_form">
+                            &emsp;<label for="site" class="col-form-label">Site</label>
                             <input type="text" name="asset_site" id="asset_site" required>
                             <label for="asset_type" class="col-form-label">Asset Type</label>
-                            <input type="text" name="asset_type" id="asset_type" required>
-                            <label for="asset_brand" class="col-form-label">Brand</label>
+                            <input type="text" name="asset_type" id="asset_type" required><br>
+                            &emsp;<label for="asset_brand" class="col-form-label">Brand</label>
                             <input type="text" name="asset_brand" id="asset_brand" required>
                             <label for="asset_tag" class="col-form-label">Asset Tag</label>
-                            <input type="text" name="asset_tag" id="asset_tag">
-                            <label for="serial_number" class="col-form-label">Serial Number</label>
+                            <input type="text" name="asset_tag" id="asset_tag"><br>
+                            &emsp;<label for="serial_number" class="col-form-label">Serial Number</label>
                             <input type="text" name="serial_number" id="serial_number">
                             <label for="location" class="col-form-label">Location/User</label>
-                            <input type="text" name="location" id="location">
-                            <label for="campaign_vendor" class="col-form-label">Campaign/Vendor</label>
+                            <input type="text" name="location" id="location"><br>
+                            &emsp;<label for="campaign_vendor" class="col-form-label">Campaign/Vendor</label>
                             <input type="text" name="campaign_vendor" id="campaign_vendor">
                             <label for="station_no" class="col-form-label">Station Number</label>
-                            <input type="text" name="station_no" id="station_no">
-                            <label for="pur_date" class="col-form-label">Purchased Date</label>
+                            <input type="text" name="station_no" id="station_no"><br>
+                            &emsp;<label for="pur_date" class="col-form-label">Purchased Date</label>
                             <input type="text" name="product_name" id="product_name">
                             <label for="model" class="col-form-label">Model</label>
-                            <input type="text" name="model" id="model">
-                            <label for="specs" class="col-form-label">Specifications</label>
+                            <input type="text" name="model" id="model"><br>
+                            &emsp;<label for="specs" class="col-form-label">Specifications</label>
                             <input type="text" name="specs" id="specs">
                             <label for="ram_slot" class="col-form-label">RAM Slot</label>
-                            <input type="text" name="ram_slot" id="ram_slot">
-                            <label for="capacity" class="col-form-label">Capacity</label>
+                            <input type="text" name="ram_slot" id="ram_slot"><br>
+                            &emsp;<label for="capacity" class="col-form-label">Capacity</label>
                             <input type="text" name="capacity" id="capacity">
                             <label for="type" class="col-form-label">Type</label>
-                            <input type="text" name="type" id="type">
-                            <label for="pc_name" class="col-form-label">PC Name</label>
+                            <input type="text" name="type" id="type"><br>
+                            &emsp;<label for="pc_name" class="col-form-label">PC Name</label>
                             <input type="text" name="pc_name" id="pc_name">
                             <label for="win_ver" class="col-form-label">Windows Version</label>
-                            <input type="text" name="win_ver" id="win_ver">
-                            <label for="last_upd" class="col-form-label">Last Update/Date Installed</label>
+                            <input type="text" name="win_ver" id="win_ver"><br>
+                            &emsp;<label for="last_upd" class="col-form-label">Last Update/Date Installed</label>
                             <input type="text" name="last_upd" id="last_upd">
                             <label for="com_by" class="col-form-label">Completed By:</label>
                             <input type="text" name="com_by" id="com_by">
-                            <input id="submitProduct" value="Add Asset" class="btn btn-primary">
+                            <input type="submit" value="Add Asset" class="btn btn-primary">
                         </form>
                     </div>
                 </div>

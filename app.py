@@ -41,9 +41,40 @@ def index():
 def assets():
     return render_template('assets.html')
 
+@app.route("/add-asset/", methods=["POST"])
+def add_asset():
+    site = request.form.get('site')
+    asset_type = request.form.get('asset_type')
+    brand = request.form.get('brand')
+    asset_tag = request.form.get('asset_tag')
+    serial_no = request.form.get('serial_no')
+    id = request.form.get('id')
+    location = request.form.get('location')
+    campaign = request.form.get('campaign')
+    station_no = request.form.get('station_no')
+    pur_date = request.form.get('pur_date')
+    model = request.form.get('model')
+    specs = request.form.get('specs')
+    pc_name = request.form.get('pc_name')
+    win_ver = request.form.get('win_ver')
+    last_upd = request.form.get('last_upd')
+    completed_by = request.form.get('completed_by')
+    
+    conn = get_db_connection()
+    conn.execute('INSERT INTO assets (site, asset_type, brand, asset_tag, serial_no, id, location, campaign, station_no, pur_date, model, specs, pc_name, win_ver, last_upd, completed_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                 (site, asset_type, brand, asset_tag, serial_no, id, location,
+                   campaign, station_no, pur_date, model, specs, pc_name, win_ver, last_upd, completed_by))
+    conn.commit()
+    conn.close()
+    return redirect(url_for('inventory'))
+
 @app.route('/audit/', methods=["POST", "GET"])
 def audit():
     return render_template('audit.html')
+
+@app.route('/inventory/', methods=["POST", "GET"])
+def inventory():
+    return render_template('inventory.html')
 
 @app.route('/systemusers/', methods=["POST", "GET"])
 def system_users():
