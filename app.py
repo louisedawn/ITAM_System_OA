@@ -180,5 +180,27 @@ def add_header(response):
     response.cache_control.must_revalidate = True
     return response
 
+@app.route('/confirm-delete/<email>', methods=["GET", "POST"])
+@login_required
+def confirm_delete(email):
+    if request.method == "POST":
+        # Check the password provided by the logged-in user
+        password = request.form.get('password')
+        conn = get_db_connection()
+        user = conn.execute('SELECT * FROM user_accounts WHERE email = ?', (session['user_email'],)).fetchone()
+
+        if user and password == user['password']:
+            # Password is correct; proceed to delete the user
+            conn.execute('DELETE FROM user_accounts WHERE email = ?', (email,))
+            conn.commit()
+            flash('User account deleted successfully!')
+            return redirect(url_for('system_users'))
+        else:
+            flash('Incorrect password. Please try again.')
+            return redirect(url_for('confirm_delete', email=email))
+
+    return render_template('confirm_delete.html', email=email)
+
+
 if __name__ == "__main__":
     app.run(debug=True)
