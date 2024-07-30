@@ -27,11 +27,21 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="asset_site">Site</label>
-                                        <input type="text" name="asset_site" id="asset_site" class="form-control" required>
+                                        <select name="asset_site" id="asset_site" class="form-control" required>
+                                            <option value="" disabled selected>Select Site</option>
+                                            <option value="Makati"> Makati </option>
+                                            <option value="Davao">Davao</option>
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="asset_type">Asset Type</label>
-                                        <input type="text" name="asset_type" id="asset_type" class="form-control" required>
+                                        <select name="asset_type" id="asset_type" class="form-control" required>
+                                            <option value="" disabled selected>Select Asset Type</option>
+                                            <option value="Monitor">Monitor</option>
+                                            <option value="Laptop">Laptop</option>
+                                            <option value="PC">PC</option>
+                                            <!-- Add more options as needed -->
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="asset_brand">Brand</label>
@@ -46,11 +56,18 @@
                                         <input type="text" name="serial_number" id="serial_number" class="form-control">
                                     </div>
                                     <div class="form-group">
-                                        <label for="location">Location/User</label>
-                                        <input type="text" name="location" id="location" class="form-control">
+                                        <label for="asset_site">Location</label>
+                                        <select name="asset_site" id="asset_site" class="form-control" required>
+                                            <option value="" disabled selected>Select Location</option>
+                                            <option value="7th Floor">  7th  Floor </option>
+                                            <option value="19th Floor"> 19th Floor </option>
+                                            <option value="21st Floor"> 21st Floor </option>
+                                            <option value="32nd Floor"> 32nd Floor </option>
+
+                                        </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="campaign_vendor">Campaign/Vendor</label>
+                                        <label for="campaign_vendor">Campaign</label>
                                         <input type="text" name="campaign_vendor" id="campaign_vendor" class="form-control">
                                     </div>
                                     <div class="form-group">
@@ -61,8 +78,9 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="purchased_date">Purchased Date</label>
-                                        <input type="text" name="purchased_date" id="purchased_date" class="form-control">
+                                        <input type="date" name="purchased_date" id="purchased_date" class="form-control">
                                     </div>
+                                    
                                     <div class="form-group">
                                         <label for="model">Model</label>
                                         <input type="text" name="model" id="model" class="form-control">
