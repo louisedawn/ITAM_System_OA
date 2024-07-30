@@ -20,6 +20,67 @@
             <div class="card-header"><b>Inventory</b></div>
             <div class="card-body">
                 <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-table mr-1"></i>
+                        <b>Inventory Table</b>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            {% if products|length < 1 %}
+                            <h4>There are no assets, add one above</h4>
+                            {% else %}
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Site</th>
+                                        <th>Asset Type</th>
+                                        <th>Brand</th>
+                                        <th>Asset Tag</th>
+                                        <th>Serial Number</th>
+                                        <th>Location/User</th>
+                                        <th>Campaign/Vendor</th>
+                                        <th>Station Number</th>
+                                        <th>Purchased Date</th>
+                                        <th>Model</th>
+                                        <th>Specifications</th>
+                                        <th>PC Name</th>
+                                        <th>Windows Version</th>
+                                        <th>Last Update/Date Installed</th>
+                                        <th>Completed By</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for product in products %}
+                                    <tr>
+                                        <td>{{ product.site }}</td>
+                                        <td>{{ product.asset_type }}</td>
+                                        <td>{{ product.brand }}</td>
+                                        <td>{{ product.asset_tag }}</td>
+                                        <td>{{ product.serial_number }}</td>
+                                        <td>{{ product.location }}</td>
+                                        <td>{{ product.campaign_vendor }}</td>
+                                        <td>{{ product.station_number }}</td>
+                                        <td>{{ product.purchased_date }}</td>
+                                        <td>{{ product.model }}</td>
+                                        <td>{{ product.specifications }}</td>
+                                        <td>{{ product.pc_name }}</td>
+                                        <td>{{ product.windows_version }}</td>
+                                        <td>{{ product.last_update }}</td>
+                                        <td>{{ product.completed_by }}</td>
+                                        <td>
+                                            <a href="/delete-product/{{ product.product_id }}" class="btn btn-danger btn-sm">Delete</a>
+                                            <a href="/update-product/{{ product.product_id }}" class="btn btn-secondary btn-sm">Update</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
                     <div class="card-header"> <b>Add New Asset</b></div>
                     <div class="card-body">
                         <form action="/add-asset/" method="POST" id="product_form">
@@ -124,67 +185,6 @@
 
                             </div>
                         </form>
-                    </div>
-                </div>
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <i class="fas fa-table mr-1"></i>
-                        <b>Inventory Table</b>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            {% if products|length < 1 %}
-                            <h4>There are no assets, add one above</h4>
-                            {% else %}
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th>Site</th>
-                                        <th>Asset Type</th>
-                                        <th>Brand</th>
-                                        <th>Asset Tag</th>
-                                        <th>Serial Number</th>
-                                        <th>Location/User</th>
-                                        <th>Campaign/Vendor</th>
-                                        <th>Station Number</th>
-                                        <th>Purchased Date</th>
-                                        <th>Model</th>
-                                        <th>Specifications</th>
-                                        <th>PC Name</th>
-                                        <th>Windows Version</th>
-                                        <th>Last Update/Date Installed</th>
-                                        <th>Completed By</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for product in products %}
-                                    <tr>
-                                        <td>{{ product.site }}</td>
-                                        <td>{{ product.asset_type }}</td>
-                                        <td>{{ product.brand }}</td>
-                                        <td>{{ product.asset_tag }}</td>
-                                        <td>{{ product.serial_number }}</td>
-                                        <td>{{ product.location }}</td>
-                                        <td>{{ product.campaign_vendor }}</td>
-                                        <td>{{ product.station_number }}</td>
-                                        <td>{{ product.purchased_date }}</td>
-                                        <td>{{ product.model }}</td>
-                                        <td>{{ product.specifications }}</td>
-                                        <td>{{ product.pc_name }}</td>
-                                        <td>{{ product.windows_version }}</td>
-                                        <td>{{ product.last_update }}</td>
-                                        <td>{{ product.completed_by }}</td>
-                                        <td>
-                                            <a href="/delete-product/{{ product.product_id }}" class="btn btn-danger btn-sm">Delete</a>
-                                            <a href="/update-product/{{ product.product_id }}" class="btn btn-secondary btn-sm">Update</a>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                            {% endif %}
-                        </div>
                     </div>
                 </div>
             </div>
