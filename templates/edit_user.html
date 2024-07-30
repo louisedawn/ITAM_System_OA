@@ -9,7 +9,7 @@
     <div class="container-fluid">
         <h1 class="mt-4">Edit User</h1>
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="/index">Dashboard</a></li>
             <li class="breadcrumb-item"><a href="/system-users">System Users</a></li>
             <li class="breadcrumb-item active">Edit User</li>
         </ol>
@@ -24,7 +24,7 @@
                     <label for="password" class="col-form-label">Password</label>
                     <input type="text" name="password" id="password" value="{{ user.password }}" required>
                     <label for="role" class="col-form-label">Role</label>
-                    <input type="text" name="role" id="role" value="{{ user.role }}" required>
+                    <input type="text" name="role" id="role" value="{{ user.user_role }}" required>
                     <input type="submit" value="Update User" class="btn btn-primary">
                 </form>
             </div>

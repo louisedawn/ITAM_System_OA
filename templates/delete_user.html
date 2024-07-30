@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Delete User</title>
+{% endblock %}
+
+{% block content %}
+<main>
+    <div class="container-fluid">
+        <h1 class="mt-4">Delete User</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="/index">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="/system-users">System Users</a></li>
+            <li class="breadcrumb-item active">Delete User</li>
+        </ol>
+        <div class="card mb-4">
+            <div class="card-header">Delete User</div>
+            <div class="card-body">
+                <form action="/delete-user/{{ user.email }}" method="POST">
+                    <p>Are you sure you want to delete the user <strong>{{ user.name }}</strong> with email <strong>{{ user.email }}</strong>?</p>
+                    <input type="submit" value="Delete User" class="btn btn-danger">
+                    <a href="/system-users" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
