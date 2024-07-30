@@ -48,13 +48,13 @@
                             Audit Trail (History Log)
                         </a>
                         <br>
-                        <a>
-                        <div class="sb-sidenav-menu-heading">Erika Bisoy (Super-Admin)</div>
-                        <a class="nav-link" href="/logout">
-                            <div class="sb-nav-link-icon"><i class="fas fa-sign-out-alt"></i></div>
-                            Logout
-                        </a>
-                        </a>
+                        {% if 'user_email' in session %}
+                            <div class="sb-sidenav-menu-heading">{{ session['user_email'] }}</div>
+                            <a class="nav-link" href="/logout">
+                                <div class="sb-nav-link-icon"><i class="fas fa-sign-out-alt"></i></div>
+                                Logout
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
             </nav>

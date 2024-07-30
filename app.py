@@ -1,6 +1,7 @@
 from flask import Flask, render_template, url_for, request, redirect, flash, session
 import sqlite3
 import os
+from functools import wraps
 
 app = Flask(__name__)
 
@@ -12,8 +13,19 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_email' not in session:
+            flash('Please log in to access this page.')
+            return redirect(url_for('home'))  # Redirect to the login page
+        return f(*args, **kwargs)
+    return decorated_function
+
 @app.route("/", methods=["GET"])
 def home():
+    if 'user_email' in session:
+        return redirect(url_for('index'))  # Redirect to the index if already logged in
     return render_template('login.html')
 
 @app.route("/login", methods=["POST"])
@@ -34,14 +46,17 @@ def login():
         return redirect(url_for('home'))
 
 @app.route("/index")
+@login_required
 def index():
     return render_template('index.html')
 
 @app.route('/assets/', methods=["POST", "GET"])
+@login_required
 def assets():
     return render_template('assets.html')
 
 @app.route("/add-asset/", methods=["POST"])
+@login_required
 def add_asset():
     site = request.form.get('site')
     asset_type = request.form.get('asset_type')
@@ -69,14 +84,17 @@ def add_asset():
     return redirect(url_for('inventory'))
 
 @app.route('/audit/', methods=["POST", "GET"])
+@login_required
 def audit():
     return render_template('audit.html')
 
 @app.route('/inventory/', methods=["POST", "GET"])
+@login_required
 def inventory():
     return render_template('inventory.html')
 
 @app.route('/systemusers/', methods=["GET"])
+@login_required
 def system_users():
     conn = get_db_connection()
     users = conn.execute('SELECT * FROM user_accounts').fetchall()
@@ -84,6 +102,7 @@ def system_users():
     return render_template('systemusers.html', users=users)
 
 @app.route('/add-user', methods=["POST"])
+@login_required
 def add_user():
     email = request.form.get('email')
     name = request.form.get('name')
@@ -99,6 +118,48 @@ def add_user():
     flash('New user account added successfully!')
     return redirect(url_for('system_users'))
 
+@app.route('/edit_user/<email>', methods=["GET", "POST"])
+@login_required
+def edit_user(email):
+    conn = get_db_connection()
+    if request.method == "POST":
+        name = request.form.get('name')
+        password = request.form.get('password')
+        role = request.form.get('role')
+        
+        conn.execute('UPDATE user_accounts SET name = ?, password = ?, user_role = ? WHERE email = ?',
+                     (name, password, role, email))
+        conn.commit()
+        conn.close()
+        flash('User account updated successfully!')
+        return redirect(url_for('system_users'))
+    
+    user = conn.execute('SELECT * FROM user_accounts WHERE email = ?', (email,)).fetchone()
+    conn.close()
+    return render_template('edit_user.html', user=user)
+
+@app.route('/delete-user/<email>', methods=["GET", "POST"])
+@login_required
+def delete_user(email):
+    conn = get_db_connection()
+    conn.execute('DELETE FROM user_accounts WHERE email = ?', (email,))
+    conn.commit()
+    conn.close()
+    flash('User account deleted successfully!')
+    return redirect(url_for('system_users'))
+
+@app.route("/logout")
+def logout():
+    session.pop('user_email', None)  # Remove user_email from the session
+    flash('You have successfully logged out!')
+    return redirect(url_for('home'))
+
+@app.after_request
+def add_header(response):
+    response.cache_control.no_cache = True
+    response.cache_control.no_store = True
+    response.cache_control.must_revalidate = True
+    return response
 
 if __name__ == "__main__":
     app.run(debug=True)
