@@ -121,24 +121,41 @@ def add_user():
     return redirect(url_for('system_users'))
 
 @app.route('/edit_user/<email>', methods=["GET", "POST"])
-@login_required
 def edit_user(email):
     conn = get_db_connection()
+    user = conn.execute('SELECT * FROM user_accounts WHERE email = ?', (email,)).fetchone()
+
     if request.method == "POST":
-        name = request.form.get('name')
-        password = request.form.get('password')
-        role = request.form.get('role')
-        
+        current_password = request.form.get('current_password')
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+        super_admin_password = request.form.get('super_admin_password')
+
+        # Check if current password is correct
+        if current_password != user['password']:
+            flash('Current password is incorrect.')
+            return render_template('edit_user.html', user=user)
+
+        # Check if super admin password is correct (Assuming the super-admin's email is known)
+        super_admin = conn.execute('SELECT * FROM user_accounts WHERE user_role = "Super-Admin"').fetchone()
+        if super_admin_password != super_admin['password']:
+            flash('Super-Admin password is incorrect.')
+            return render_template('edit_user.html', user=user)
+
+        # Check if new password and confirm password match
+        if new_password != confirm_password:
+            flash('New password and confirmation do not match.')
+            return render_template('edit_user.html', user=user)
+
+        # Update user details in the database
         conn.execute('UPDATE user_accounts SET name = ?, password = ?, user_role = ? WHERE email = ?',
-                     (name, password, role, email))
+                     (request.form.get('name'), new_password, request.form.get('role'), email))
         conn.commit()
-        conn.close()
         flash('User account updated successfully!')
         return redirect(url_for('system_users'))
-    
-    user = conn.execute('SELECT * FROM user_accounts WHERE email = ?', (email,)).fetchone()
-    conn.close()
+
     return render_template('edit_user.html', user=user)
+
 
 @app.route('/delete-user/<email>', methods=["GET", "POST"])
 @login_required

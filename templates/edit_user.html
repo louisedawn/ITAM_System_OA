@@ -22,23 +22,35 @@
                             <input type="text" class="form-control form-control-sm" name="name" id="name" value="{{ user.name }}" required>
                         </div>
                     </div>
+
                     <div class="form-group row mb-3">
-                        <label for="password" class="col-sm-2 col-form-label">Password</label>
+                        <label for="current_password" class="col-sm-2 col-form-label">Current Password</label>
                         <div class="col-sm-4">
-                            <input type="password" class="form-control form-control-sm" name="password" id="password" value="{{ user.password }}" required>
+                            <input type="password" class="form-control form-control-sm" name="current_password" id="current_password" required>
                         </div>
                     </div>
+
                     <div class="form-group row mb-3">
-                        <label for="role" class="col-sm-2 col-form-label">Role</label>
+                        <label for="new_password" class="col-sm-2 col-form-label">New Password</label>
                         <div class="col-sm-4">
-                            <select class="form-control form-control-sm" name="role" id="role" required>
-                                <option value="super_admin" {% if user.user_role == 'super_admin' %}selected{% endif %}>Super-Admin</option>
-                                <option value="admin" {% if user.user_role == 'admin' %}selected{% endif %}>Admin</option>
-                                <option value="super_user" {% if user.user_role == 'super_user' %}selected{% endif %}>Super-User</option>
-                                <option value="user" {% if user.user_role == 'user' %}selected{% endif %}>User</option>
-                            </select>
+                            <input type="password" class="form-control form-control-sm" name="new_password" id="new_password" required>
                         </div>
                     </div>
+
+                    <div class="form-group row mb-3">
+                        <label for="confirm_password" class="col-sm-2 col-form-label">Confirm New Password</label>
+                        <div class="col-sm-4">
+                            <input type="password" class="form-control form-control-sm" name="confirm_password" id="confirm_password" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group row mb-3">
+                        <label for="super_admin_password" class="col-sm-2 col-form-label">Enter Super-Admin Password</label>
+                        <div class="col-sm-4">
+                            <input type="password" class="form-control form-control-sm" name="super_admin_password" id="super_admin_password" required>
+                        </div>
+                    </div>
+
                     <div class="form-group row">
                         <div class="col-sm-4 offset-sm-2">
                             <button type="submit" class="btn btn-primary btn-sm">Update User</button>
@@ -49,4 +61,16 @@
         </div>
     </div>
 </main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set a timer to remove flash messages after 5 seconds
+        setTimeout(function() {
+            var flashMessages = document.getElementById('flash-messages');
+            if (flashMessages) {
+                flashMessages.style.display = 'none'; // Hide the flash messages
+            }
+        }, 5000); // 5000 milliseconds = 5 seconds
+    });
+</script>
 {% endblock %}
