@@ -40,6 +40,8 @@ def login():
     
     if user:
         session['user_email'] = email  # Store the logged-in user email in session
+        session['user_name'] = user['name']
+        session['user_role'] = user['user_role']
         return redirect(url_for('index'))
     else:
         flash('Invalid email or password! Please try again!')
