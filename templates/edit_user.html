@@ -8,27 +8,31 @@
 <main>
     <div class="container-fluid">
         <h1 class="mt-4">Edit User</h1>
-        <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item"><a href="/index">Dashboard</a></li>
-            <li class="breadcrumb-item"><a href="/system-users">System Users</a></li>
-            <li class="breadcrumb-item active">Edit User</li>
-        </ol>
-        <div class="card mb-4">
-            <div class="card-header">Edit User</div>
-            <div class="card-body">
-                <form action="/edit-user/{{ user.email }}" method="POST">
-                    <label for="email" class="col-form-label">Email</label>
-                    <input type="text" name="email" id="email" value="{{ user.email }}" required>
-                    <label for="name" class="col-form-label">Name</label>
-                    <input type="text" name="name" id="name" value="{{ user.name }}" required>
-                    <label for="password" class="col-form-label">Password</label>
-                    <input type="text" name="password" id="password" value="{{ user.password }}" required>
-                    <label for="role" class="col-form-label">Role</label>
-                    <input type="text" name="role" id="role" value="{{ user.user_role }}" required>
-                    <input type="submit" value="Update User" class="btn btn-primary">
-                </form>
+        <form action="/edit_user/{{ user.email }}" method="POST">
+            <div class="form-group row mb-3">
+                <label for="name" class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control form-control-sm" name="name" id="name" value="{{ user.name }}" required>
+                </div>
             </div>
-        </div>
+            <div class="form-group row mb-3">
+                <label for="password" class="col-sm-2 col-form-label">Password</label>
+                <div class="col-sm-4">
+                    <input type="password" class="form-control form-control-sm" name="password" id="password" required>
+                </div>
+            </div>
+            <div class="form-group row mb-3">
+                <label for="role" class="col-sm-2 col-form-label">Role</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control form-control-sm" name="role" id="role" value="{{ user.user_role }}" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-4 offset-sm-2">
+                    <button type="submit" class="btn btn-primary btn-sm">Update User</button>
+                </div>
+            </div>
+        </form>
     </div>
 </main>
 {% endblock %}
