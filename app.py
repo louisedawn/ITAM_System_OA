@@ -98,11 +98,6 @@ def inventory():
 def audit():
     return render_template('audit.html')
 
-@app.route('/inventory/', methods=["POST", "GET"])
-@login_required
-def inventory():
-    return render_template('inventory.html')
-
 @app.route('/request/', methods=["POST", "GET"])
 @login_required
 def request_inventory():

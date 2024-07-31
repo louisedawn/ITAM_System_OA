@@ -49,7 +49,6 @@
                                         <th>Windows Version</th>
                                         <th>Last Update/Date Installed</th>
                                         <th>Completed By</th>
-                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -72,10 +71,6 @@
                                         <td>{{ asset.win_ver }}</td>
                                         <td>{{ asset.last_upd }}</td>
                                         <td>{{ asset.completed_by }}</td>
-                                        <!--<td>
-                                            <a href="/delete-product/{{ product.product_id }}" class="btn btn-danger btn-sm">Delete</a>
-                                            <a href="/update-product/{{ product.product_id }}" class="btn btn-secondary btn-sm">Update</a>
-                                        --></td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
