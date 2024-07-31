@@ -10,7 +10,7 @@
     <div class="container">
         <div class="form">
             <header><img src="{{ url_for('static', filename='logo.png') }}" alt="Logo"></header>
-            <h1> IT Asset Management System </h1>
+            <h1><b> IT Asset Management System </b></h1>
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
                     <p style="color: red;">{{ messages[0] }}</p>

@@ -10,9 +10,12 @@
 </head>
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            
             <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
             <a class="navbar-brand" href="/index">IT Asset Management System</a>
             <!--for the logo-->
+            <a class="navbar-brand" href="/index"><b>IT Asset Management System</b></a>
+
             <div class="ml-auto">
                 <a href="/">
                     <img class="logo" src="{{ url_for('static', filename='logoSide.png') }}" alt="Logo">
@@ -32,8 +35,14 @@
                             Dashboard
                         </a>
                         <div class="sb-sidenav-menu-heading">Sections</div>
-                        {% if session['user_role'] in ['Super-Admin', 'Admin', 'Super-User'] %}
+                        {% if session['user_role'] in ['Super-Admin', 'Admin'] %}
                         <a class="nav-link" href="/inventory/">
+                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                            Inventory
+                        </a>
+                        {% endif %}
+                        {% if session['user_role'] in ['Super-User'] %}
+                        <a class="nav-link" href="/request/">
                             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                             Inventory
                         </a>
