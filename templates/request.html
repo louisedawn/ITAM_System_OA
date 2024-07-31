@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>IT Asset Management System</title>
+{% endblock %}
+
+{% block content %}
+<main>
+    <div class="container-fluid">
+        <div class="header1 mb-4 d-flex justify-content-between align-items-center">
+            <h1 id="headerInv" class="mt-4"><i class="fas fa-clipboard-check"></i> Add/Move Asset for Approval</h1>
+        </div>
+        
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="/index">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Add/Move Asset for Approval</li>
+        </ol>
+        <div class="card mb-4">
+            <div class="card-header"><b>Request</b></div>
+            <div class="card-body">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-table mr-1"></i>
+                        <b>Inventory Table</b>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            {% if products|length < 1 %}
+                            <h4>There are no assets, add one above</h4>
+                            {% else %}
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Site</th>
+                                        <th>Asset Type</th>
+                                        <th>Brand</th>
+                                        <th>Asset Tag</th>
+                                        <th>Serial Number</th>
+                                        <th>Location/User</th>
+                                        <th>Campaign/Vendor</th>
+                                        <th>Station Number</th>
+                                        <th>Purchased Date</th>
+                                        <th>Model</th>
+                                        <th>Specifications</th>
+                                        <th>PC Name</th>
+                                        <th>Windows Version</th>
+                                        <th>Last Update/Date Installed</th>
+                                        <th>Completed By</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for product in products %}
+                                    <tr>
+                                        <td>{{ product.site }}</td>
+                                        <td>{{ product.asset_type }}</td>
+                                        <td>{{ product.brand }}</td>
+                                        <td>{{ product.asset_tag }}</td>
+                                        <td>{{ product.serial_number }}</td>
+                                        <td>{{ product.location }}</td>
+                                        <td>{{ product.campaign_vendor }}</td>
+                                        <td>{{ product.station_number }}</td>
+                                        <td>{{ product.purchased_date }}</td>
+                                        <td>{{ product.model }}</td>
+                                        <td>{{ product.specifications }}</td>
+                                        <td>{{ product.pc_name }}</td>
+                                        <td>{{ product.windows_version }}</td>
+                                        <td>{{ product.last_update }}</td>
+                                        <td>{{ product.completed_by }}</td>
+                                        <td>
+                                            <a href="/delete-product/{{ product.product_id }}" class="btn btn-danger btn-sm">Delete</a>
+                                            <a href="/update-product/{{ product.product_id }}" class="btn btn-secondary btn-sm">Update</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header"> <b>Add New Asset</b></div>
+                    <div class="card-body">
+                        <form action="/add-asset/" method="POST" id="product_form">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="asset_site">Site</label>
+                                        <select name="asset_site" id="asset_site" class="form-control" required>
+                                            <option value="" disabled selected>Select Site</option>
+                                            <option value="Makati"> Makati </option>
+                                            <option value="Davao">Davao</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="asset_type">Asset Type</label>
+                                        <select name="asset_type" id="asset_type" class="form-control" required>
+                                            <option value="" disabled selected>Select Asset Type</option>
+                                            <option value="Monitor">Monitor</option>
+                                            <option value="Laptop">Laptop</option>
+                                            <option value="PC">Desktop</option>
+                                            <option value="PC">Headset</option>
+                                            <!-- Add more options as needed -->
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="asset_brand">Brand</label>
+                                        <input type="text" name="asset_brand" id="asset_brand" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="asset_tag">Asset Tag</label>
+                                        <input type="text" name="asset_tag" id="asset_tag" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="serial_number">Serial Number</label>
+                                        <input type="text" name="serial_number" id="serial_number" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="asset_site">Location</label>
+                                        <select name="asset_site" id="asset_site" class="form-control" required>
+                                            <option value="" disabled selected>Select Location</option>
+                                            <option value="7th Floor">  7th  Floor </option>
+                                            <option value="19th Floor"> 19th Floor </option>
+                                            <option value="21st Floor"> 21st Floor </option>
+                                            <option value="32nd Floor"> 32nd Floor </option>
+
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="campaign_vendor">Campaign</label>
+                                        <input type="text" name="campaign_vendor" id="campaign_vendor" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="station_no">Station Number</label>
+                                        <input type="text" name="station_no" id="station_no" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="last_upd">Last Update/Date Installed</label>
+                                        <input type="text" name="last_upd" id="last_upd" class="form-control">
+                                    </div>
+                                    
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="purchased_date">Purchased Date</label>
+                                        <input type="date" name="purchased_date" id="purchased_date" class="form-control">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="model">Model</label>
+                                        <input type="text" name="model" id="model" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="specs">Specifications</label>
+                                        <input type="text" name="specs" id="specs" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ram_slot">RAM Slot</label>
+                                        <input type="text" name="ram_slot" id="ram_slot" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="capacity">Capacity</label>
+                                        <input type="text" name="capacity" id="capacity" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="type">Type</label>
+                                        <input type="text" name="type" id="type" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="pc_name">PC Name</label>
+                                        <input type="text" name="pc_name" id="pc_name" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="win_ver">Windows Version</label>
+                                        <input type="text" name="win_ver" id="win_ver" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="com_by">Completed By</label>
+                                        <input type="text" name="com_by" id="com_by" class="form-control">
+
+                                    </div>
+                                    <button type="submit" class="btn btn-primary mt-3">Add Asset</button>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
