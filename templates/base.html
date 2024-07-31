@@ -10,9 +10,15 @@
 </head>
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            
             <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
-            <a class="navbar-brand" href="/index">IT Asset Management System</a>
-            <div class="ml-auto"><img class="logo" href="/" src="static/logoSide.png" alt="Logo">
+            <a class="navbar-brand" href="/index"><b>IT Asset Management System</b></a>
+            <div class="ml-auto">
+                <a href="/">
+                    <img class="logo" src="{{ url_for('static', filename='logoSide.png') }}" alt="Logo">
+                </a>
+            </div>
+            
                 
             </div>
     </nav>
@@ -27,34 +33,48 @@
                             Dashboard
                         </a>
                         <div class="sb-sidenav-menu-heading">Sections</div>
+                        {% if session['user_role'] in ['Super-Admin', 'Admin'] %}
                         <a class="nav-link" href="/inventory/">
                             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                             Inventory
                         </a>
+                        {% endif %}
+                        {% if session['user_role'] in ['Super-User'] %}
+                        <a class="nav-link" href="/request/">
+                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                            Inventory
+                        </a>
+                        {% endif %}
                         <a class="nav-link" href="/assets/">
                             <div class="sb-nav-link-icon"><i class="fas fa-hands"></i></div>
                             Assets Care/FAQs
                         </a>
+                        {% if session['user_role'] in ['Super-Admin'] %}
                         <a class="nav-link" href="/systemusers/">
                             <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
                             System Users
                         </a>
+                        {% endif %}
                         <a class="nav-link" href="/products/">
                             <div class="sb-nav-link-icon"><i class="fas fa-laptop"></i></div>
                             Workstations
                         </a>
+                        {% if session['user_role'] in ['Super-Admin', 'Admin'] %}
                         <a class="nav-link" href="/audit/">
                             <div class="sb-nav-link-icon"><i class="fas fa-clock"></i></div>
                             Audit Trail (History Log)
                         </a>
-                        <br>
-                        {% if 'user_email' in session %}
-                        <div class="sb-sidenav-menu-heading">{{ session.get('user_name', 'Guest') }} ({{ session.get('user_role', 'Role') }})</div>
-                            <a class="nav-link" href="/logout">
-                                <div class="sb-nav-link-icon"><i class="fas fa-sign-out-alt"></i></div>
-                                Logout
-                            </a>
                         {% endif %}
+                         <!--logout-->
+                         {% if 'user_email' in session %}
+                         <div class="sb-sidenav-menu-heading" style="color: #1d93d0;">{{ session.get('user_name', 'Guest') }} ({{ session.get('user_role', 'Role') }})</div>
+                         <a class="nav-link" href="/logout">
+                             <div class="sb-nav-link-icon"><i class="fas fa-sign-out-alt"></i></div>
+                             Logout
+                         </a>
+                     {% endif %}
+                     <!--end of this logout code-->
+                     
                     </div>
                 </div>
             </nav>
