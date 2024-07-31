@@ -37,12 +37,13 @@
                                         <th>Brand</th>
                                         <th>Asset Tag</th>
                                         <th>Serial Number</th>
-                                        <th>Location/User</th>
-                                        <th>Campaign/Vendor</th>
+                                        <th>Location</th>
+                                        <th>Campaign</th>
                                         <th>Station Number</th>
                                         <th>Purchased Date</th>
                                         <th>Model</th>
                                         <th>Specifications</th>
+                                        <th>RAM Slot</th>
                                         <th>PC Name</th>
                                         <th>Windows Version</th>
                                         <th>Last Update/Date Installed</th>
@@ -53,25 +54,23 @@
                                 <tbody>
                                     {% for product in products %}
                                     <tr>
-                                        <td>{{ product.site }}</td>
-                                        <td>{{ product.asset_type }}</td>
-                                        <td>{{ product.brand }}</td>
-                                        <td>{{ product.asset_tag }}</td>
-                                        <td>{{ product.serial_number }}</td>
-                                        <td>{{ product.location }}</td>
-                                        <td>{{ product.campaign_vendor }}</td>
-                                        <td>{{ product.station_number }}</td>
-                                        <td>{{ product.purchased_date }}</td>
-                                        <td>{{ product.model }}</td>
-                                        <td>{{ product.specifications }}</td>
-                                        <td>{{ product.pc_name }}</td>
-                                        <td>{{ product.windows_version }}</td>
-                                        <td>{{ product.last_update }}</td>
-                                        <td>{{ product.completed_by }}</td>
-                                        <td>
-                                            <a href="/delete-product/{{ product.product_id }}" class="btn btn-danger btn-sm">Delete</a>
-                                            <a href="/update-product/{{ product.product_id }}" class="btn btn-secondary btn-sm">Update</a>
-                                        </td>
+                                        <td>{{ asset.id }}</td>
+                                        <td>{{ asset.site }}</td>
+                                        <td>{{ asset.asset_type }}</td>
+                                        <td>{{ asset.brand }}</td>
+                                        <td>{{ asset.asset_tag }}</td>
+                                        <td>{{ asset.serial_no }}</td>
+                                        <td>{{ asset.location }}</td>
+                                        <td>{{ asset.campaign }}</td>
+                                        <td>{{ asset.station_no }}</td>
+                                        <td>{{ asset.pur_date }}</td>
+                                        <td>{{ asset.model }}</td>
+                                        <td>{{ asset.specs }}</td>
+                                        <td>{{ asset.ram_slot }}</td>
+                                        <td>{{ asset.pc_name }}</td>
+                                        <td>{{ asset.win_ver }}</td>
+                                        <td>{{ asset.last_upd }}</td>
+                                        <td>{{ asset.completed_by }}</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -102,6 +101,7 @@
                                             <option value="Monitor">Monitor 2</option>
                                             <option value="Laptop">Laptop</option>
                                             <option value="PC">Desktop</option>
+                                            <option value="Headset">Headset</option>
                                             <option value="PC">Headset</option>
                                             <!-- Add more options as needed -->
                                         </select>
@@ -164,10 +164,6 @@
                                     <div class="form-group">
                                         <label for="capacity">Capacity</label>
                                         <input type="text" name="capacity" id="capacity" class="form-control">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="type">RAM Type</label>
-                                        <input type="text" name="type" id="type" class="form-control">
                                     </div>
                                     <div class="form-group">
                                         <label for="pc_name">PC Name</label>
