@@ -55,7 +55,8 @@
                         {% endif %}
                         <br>
                         {% if 'user_email' in session %}
-                        <div class="sb-sidenav-menu-heading">{{ session.get('user_name', 'Guest') }} ({{ session.get('user_role', 'Role') }})</div>
+                       <!--#1d93d0--> 
+                        <div class="sb-sidenav-menu-heading" style="color: #1d93d0;">{{ session.get('user_name', 'Guest') }} ({{ session.get('user_role', 'Role') }})</div>
                             <a class="nav-link" href="/logout">
                                 <div class="sb-nav-link-icon"><i class="fas fa-sign-out-alt"></i></div>
                                 Logout
