@@ -12,14 +12,16 @@
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             
             <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
+            <a class="navbar-brand" href="/index">IT Asset Management System</a>
+            <!--for the logo-->
             <a class="navbar-brand" href="/index"><b>IT Asset Management System</b></a>
+
             <div class="ml-auto">
                 <a href="/">
                     <img class="logo" src="{{ url_for('static', filename='logoSide.png') }}" alt="Logo">
                 </a>
             </div>
-            
-                
+            <!--end logo-->
             </div>
     </nav>
     <div id="layoutSidenav">
@@ -65,16 +67,18 @@
                             Audit Trail (History Log)
                         </a>
                         {% endif %}
-                         <!--logout-->
-                         {% if 'user_email' in session %}
-                         <div class="sb-sidenav-menu-heading" style="color: #1d93d0;">{{ session.get('user_name', 'Guest') }} ({{ session.get('user_role', 'Role') }})</div>
-                         <a class="nav-link" href="/logout">
-                             <div class="sb-nav-link-icon"><i class="fas fa-sign-out-alt"></i></div>
-                             Logout
-                         </a>
-                     {% endif %}
-                     <!--end of this logout code-->
-                     
+                        <!-- Logout Section -->
+                        <footer class="footer fixed-bottom">
+                        {% if 'user_email' in session %}
+                        <div class="sb-sidenav-menu-heading" style="color: #1d93d0;">{{ session.get('user_name', 'Guest') }} ({{ session.get('user_role', 'Role') }})</div>
+                        <a class="nav-link logout-link" href="/logout">
+                            <div class="sb-nav-link-icon"><i class="fas fa-sign-out-alt"></i></div>
+                            Logout
+                        </a>
+                        {% endif %}
+                    </footer>
+                    <!-- End of Logout Section -->
+                        
                     </div>
                 </div>
             </nav>

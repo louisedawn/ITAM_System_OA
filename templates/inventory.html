@@ -28,13 +28,12 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            {% if assets|length < 1 %}
+                            {% if products|length < 1 %}
                             <h4>There are no assets, add one above</h4>
                             {% else %}
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
                                         <th>Site</th>
                                         <th>Asset Type</th>
                                         <th>Brand</th>
@@ -48,16 +47,15 @@
                                         <th>Model</th>
                                         <th>Specifications</th>
                                         <th>RAM Slot</th>
-                                        <th>RAM Capacity</th>
-                                        <th>RAM Type</th>
                                         <th>PC Name</th>
                                         <th>Windows Version</th>
                                         <th>Last Update/Date Installed</th>
                                         <th>Completed By</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for asset in assets %}
+                                    {% for product in products %}
                                     <tr>
                                         <td>{{ asset.id }}</td>
                                         <td>{{ asset.site }}</td>
@@ -73,8 +71,6 @@
                                         <td>{{ asset.model }}</td>
                                         <td>{{ asset.specs }}</td>
                                         <td>{{ asset.ram_slot }}</td>
-                                        <td>{{ asset.capacity }}</td>
-                                        <td>{{ asset.ram_type }}</td>
                                         <td>{{ asset.pc_name }}</td>
                                         <td>{{ asset.win_ver }}</td>
                                         <td>{{ asset.last_upd }}</td>
@@ -95,9 +91,9 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="asset_site">Site</label>
-                                        <select name="site" id="asset_site" class="form-control" required>
+                                        <select name="asset_site" id="asset_site" class="form-control" required>
                                             <option value="" disabled selected>Select Site</option>
-                                            <option value="Makati">Makati</option>
+                                            <option value="Makati"> Makati </option>
                                             <option value="Davao">Davao</option>
                                         </select>
                                     </div>
@@ -105,16 +101,18 @@
                                         <label for="asset_type">Asset Type</label>
                                         <select name="asset_type" id="asset_type" class="form-control" required>
                                             <option value="" disabled selected>Select Asset Type</option>
-                                            <option value="Monitor 1">Monitor 1</option>
-                                            <option value="Monitor 2">Monitor 2</option>
+                                            <option value="Monitor">Monitor 1</option>
+                                            <option value="Monitor">Monitor 2</option>
                                             <option value="Laptop">Laptop</option>
                                             <option value="PC">Desktop</option>
                                             <option value="Headset">Headset</option>
+                                            <option value="PC">Headset</option>
+                                            <!-- Add more options as needed -->
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="asset_brand">Brand</label>
-                                        <input type="text" name="brand" id="asset_brand" class="form-control" required>
+                                        <input type="text" name="asset_brand" id="asset_brand" class="form-control" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="asset_tag">Asset Tag</label>
@@ -122,21 +120,22 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="serial_number">Serial Number</label>
-                                        <input type="text" name="serial_no" id="serial_number" class="form-control">
+                                        <input type="text" name="serial_number" id="serial_number" class="form-control">
                                     </div>
                                     <div class="form-group">
-                                        <label for="asset_location">Location</label>
-                                        <select name="location" id="asset_location" class="form-control" required>
+                                        <label for="asset_site">Location</label>
+                                        <select name="asset_site" id="asset_site" class="form-control" required>
                                             <option value="" disabled selected>Select Location</option>
-                                            <option value="7th Floor">7th Floor</option>
-                                            <option value="19th Floor">19th Floor</option>
-                                            <option value="21st Floor">21st Floor</option>
-                                            <option value="32nd Floor">32nd Floor</option>
+                                            <option value="7th Floor">  7th  Floor </option>
+                                            <option value="19th Floor"> 19th Floor </option>
+                                            <option value="21st Floor"> 21st Floor </option>
+                                            <option value="32nd Floor"> 32nd Floor </option>
+
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="campaign_vendor">Campaign</label>
-                                        <input type="text" name="campaign" id="campaign_vendor" class="form-control">
+                                        <input type="text" name="campaign_vendor" id="campaign_vendor" class="form-control">
                                     </div>
                                     <div class="form-group">
                                         <label for="station_no">Station Number</label>
@@ -159,6 +158,7 @@
                                         <label for="si_num">Sales Invoice Number</label>
                                         <input type="text" name="si_num" id="si_num" class="form-control">
                                     </div>
+                                    
                                     <div class="form-group">
                                         <label for="model">Model</label>
                                         <input type="text" name="model" id="model" class="form-control">
@@ -176,21 +176,19 @@
                                         <input type="text" name="capacity" id="capacity" class="form-control">
                                     </div>
                                     <div class="form-group">
-                                        <label for="ram_type">Ram Type</label>
-                                        <input type="text" name="ram_type" id="ram_type" class="form-control">
-                                    </div>
-                                    <div class="form-group">
                                         <label for="pc_name">PC Name</label>
                                         <input type="text" name="pc_name" id="pc_name" class="form-control">
                                     </div>
                                     <div class="form-group">
                                         <label for="com_by">Completed By</label>
-                                        <input type="text" name="completed_by" id="com_by" class="form-control">
+                                        <input type="text" name="com_by" id="com_by" class="form-control">
+
                                     </div>
                                     <button type="submit" class="btn btn-primary mt-3">Add New Asset</button>
                                 </div>
+
                             </div>
-                        </form>                        
+                        </form>
                     </div>
                 </div>
             </div>
