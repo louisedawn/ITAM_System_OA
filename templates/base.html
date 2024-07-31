@@ -27,26 +27,32 @@
                             Dashboard
                         </a>
                         <div class="sb-sidenav-menu-heading">Sections</div>
+                        {% if session['user_role'] in ['Super-Admin', 'Admin', 'Super-User'] %}
                         <a class="nav-link" href="/inventory/">
                             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                             Inventory
                         </a>
+                        {% endif %}
                         <a class="nav-link" href="/assets/">
                             <div class="sb-nav-link-icon"><i class="fas fa-hands"></i></div>
                             Assets Care/FAQs
                         </a>
+                        {% if session['user_role'] in ['Super-Admin'] %}
                         <a class="nav-link" href="/systemusers/">
                             <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
                             System Users
                         </a>
+                        {% endif %}
                         <a class="nav-link" href="/products/">
                             <div class="sb-nav-link-icon"><i class="fas fa-laptop"></i></div>
                             Workstations
                         </a>
+                        {% if session['user_role'] in ['Super-Admin', 'Admin'] %}
                         <a class="nav-link" href="/audit/">
                             <div class="sb-nav-link-icon"><i class="fas fa-clock"></i></div>
                             Audit Trail (History Log)
                         </a>
+                        {% endif %}
                         <br>
                         {% if 'user_email' in session %}
                         <div class="sb-sidenav-menu-heading">{{ session.get('user_name', 'Guest') }} ({{ session.get('user_role', 'Role') }})</div>
