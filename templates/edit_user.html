@@ -7,6 +7,16 @@
 {% block content %}
 <main>
     <div class="container-fluid">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="alert alert-danger" id="flash-messages">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
         <h1 class="mt-4"><i class="fas fa-user-edit"></i> Edit User</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="/index">Dashboard</a></li>

@@ -129,6 +129,7 @@ def add_user():
     return redirect(url_for('system_users'))
 
 @app.route('/edit_user/<email>', methods=["GET", "POST"])
+@login_required
 def edit_user(email):
     conn = get_db_connection()
     user = conn.execute('SELECT * FROM user_accounts WHERE email = ?', (email,)).fetchone()
@@ -139,30 +140,53 @@ def edit_user(email):
         confirm_password = request.form.get('confirm_password')
         super_admin_password = request.form.get('super_admin_password')
 
+        # Fetch the currently logged-in super-admin user
+        super_admin = conn.execute('SELECT * FROM user_accounts WHERE email = ? AND user_role = "Super-Admin"',
+                                   (session['user_email'],)).fetchone()
+
+        if not super_admin:
+            flash('You must be a super-admin to edit user details.')
+            return redirect(url_for('home'))
+
         # Check if current password is correct
         if current_password != user['password']:
             flash('Current password is incorrect.')
             return render_template('edit_user.html', user=user)
 
-        # Check if super admin password is correct (Assuming the super-admin's email is known)
-        super_admin = conn.execute('SELECT * FROM user_accounts WHERE user_role = "Super-Admin"').fetchone()
+        # Check if super-admin password is correct
         if super_admin_password != super_admin['password']:
             flash('Super-Admin password is incorrect.')
             return render_template('edit_user.html', user=user)
 
         # Check if new password and confirm password match
-        if new_password != confirm_password:
+        if new_password and new_password != confirm_password:
             flash('New password and confirmation do not match.')
             return render_template('edit_user.html', user=user)
 
+        # Prepare the update data
+        update_data = {
+            'name': request.form.get('name'),
+            'user_role': request.form.get('role'),
+            'email': email
+        }
+
+        if new_password:
+            update_data['password'] = new_password
+
         # Update user details in the database
-        conn.execute('UPDATE user_accounts SET name = ?, password = ?, user_role = ? WHERE email = ?',
-                     (request.form.get('name'), new_password, request.form.get('role'), email))
+        query = 'UPDATE user_accounts SET name = :name, user_role = :user_role {password_clause} WHERE email = :email'.format(
+            password_clause=', password = :password' if new_password else ''
+        )
+        conn.execute(query, update_data)
         conn.commit()
+        conn.close()
+
         flash('User account updated successfully!')
         return redirect(url_for('system_users'))
 
+    conn.close()
     return render_template('edit_user.html', user=user)
+
 
 
 @app.route('/delete-user/<email>', methods=["GET", "POST"])
