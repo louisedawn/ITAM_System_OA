@@ -17,7 +17,9 @@
             <li class="breadcrumb-item active" aria-current="page">Inventory</li>
         </ol>
         <div class="card mb-4">
-            <div class="card-header"><b>Manage IT Assets</b></div>
+            <div class="card-header d-flex justify-content-between align-items-center"><b>Manage IT Assets</b>
+                <button type="submit" id="addAsset" value="Add New Asset" class="btn btn-primary ms-auto" aria-label="Add New Asset">Add New Asset</button></div>
+
             <div class="card-body">
                 <div class="card mb-4">
                     <div class="card-header">
@@ -42,6 +44,7 @@
                                         <th>Campaign</th>
                                         <th>Station Number</th>
                                         <th>Purchased Date</th>
+                                        <th>Sales Invoice Number</th>
                                         <th>Model</th>
                                         <th>Specifications</th>
                                         <th>RAM Slot</th>
@@ -66,6 +69,7 @@
                                         <td>{{ asset.campaign }}</td>
                                         <td>{{ asset.station_no }}</td>
                                         <td>{{ asset.pur_date }}</td>
+                                        <td>{{ asset.si_num }}</td>
                                         <td>{{ asset.model }}</td>
                                         <td>{{ asset.specs }}</td>
                                         <td>{{ asset.ram_slot }}</td>
@@ -142,11 +146,18 @@
                                         <label for="last_upd">Last Update/Date Installed</label>
                                         <input type="text" name="last_upd" id="last_upd" class="form-control">
                                     </div>
+                                    <div class="form-group">
+                                        <label for="win_ver">Windows Version</label>
+                                        <input type="text" name="win_ver" id="win_ver" class="form-control">
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="purchased_date">Purchased Date</label>
                                         <input type="date" name="pur_date" id="purchased_date" class="form-control">
+                                    </div><div class="form-group">
+                                        <label for="si_num">Sales Invoice Number</label>
+                                        <input type="text" name="si_num" id="si_num" class="form-control">
                                     </div>
                                     <div class="form-group">
                                         <label for="model">Model</label>
@@ -161,7 +172,7 @@
                                         <input type="text" name="ram_slot" id="ram_slot" class="form-control">
                                     </div>
                                     <div class="form-group">
-                                        <label for="capacity">Capacity</label>
+                                        <label for="capacity">RAM Capacity</label>
                                         <input type="text" name="capacity" id="capacity" class="form-control">
                                     </div>
                                     <div class="form-group">
@@ -173,14 +184,10 @@
                                         <input type="text" name="pc_name" id="pc_name" class="form-control">
                                     </div>
                                     <div class="form-group">
-                                        <label for="win_ver">Windows Version</label>
-                                        <input type="text" name="win_ver" id="win_ver" class="form-control">
-                                    </div>
-                                    <div class="form-group">
                                         <label for="com_by">Completed By</label>
                                         <input type="text" name="completed_by" id="com_by" class="form-control">
                                     </div>
-                                    <button type="submit" class="btn btn-primary mt-3">Add Asset</button>
+                                    <button type="submit" class="btn btn-primary mt-3">Add New Asset</button>
                                 </div>
                             </div>
                         </form>                        
