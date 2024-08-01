@@ -107,7 +107,7 @@
                                             <option value="PC">Desktop</option>
                                             <option value="Headset">Headset</option>
                                             <option value="PC">Headset</option>
-                                            <!-- Add more options as needed -->
+                                        
                                         </select>
                                     </div>
                                     <div class="form-group">
@@ -130,7 +130,6 @@
                                             <option value="19th Floor"> 19th Floor </option>
                                             <option value="21st Floor"> 21st Floor </option>
                                             <option value="32nd Floor"> 32nd Floor </option>
-
                                         </select>
                                     </div>
                                     <div class="form-group">
@@ -141,21 +140,22 @@
                                         <label for="station_no">Station Number</label>
                                         <input type="text" name="station_no" id="station_no" class="form-control">
                                     </div>
+
                                     <div class="form-group">
                                         <label for="last_upd">Last Update/Date Installed</label>
-                                        <input type="text" name="last_upd" id="last_upd" class="form-control">
+                                        <input type="date" name="last_upd" id="last_upd" class="form-control">
                                     </div>
-                                    <div class="form-group">
-                                        <label for="win_ver">Windows Version</label>
-                                        <input type="text" name="win_ver" id="win_ver" class="form-control">
-                                    </div>
+                                
                                 </div>
+
+                                <!-- coloumn 2 -->
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="purchased_date">Purchased Date</label>
                                         <input type="date" name="pur_date" id="purchased_date" class="form-control">
                                     </div><div class="form-group">
                                         <label for="si_num">Sales Invoice Number</label>
+                                        <input type="number" name="si_num" id="si_num" class="form-control">
                                         <input type="text" name="si_num" id="si_num" class="form-control">
                                     </div>
                                     
@@ -179,14 +179,27 @@
                                         <label for="pc_name">PC Name</label>
                                         <input type="text" name="pc_name" id="pc_name" class="form-control">
                                     </div>
+
                                     <div class="form-group">
                                         <label for="com_by">Completed By</label>
                                         <input type="text" name="com_by" id="com_by" class="form-control">
-
                                     </div>
-                                    <button type="submit" class="btn btn-primary mt-3">Add New Asset</button>
+                                    <div class="form-group">
+                                        <label for="win_ver">Windows Version</label>
+                                        <input type="number" name="win_ver" id="win_ver" class="form-control">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="com_by">Completed By</label>
+                                        <input type="text" name="com_by" id="com_by" class="form-control">
+                                    </div>
+                                    
                                 </div>
 
+                                <div class="form-group d-flex justify-content-center">
+                                    <button type="submit" class="btn btn-primary mt-3 mx-3">Add New Asset</button>
+                                </div>
+                                
                             </div>
                         </form>
                     </div>
