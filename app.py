@@ -3,6 +3,7 @@ import sqlite3
 import os
 from functools import wraps
 
+
 app = Flask(__name__)
 
 # Generate a random secret key if you don't have one
@@ -251,6 +252,33 @@ def add_asset():
         return redirect(url_for('inventory'))
     
     return render_template('add_asset.html')
+
+
+@app.route('/delete-asset/<int:asset_id>', methods=['GET', 'POST'])
+@login_required
+def delete_asset(asset_id):
+    conn = get_db_connection()
+    asset = conn.execute('SELECT * FROM assets WHERE id = ?', (asset_id,)).fetchone()
+    
+    if request.method == 'POST':
+        password = request.form.get('password')
+        user_email = session.get('user_email')
+
+        # Fetch the current user to validate password
+        user = conn.execute('SELECT * FROM user_accounts WHERE email = ?', (user_email,)).fetchone()
+
+        if user and password == user['password']:  # Assuming plain-text passwords
+            conn.execute('DELETE FROM assets WHERE id = ?', (asset_id,))
+            conn.commit()
+            flash('Asset deleted successfully.', 'success')
+            conn.close()
+            return redirect(url_for('inventory'))
+        else:
+            flash('Invalid password. Please try again.', 'danger')
+    
+    conn.close()
+    return render_template('delete_asset.html', asset=asset)
+
 
 
 

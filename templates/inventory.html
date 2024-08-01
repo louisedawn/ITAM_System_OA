@@ -75,9 +75,10 @@
                                             <a href="/edit-asset/" class="btn btn-warning">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a href="/delete-asset" class="btn btn-danger">
+                                            <a href="{{ url_for('delete_asset', asset_id=asset.id) }}" class="btn btn-danger">
                                                 <i class="fas fa-trash-alt"></i>
                                             </a>
+                                            
                                         </td> 
                                         <td>{{ asset.id }}</td>
                                         <td>{{ asset.site }}</td>
