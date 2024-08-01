@@ -4,11 +4,12 @@
     <title>IT Asset Management System</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='postyles.css') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <script>
         window.onload = function() {
             document.getElementById('automatedForm').onsubmit = function(event) {
                 event.preventDefault(); // Prevent the default form submission
-                
+
                 // Collect form data
                 const formData = new FormData(this);
                 const data = {};
@@ -20,18 +21,112 @@
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
 
-                // Add content to the PDF
-                doc.setFontSize(20);
-                doc.text("IT ASSET PO REQUEST FORM", 10, 10);
+                // Add title box
+                doc.setFontSize(16);
+                doc.rect(10, 10, 190, 15); // Draw rectangle for title
+                doc.text("IT ASSET PO REQUEST FORM", 105, 20, null, null, 'center');
 
+                // Add additional text below the title box
+                doc.setFontSize(10);
+                doc.text("• This form shall be accomplished for every Purchase Order requested to Finance Department.", 10, 30);
+
+                // Add section I in a table format
                 doc.setFontSize(12);
-                let yPosition = 20;
+                doc.text("I. REQUESTING PARTY INFORMATION", 10, 40);
 
-                // Loop through the form data and add it to the PDF
-                for (const [key, value] of Object.entries(data)) {
-                    doc.text(`${key.replace(/_/g, ' ').toUpperCase()}: ${value}`, 10, yPosition);
-                    yPosition += 10;
-                }
+                doc.autoTable({
+                    startY: 50,
+                    body: [
+                        ['Requestor:', data.requestor || ''],
+                        ['Client Passthrough cost?', data.client_passthrough || ''],
+                        ['Program/Department:', data.program_dept || ''],
+                        ['Date Requested:', data.date_requested || ''],
+                        ['Date Required:', data.date_required || '']
+                    ],
+                    margin: { left: 10, right: 10 },
+                    styles: { 
+                        fontSize: 10, 
+                        cellPadding: 5, 
+                        lineColor: [169, 169, 169], // Darker gray color for table lines
+                        lineWidth: 0.75
+                    },
+                    theme: 'striped' // Optional: Adds a striped effect for better readability
+                });
+
+                // Add section II in a table format
+                doc.setFontSize(12);
+                doc.text("II. IT ASSET INFORMATION", 10, doc.autoTable.previous.finalY + 10);
+
+                doc.autoTable({
+                    startY: doc.autoTable.previous.finalY + 20,
+                    body: [
+                        ['Expenditure Category:', data.expenditure || ''],
+                        ['IT Asset Type:', data.asset_type || ''],
+                        ['Vendor:', data.vendor || ''],
+                        ['Account Manager:', data.manager || ''],
+                        ['Email/Mobile:', data.email_mobile || ''],
+                        ['IT Asset Description:', data.asset_desc || '']
+                    ],
+                    margin: { left: 10, right: 10 },
+                    styles: { 
+                        fontSize: 10, 
+                        cellPadding: 5, 
+                        lineColor: [169, 169, 169], // Darker gray color for table lines
+                        lineWidth: 0.75
+                    },
+                    theme: 'striped'
+                });
+
+                // Add section III in a table format
+                doc.setFontSize(12);
+                doc.text("III. IT ASSET ALLOCATION", 10, doc.autoTable.previous.finalY + 10);
+
+                doc.autoTable({
+                    startY: doc.autoTable.previous.finalY + 20,
+                    body: [
+                        ['Location:', data.location || ''],
+                        ['Location (RSC):', data.location_rsc || ''],
+                        ['Business Unit Allocation:', data.business_unit || '']
+                    ],
+                    margin: { left: 10, right: 10 },
+                    styles: { 
+                        fontSize: 10, 
+                        cellPadding: 5, 
+                        lineColor: [169, 169, 169], // Darker gray color for table lines
+                        lineWidth: 0.75
+                    },
+                    theme: 'striped'
+                });
+
+                // Add section IV in a table format
+                doc.setFontSize(12);
+                doc.text("IV. NOTES & ATTACHMENTS", 10, doc.autoTable.previous.finalY + 10);
+
+                doc.autoTable({
+                    startY: doc.autoTable.previous.finalY + 20,
+                    body: [
+                        ['Notes:', data.notes || '']
+                    ],
+                    margin: { left: 10, right: 10 },
+                    styles: { 
+                        fontSize: 10, 
+                        cellPadding: 5, 
+                        lineColor: [169, 169, 169], // Darker gray color for table lines
+                        lineWidth: 0.75
+                    },
+                    theme: 'striped'
+                });
+
+                // Add footer information
+                doc.setFontSize(10);
+                doc.text("Prepared by:", 15, doc.autoTable.previous.finalY + 20);
+                doc.text(data.prepared_by || '', 60, doc.autoTable.previous.finalY + 20);
+
+                doc.text("Department:", 15, doc.autoTable.previous.finalY + 30);
+                doc.text(data.department || '', 60, doc.autoTable.previous.finalY + 30);
+
+                doc.text("Date:", 15, doc.autoTable.previous.finalY + 40);
+                doc.text(data.prepared_date || '', 60, doc.autoTable.previous.finalY + 40);
 
                 // Save the PDF
                 doc.save('IT_Asset_PO_Request_Form.pdf');
@@ -43,7 +138,7 @@
 {% block content %}
 <main>
     <div class="container-fluid">
-        <h1 class="mt-4"><i class="sb-nav-link-icon"></i>  Purchase Order Request Form </h1>
+        <h1 class="mt-4"><i class="sb-nav-link-icon"></i> Purchase Order Request Form</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="/index">Dashboard</a></li>
             <li class="breadcrumb-item active" aria-current="page">Request Form</li>
@@ -74,13 +169,12 @@
             </div>
 
             <div class="form-group">
-                <label for="client_passthrough">Client Passthrough cost?</label>
-                <select name="client_passthrough" id="client_passthrough" class="form-control" required>
-                    <option value="" disabled selected>Select an option</option>
-                    <option value="yes">Yes</option>
-                    <option value="no">No</option>
-                    <option value="n/a">N/A</option>
-                </select>
+                <label>Client Passthrough cost?</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="client_passthrough" value="yes"> Yes</label>
+                    <label><input type="radio" name="client_passthrough" value="no"> No</label>
+                    <label><input type="radio" name="client_passthrough" value="n/a"> N/A</label>
+                </div>
             </div>
 
             <div class="form-row">
@@ -97,51 +191,49 @@
 
             <h6 class="mt-4"><b>II. IT ASSET INFORMATION</b></h6>
 
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="expenditure">Expenditure Category:</label>
-                    <select name="expenditure" id="expenditure" class="form-control" required>
-                        <option value="" disabled selected>Select an option</option>
-                        <option value="capital_asset">Capital Asset</option>
-                        <option value="consumable">Consumable</option>
-                        <option value="subscription">Subscription</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-
-                <div class="form-group col-md-6">
-                    <label for="asset_type">IT Asset Type:</label>
-                    <select name="asset_type" id="asset_type" class="form-control" required>
-                        <option value="" disabled selected>Select an option</option>
-                        <option value="software">Software</option>
-                        <option value="hardware">Hardware</option>
-                        <option value="other">Other</option>
-                    </select>
+            <div class="form-group">
+                <label>Expenditure Category:</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="expenditure" value="capital_asset"> Capital Asset</label>
+                    <label><input type="radio" name="expenditure" value="consumable"> Consumable</label>
+                    <label><input type="radio" name="expenditure" value="subscription"> Subscription</label>
+                    <label><input type="radio" name="expenditure" value="other"> Other</label>
                 </div>
             </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="asset_type">IT Asset Type:</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="type" value="capital_asset"> Hardware</label>
+                        <label><input type="radio" name="type" value="consumable"> Software</label>
+                        <label><input type="radio" name="type" value="subscription"> Others</label>
+                    </div>
+                </div>
+                </div>
 
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="vendor">Vendor:</label>
                     <input type="text" id="vendor" name="vendor" class="form-control" required>
                 </div>
-
-                <div class="form-group col-md-6">
-                    <label for="manager">Account Manager:</label>
-                    <input type="text" id="manager" name="manager" class="form-control" required>
-                </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    <label for="email_mobile">Email/Mobile:</label>
-                    <input type="text" id="email_mobile" name="email_mobile" class="form-control" required>
+                    <label for="manager">Account Manager:</label>
+                    <input type="text" id="manager" name="manager" class="form-control">
                 </div>
 
                 <div class="form-group col-md-6">
-                    <label for="asset_desc">IT Asset Description:</label>
-                    <input type="text" id="asset_desc" name="asset_desc" class="form-control" required>
+                    <label for="email_mobile">Email/Mobile:</label>
+                    <input type="text" id="email_mobile" name="email_mobile" class="form-control">
                 </div>
+            </div>
+
+            <div class="form-group">
+                <label for="asset_desc">IT Asset Description:</label>
+                <textarea id="asset_desc" name="asset_desc" class="form-control" rows="3"></textarea>
             </div>
 
             <h6 class="mt-4"><b>III. IT ASSET ALLOCATION</b></h6>
@@ -149,29 +241,18 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="location">Location:</label>
-                    <select name="location" id="location" class="form-control" required>
-                        <option value="" disabled selected>Select an option</option>
-                        <option value="5th">Jaka (5th)</option>
-                        <option value="5th ext">Jaka (5th Ext)</option>
-                        <option value="7th">RSC (7th)</option>
-                        <option value="19th">RSC (19th)</option>
-                        <option value="21st">RSC (21st)</option>
-                    </select>
+                    <input type="text" id="location" name="location" class="form-control">
                 </div>
 
                 <div class="form-group col-md-6">
                     <label for="location_rsc">Location (RSC):</label>
-                    <select name="location_rsc" id="location_rsc" class="form-control" required>
-                        <option value="" disabled selected>Select an option</option>
-                        <option value="davao">Davao</option>
-                        <option value="summit">Summit</option>
-                    </select>
+                    <input type="text" id="location_rsc" name="location_rsc" class="form-control">
                 </div>
+            </div>
 
-                <div class="form-group col-md-6">
-                    <label for="business_unit">Business Unit Allocation:</label>
-                    <input type="text" id="business_unit" name="business_unit" class="form-control" required>
-                </div>
+            <div class="form-group">
+                <label for="business_unit">Business Unit Allocation:</label>
+                <input type="text" id="business_unit" name="business_unit" class="form-control">
             </div>
 
             <h6 class="mt-4"><b>IV. NOTES & ATTACHMENTS</b></h6>
@@ -181,27 +262,27 @@
                 <textarea id="notes" name="notes" class="form-control" rows="3"></textarea>
             </div>
 
+            <h6 class="mt-4"><b>Prepared by:</b></h6>
+
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    <label for="prepared_by">Prepared by:</label>
-                    <input type="text" id="prepared_by" name="prepared_by" class="form-control" required>
+                    <label for="prepared_by">Name:</label>
+                    <input type="text" id="prepared_by" name="prepared_by" class="form-control">
                 </div>
 
                 <div class="form-group col-md-6">
                     <label for="department">Department:</label>
-                    <input type="text" id="department" name="department" class="form-control" required>
-                </div>
-
-                <div class="form-group col-md-6">
-                    <label for="prepared_date">Date:</label>
-                    <input type="date" id="prepared_date" name="prepared_date" class="form-control" required>
+                    <input type="text" id="department" name="department" class="form-control">
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary"><b>Submit</b></button>
+            <div class="form-group">
+                <label for="prepared_date">Date:</label>
+                <input type="date" id="prepared_date" name="prepared_date" class="form-control">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Generate PDF</button>
         </form>
     </div>
-</div>
-
 </main>
 {% endblock %}
