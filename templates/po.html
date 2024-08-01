@@ -3,6 +3,41 @@
 {% block title %}
     <title>IT Asset Management System</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='postyles.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        window.onload = function() {
+            document.getElementById('automatedForm').onsubmit = function(event) {
+                event.preventDefault(); // Prevent the default form submission
+                
+                // Collect form data
+                const formData = new FormData(this);
+                const data = {};
+                formData.forEach((value, key) => {
+                    data[key] = value;
+                });
+
+                // Create a PDF
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                // Add content to the PDF
+                doc.setFontSize(20);
+                doc.text("IT ASSET PO REQUEST FORM", 10, 10);
+
+                doc.setFontSize(12);
+                let yPosition = 20;
+
+                // Loop through the form data and add it to the PDF
+                for (const [key, value] of Object.entries(data)) {
+                    doc.text(`${key.replace(/_/g, ' ').toUpperCase()}: ${value}`, 10, yPosition);
+                    yPosition += 10;
+                }
+
+                // Save the PDF
+                doc.save('IT_Asset_PO_Request_Form.pdf');
+            };
+        };
+    </script>
 {% endblock %}
 
 {% block content %}
@@ -121,14 +156,12 @@
                         <option value="7th">RSC (7th)</option>
                         <option value="19th">RSC (19th)</option>
                         <option value="21st">RSC (21st)</option>
-                        
                     </select>
                 </div>
 
-
                 <div class="form-group col-md-6">
-                    <label for="location">Location (RSC):</label>
-                    <select name="location" id="location" class="form-control" required>
+                    <label for="location_rsc">Location (RSC):</label>
+                    <select name="location_rsc" id="location_rsc" class="form-control" required>
                         <option value="" disabled selected>Select an option</option>
                         <option value="davao">Davao</option>
                         <option value="summit">Summit</option>
