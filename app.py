@@ -57,34 +57,6 @@ def index():
 def assets():
     return render_template('assets.html')
 
-@app.route("/add-asset/", methods=["POST"])
-@login_required
-def add_asset():
-    site = request.form.get('site')  # Fixed to match HTML
-    asset_type = request.form.get('asset_type')
-    brand = request.form.get('brand')
-    asset_tag = request.form.get('asset_tag')
-    serial_no = request.form.get('serial_no')  # Fixed to match HTML
-    location = request.form.get('location')  # Fixed to match HTML
-    campaign = request.form.get('campaign')
-    station_no = request.form.get('station_no')
-    pur_date = request.form.get('pur_date')  # Fixed to match HTML
-    model = request.form.get('model')
-    specs = request.form.get('specs')
-    ram_slot = request.form.get('ram_slot')
-    pc_name = request.form.get('pc_name')
-    win_ver = request.form.get('win_ver')
-    last_upd = request.form.get('last_upd')
-    completed_by = request.form.get('completed_by')
-    
-    conn = get_db_connection()
-    conn.execute('INSERT INTO assets (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, model, specs, ram_slot, pc_name, win_ver, last_upd, completed_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                 (site, asset_type, brand, asset_tag, serial_no, location,
-                  campaign, station_no, pur_date, model, specs, ram_slot, pc_name, win_ver, last_upd, completed_by))
-    conn.commit()
-    conn.close()
-    return redirect(url_for('inventory'))
-
 @app.route('/inventory/', methods=["POST", "GET"])
 @login_required
 def inventory():
@@ -232,6 +204,42 @@ def confirm_delete(email):
             return redirect(url_for('confirm_delete', email=email))
 
     return render_template('confirm_delete.html', email=email)
+
+
+@app.route('/add-asset', methods=["GET", "POST"])
+@login_required
+def add_asset():
+    if request.method == "POST":
+        asset_site = request.form.get('asset_site')
+        asset_type = request.form.get('asset_type')
+        asset_brand = request.form.get('asset_brand')
+        asset_tag = request.form.get('asset_tag')
+        serial_number = request.form.get('serial_number')
+        location = request.form.get('location')
+        campaign_vendor = request.form.get('campaign_vendor')
+        station_no = request.form.get('station_no')
+        last_upd = request.form.get('last_upd')
+        pur_date = request.form.get('pur_date')
+        si_num = request.form.get('si_num')
+        model = request.form.get('model')
+        specs = request.form.get('specs')
+        ram_slot = request.form.get('ram_slot')
+        capacity = request.form.get('capacity')
+        pc_name = request.form.get('pc_name')
+        win_ver = request.form.get('win_ver')
+        com_by = request.form.get('com_by')
+        
+        conn = get_db_connection()
+        conn.execute('INSERT INTO assets (asset_site, asset_type, asset_brand, asset_tag, serial_number, location, campaign_vendor, station_no, last_upd, pur_date, si_num, model, specs, ram_slot, capacity, pc_name, win_ver, com_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                     (asset_site, asset_type, asset_brand, asset_tag, serial_number, location, campaign_vendor, station_no, last_upd, pur_date, si_num, model, specs, ram_slot, capacity, pc_name, win_ver, com_by))
+        conn.commit()
+        conn.close()
+        
+        flash('New asset added successfully!')
+        return redirect(url_for('inventory'))
+    
+    return render_template('add_asset.html')
+
 
 
 if __name__ == "__main__":
