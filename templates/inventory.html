@@ -7,6 +7,17 @@
 {% block content %}
 <main>
     <div class="container-fluid">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="alert alert-danger" id="flash-messages">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
         <div class="header1 mb-4 d-flex justify-content-between align-items-center">
             <h1 id="headerInv" class="mt-4"><i class="fas fa-dolly-flatbed"></i> Inventory</h1>
             <input id="submitCSV" value="Import CSV File" class="btn btn-primary" aria-label="Import CSV File">
@@ -18,13 +29,13 @@
         </ol>
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center"><b>Manage IT Assets</b>
-                <a href="/add_asset" id="addAsset" value="Add New Asset" class="btn btn-primary ms-auto" aria-label="Add New Asset">Add New Asset</a></div>
+                <a href="/add-asset/" id="addAsset" value="Add New Asset" class="btn btn-primary ms-auto" aria-label="Add New Asset">Add New Asset</a></div>
 
             <div class="card-body">
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-table mr-1"></i>
-                        <b>Inventory Table</b>
+                        <b>IT Assets Table</b>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -34,6 +45,8 @@
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
+                                        <th>Actions</th>
+                                        <th>ID</th>
                                         <th>Site</th>
                                         <th>Asset Type</th>
                                         <th>Brand</th>
@@ -42,20 +55,21 @@
                                         <th>Location</th>
                                         <th>Campaign</th>
                                         <th>Station Number</th>
-                                        <th>Purchased Date</th>
+                                        <th>Purchase Date</th>
                                         <th>Sales Invoice Number</th>
                                         <th>Model</th>
                                         <th>Specifications</th>
                                         <th>RAM Slot</th>
+                                        <th>RAM Type</th>
+                                        <th>RAM Capacity</th>
                                         <th>PC Name</th>
                                         <th>Windows Version</th>
                                         <th>Last Update/Date Installed</th>
                                         <th>Completed By</th>
-                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for product in products %}
+                                    {% for asset in assets %}
                                     <tr>
                                         <td>{{ asset.id }}</td>
                                         <td>{{ asset.site }}</td>
@@ -71,10 +85,20 @@
                                         <td>{{ asset.model }}</td>
                                         <td>{{ asset.specs }}</td>
                                         <td>{{ asset.ram_slot }}</td>
+                                        <td>{{ asset.ram_type }}</td>
+                                        <td>{{ asset.ram_capacity }}</td>
                                         <td>{{ asset.pc_name }}</td>
                                         <td>{{ asset.win_ver }}</td>
                                         <td>{{ asset.last_upd }}</td>
                                         <td>{{ asset.completed_by }}</td>
+                                        <td>
+                                            <a href="/edit-asset/" class="btn btn-warning">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="/delete-asset" class="btn btn-danger">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                        </td> 
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -87,4 +111,15 @@
         </div>
     </div>
 </main>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set a timer to remove flash messages after 5 seconds
+        setTimeout(function() {
+            var flashMessages = document.getElementById('flash-messages');
+            if (flashMessages) {
+                flashMessages.style.display = 'none'; // Hide the flash messages
+            }
+        }, 5000); // 5000 milliseconds = 5 seconds
+    });
+</script>
 {% endblock %}

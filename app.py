@@ -205,37 +205,47 @@ def confirm_delete(email):
 
     return render_template('confirm_delete.html', email=email)
 
-
-@app.route('/add-asset', methods=["GET", "POST"])
+@app.route('/add-asset/', methods=["GET", "POST"])
 @login_required
 def add_asset():
     if request.method == "POST":
-        asset_site = request.form.get('asset_site')
+        # Log the incoming data for debugging
+        print(request.form)  # Print submitted data for debugging
+        
+        # Get data from the form
+        site = request.form.get('site')  
         asset_type = request.form.get('asset_type')
-        asset_brand = request.form.get('asset_brand')
+        brand = request.form.get('brand')
         asset_tag = request.form.get('asset_tag')
-        serial_number = request.form.get('serial_number')
+        serial_no = request.form.get('serial_no')
         location = request.form.get('location')
-        campaign_vendor = request.form.get('campaign_vendor')
+        campaign = request.form.get('campaign')
         station_no = request.form.get('station_no')
-        last_upd = request.form.get('last_upd')
         pur_date = request.form.get('pur_date')
         si_num = request.form.get('si_num')
-        model = request.form.get('model')
+        model = request.form.get('model') 
         specs = request.form.get('specs')
         ram_slot = request.form.get('ram_slot')
-        capacity = request.form.get('capacity')
+        ram_type = request.form.get('ram_type')
+        ram_capacity = request.form.get('ram_capacity')
         pc_name = request.form.get('pc_name')
         win_ver = request.form.get('win_ver')
-        com_by = request.form.get('com_by')
+        last_upd = request.form.get('last_upd')
+        completed_by = request.form.get('completed_by')
+
+        # Insert the data into the database
+        try:
+            conn = get_db_connection()
+            conn.execute('INSERT INTO assets (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                         (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by))
+            conn.commit()
+            flash('New IT asset added successfully!')
+        except Exception as e:
+            print(f"Error: {e}")  # Log any error that occurs
+            flash('An error occurred while adding the asset.')
+        finally:
+            conn.close()
         
-        conn = get_db_connection()
-        conn.execute('INSERT INTO assets (asset_site, asset_type, asset_brand, asset_tag, serial_number, location, campaign_vendor, station_no, last_upd, pur_date, si_num, model, specs, ram_slot, capacity, pc_name, win_ver, com_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                     (asset_site, asset_type, asset_brand, asset_tag, serial_number, location, campaign_vendor, station_no, last_upd, pur_date, si_num, model, specs, ram_slot, capacity, pc_name, win_ver, com_by))
-        conn.commit()
-        conn.close()
-        
-        flash('New asset added successfully!')
         return redirect(url_for('inventory'))
     
     return render_template('add_asset.html')
