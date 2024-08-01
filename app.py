@@ -105,9 +105,9 @@ def workstation():
     return render_template('workstation.html')
 
 #for PO
-@app.route('/reques_form/', methods=["POST", "GET"])
-def request_form():
-    return render_template('request_form.html')
+@app.route('/po/', methods=["POST", "GET"])
+def po():
+    return render_template('po.html')
 
 @app.route('/request/', methods=["POST", "GET"])
 @login_required
@@ -249,3 +249,7 @@ def confirm_delete(email):
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+    """ 
+    comment ba to` 
+    """

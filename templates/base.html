@@ -8,9 +8,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
     {% block title%}{% endblock %}
 </head>
+
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-            
             <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
             <!--for the logo-->
             <a class="navbar-brand" href="/index"><b>IT Asset Management System</b></a>
@@ -68,12 +68,14 @@
                             Audit Trail (History Log)
                         </a>
                         {% endif %}
+                        {% if session['user_role'] in ['Super-Admin', 'Admin'] %}
                         <!-- New Request Form Section -->
-                        <a class="nav-link" href="/request-form/">
+                        <a class="nav-link" href="/po/">
                             <div class="sb-nav-link-icon"><i class="fas fa-file-alt"></i></div>
                             Request Form
                         </a>
                         <!-- End of Request Form Section -->
+                        {% endif %}
                          
                         <!-- Logout Section -->
                         <footer class="footer fixed-bottom">
