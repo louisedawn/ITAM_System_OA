@@ -55,17 +55,25 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
                             System Users
                         </a>
+
                         {% endif %}
                         <a class="nav-link" href="/workstation/">
                             <div class="sb-nav-link-icon"><i class="fas fa-laptop"></i></div>
                             Workstations
                         </a>
+
                         {% if session['user_role'] in ['Super-Admin', 'Admin'] %}
                         <a class="nav-link" href="/audit/">
                             <div class="sb-nav-link-icon"><i class="fas fa-clock"></i></div>
                             Audit Trail (History Log)
                         </a>
                         {% endif %}
+                        <!-- New Request Form Section -->
+                        <a class="nav-link" href="/request-form/">
+                            <div class="sb-nav-link-icon"><i class="fas fa-file-alt"></i></div>
+                            Request Form
+                        </a>
+                        <!-- End of Request Form Section -->
                         <!-- Logout Section -->
                         <footer class="footer fixed-bottom">
                         {% if 'user_email' in session %}

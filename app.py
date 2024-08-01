@@ -98,6 +98,17 @@ def inventory():
 def audit():
     return render_template('audit.html')
 
+#for workstation
+@app.route('/workstation/', methods=["POST", "GET"])
+@login_required
+def workstation():
+    return render_template('workstation.html')
+
+#for PO
+@app.route('/reques_form/', methods=["POST", "GET"])
+def request_form():
+    return render_template('request_form.html')
+
 @app.route('/request/', methods=["POST", "GET"])
 @login_required
 def request_inventory():
@@ -232,6 +243,8 @@ def confirm_delete(email):
             return redirect(url_for('confirm_delete', email=email))
 
     return render_template('confirm_delete.html', email=email)
+
+
 
 
 if __name__ == "__main__":
