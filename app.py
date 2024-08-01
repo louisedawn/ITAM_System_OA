@@ -211,6 +211,7 @@ def add_asset():
     if request.method == "POST":
         # Log the incoming data for debugging
         print(request.form)  # Print submitted data for debugging
+        print("FORM SUBMITTED!!!") 
         
         # Get data from the form
         site = request.form.get('site')  
@@ -240,6 +241,7 @@ def add_asset():
                          (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by))
             conn.commit()
             flash('New IT asset added successfully!')
+            print("Asset added successfully!")
         except Exception as e:
             print(f"Error: {e}")  # Log any error that occurs
             flash('An error occurred while adding the asset.')
