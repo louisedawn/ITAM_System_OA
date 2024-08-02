@@ -14,6 +14,22 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
+''' ##### THIS USES SQLALCHEMY FOR THE CONNECTION OF THE BACKEND AND DATABASE
+
+from flask import Flask, render_template, url_for, request, redirect, flash, session
+from flask_sqlalchemy import SQLAlchemy
+from functools import wraps
+import os
+
+app = Flask(__name__)
+app.secret_key = os.urandom(24)
+
+# Configuring SQLAlchemy
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ITAM.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+'''
+
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
