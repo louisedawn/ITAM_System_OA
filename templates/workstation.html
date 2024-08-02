@@ -2,33 +2,48 @@
 
 {% block title %}
 <title>IT Asset Management System</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='workstation.css') }}">
+<style> 
+    document.addEventListener('DOMContentLoaded', function() {
+    const seats = document.querySelectorAll('.seat');
+    seats.forEach(seat => {
+        seat.addEventListener('click', function() {
+            const assets = this.getAttribute('data-assets');
+            alert(`Assets available at this seat: ${assets}`);
+        });
+    });
+});
+</style>
 {% endblock %}
 
 
 {% block content %}
 <main>
     <div class="container-fluid">
-        <h1 class="mt-4"><i class="fas fa-laptop"></i> Workstation </h1>
+        <h1 class="mt-4"><i class="fas fa-laptop"></i> Workstation</h1>
 
-    <br><ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item"><a href="/index">Dashboard</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Workstation</li>
-    </ol>
+        <br>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="/index">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Workstation</li>
+        </ol>
     </div>
     <div class="form-group row justify-content-center">
         <div class="col-md-6">
-                <label for="floorSelect"><b> Select Floor</b></label>
-                <select class="form-control" id="floorSelect" name="floor">
-                    <option value="7th Floor "> 7th Floor</option>
-                    <option value="19th Floor"> 19th Floor</option>
-                    <option value="21st Floor"> 21st Floor</option>
-                    <option value="32nd Floor"> 32nd Floor</option>   
-                    
+            <label for="floorSelect"><b>Select Floor</b></label>
+            <select class="form-control" id="floorSelect" name="floor">
+                <option value="7th Floor">7th Floor</option>
+                <option value="19th Floor">19th Floor</option>
+                <option value="21st Floor">21st Floor</option>
+                <option value="32nd Floor">32nd Floor</option>
+            </select>
+        </div>
     </div>
-
-
-
-    
-      
+    <div class="seat-plan">
+        <div class="seat" data-assets="Laptop, Monitor, Keyboard">Seat 1</div>
+        <div class="seat" data-assets="Desktop, Monitor, Mouse">Seat 2</div>
+        <div class="seat" data-assets="Laptop, Monitor, Mouse">Seat 3</div>
+        <!-- Add more seats as needed -->
+    </div>
 </main>
 {% endblock %}

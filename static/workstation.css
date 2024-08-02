@@ -1,0 +1,20 @@
+.seat-plan {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.seat {
+    background-color: #6172B0;
+    color: white;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.seat:hover {
+    background-color: #4c5a8a;
+}
