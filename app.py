@@ -1,4 +1,5 @@
 from flask import Flask, render_template, url_for, request, redirect, flash, session
+from flask_login import login_required
 import sqlite3
 import os
 from functools import wraps
@@ -294,6 +295,56 @@ def delete_asset(asset_id):
     
     conn.close()
     return render_template('delete_asset.html', asset=asset)
+
+
+@app.route('/edit-asset/<int:asset_id>', methods=['GET', 'POST'])
+@login_required
+def edit_asset(asset_id):
+    conn = get_db_connection()
+    asset = conn.execute('SELECT * FROM assets WHERE id = ?', (asset_id,)).fetchone()
+
+    if not asset:
+        flash('Asset not found.')
+        return redirect(url_for('inventory'))
+
+    if request.method == 'POST':
+        # Get data from the form
+        site = request.form.get('site')
+        asset_type = request.form.get('asset_type')
+        brand = request.form.get('brand')
+        asset_tag = request.form.get('asset_tag')
+        serial_no = request.form.get('serial_no')
+        location = request.form.get('location')
+        campaign = request.form.get('campaign')
+        station_no = request.form.get('station_no')
+        pur_date = request.form.get('pur_date')
+        si_num = request.form.get('si_num')
+        model = request.form.get('model')
+        specs = request.form.get('specs')
+        ram_slot = request.form.get('ram_slot')
+        ram_type = request.form.get('ram_type')
+        ram_capacity = request.form.get('ram_capacity')
+        pc_name = request.form.get('pc_name')
+        win_ver = request.form.get('win_ver')
+        last_upd = request.form.get('last_upd')
+        completed_by = request.form.get('completed_by')
+
+        # Update the data in the database
+        try:
+            conn.execute('''UPDATE assets SET site = ?, asset_type = ?, brand = ?, asset_tag = ?, serial_no = ?, location = ?, campaign = ?, station_no = ?, pur_date = ?, si_num = ?, model = ?, specs = ?, ram_slot = ?, ram_type = ?, ram_capacity = ?, pc_name = ?, win_ver = ?, last_upd = ?, completed_by = ? WHERE id = ?''',
+                         (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by, asset_id))
+            conn.commit()
+            flash('Asset updated successfully!')
+        except Exception as e:
+            print(f"Error: {e}")
+            flash('An error occurred while updating the asset.')
+        finally:
+            conn.close()
+
+        return redirect(url_for('inventory'))
+    
+    conn.close()
+    return render_template('edit_asset.html', asset=asset)
 
 
 
