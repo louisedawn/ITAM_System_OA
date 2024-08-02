@@ -5,116 +5,142 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='postyles.css') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-    
     <script>
         window.onload = function() {
-           document.getElementById('automatedForm').onsubmit = function(event) {
-               event.preventDefault(); // Prevent the default form submission
+            document.getElementById('automatedForm').onsubmit = function(event) {
+                event.preventDefault(); // Prevent the default form submission
+        
+                // Collect form data
+                const formData = new FormData(this);
+                const data = {};
+                formData.forEach((value, key) => {
+                    data[key] = value;
+                });
+        
+                // Create a PDF
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                const margin = 10; // Define margin
+                const xStart = margin; // Starting X position with margin
+                const boxWidth = doc.internal.pageSize.getWidth() - margin * 2; // Box width considering margins
+                const pageHeight = doc.internal.pageSize.getHeight(); // Page height
+        
+                let yPos = margin; // Initial y position
+        
+                // Function to create a section with a title and table content
+                function addSection(title, content) {
+                    const sectionHeight = content.length * 10 + 20; // Calculate section height (including title)
+        
+                    // Check if the section fits on the current page, if not create a new page
+                    if (yPos + sectionHeight > pageHeight - margin) {
+                        doc.addPage();
+                        yPos = margin; // Reset y position for the new page
+                    }
+        
+                    // Set fill color to dark gray and text color to white for the title
+                    doc.setFillColor(0, 0, 0); // Black fill color
+                    doc.setTextColor(255, 255, 255); // White text color
+                    doc.setFontSize(12);
+                    doc.setFont("calibri", "bold");
+                    doc.rect(xStart, yPos, boxWidth, 10, 'F'); // Draw rectangle with fill color
+                    doc.text(title, xStart + 5, yPos + 7); // Add title inside the rectangle
+        
+                    // Reset text color to black for the content
+                    doc.setTextColor(0, 0, 0);
+                    doc.setFont("calibri", "normal");
+                    doc.setFontSize(12);
+        
+                    const sectionYStart = yPos + 10;
+                    doc.rect(xStart, sectionYStart, boxWidth, content.length * 10 + 10); // Draw the rectangle for the section
+        
+                    // Add content inside the rectangle in table format
+                    let contentY = sectionYStart + 5;
+                    content.forEach((line) => {
+                        // Split label and value
+                        const [label, ...details] = line.split(':');
+                        const detailText = details.join(':');
+        
+                        // Add label in bold
+                        doc.setFont("calibri", "bold"); // Set font to bold
+                        doc.text(label + ':', xStart + 5, contentY);
+        
+                        // Add detail in normal font
+                        doc.setFont("calibri", "normal"); // Set font back to normal
+                        doc.text(detailText, xStart + 50, contentY); // Adjust spacing as needed
+                        contentY += 10; // Move down for the next line
+                    });
+        
+                    yPos = sectionYStart + content.length * 10 + 10 + 10; // Update yPos for the next section
+                }
+        
+                // Add title box
+                doc.setFontSize(16);
+                doc.setFont("calibri", "bold");
+                doc.rect(xStart, yPos, boxWidth, 15);
+                doc.text("IT ASSET PO REQUEST FORM", doc.internal.pageSize.getWidth() / 2, yPos + 10, null, null, 'center');
+        
+                yPos += 20;
+        
+                // Add additional text below the title box
+                doc.setFontSize(10);
+                doc.text("• This form shall be accomplished for every Purchase Order requested to Finance Department.", xStart, yPos);
+        
+                yPos += 10;
+        
+                // Calculate the x position for the ticket number to align it on the right
+                const ticketXPos = doc.internal.pageSize.getWidth() - doc.getTextWidth("Ticket #: " + (data.name || '')) - margin - 10; // 10 is for some padding
+        
+                // Add ticket number below the additional text
+                doc.text("Ticket #: " + (data.name || ''), ticketXPos, yPos); // Adjust position as needed
+        
+                yPos += 10;
+        
+                // Adjust the starting Y position for each section
+                const sectionStartY = yPos + 10; // Starting Y position after title and additional text
+        
+                // Add section I
+                const requestingPartyContent = [
+                    "Requestor: " + (data.requestor || ''),
+                    "Program/Department: " + (data.program_dept || ''),
+                    "Date Requested: " + (data.date_requested || ''),
+                    "Date Required: " + (data.date_required || '')
+                ];
+                addSection("I. REQUESTING PARTY INFORMATION", requestingPartyContent);
+        
+                // Add section II
+                const itAssetContent = [
+                    "Expenditure Category: " + (data.expenditure || ''),
+                    "IT Asset Type: " + (data.asset_type || ''),
+                    "Vendor: " + (data.vendor || ''),
+                    "Account Manager: " + (data.manager || ''),
+                    "Email/Mobile: " + (data.email_mobile || ''),
+                    "IT Asset Description: " + (data.asset_desc || '')
+                ];
+                addSection("II. IT ASSET INFORMATION", itAssetContent);
+        
+                // Add section III
+                const itAllocationContent = [
+                    "Location: " + (data.location || ''),
+                    "Place: " + (data.place || ''),
+                    "Business Unit Allocation: " + (data.business_unit || '')
+                ];
+                addSection("III. IT ASSET ALLOCATION", itAllocationContent);
+        
+                // Add section IV
+                const notesContent = [
+                    "Notes: " + (data.notes || ''),
+                    "Prepared by: " + (data.prepared_by || ''),
+                    "Department: " + (data.department || ''),
+                    "Date: " + (data.prepared_date || '')
+                ];
+                addSection("IV. NOTES & ATTACHMENTS", notesContent);
+        
+                // Save the PDF
+                doc.save('IT_Asset_PO_Request_Form.pdf');
+            };
+        };
+        </script>              
        
-               // Collect form data
-               const formData = new FormData(this);
-               const data = {};
-               formData.forEach((value, key) => {
-                   data[key] = value;
-               });
-       
-               // Create a PDF
-               const { jsPDF } = window.jspdf;
-               const doc = new jsPDF();
-               const xStart = 10;
-               const boxWidth = 190;
-       
-               // Add title box
-               doc.setFontSize(16);
-               doc.setFont("calibri", "bold");
-               doc.rect(xStart, 10, boxWidth, 15);
-               doc.text("IT ASSET PO REQUEST FORM", 105, 20, null, null, 'center');
-       
-               // Add additional text below the title box
-               doc.setFontSize(10);
-               doc.text("• This form shall be accomplished for every Purchase Order requested to Finance Department.", 10, 30);
-       
-               // Calculate the x position for the ticket number to align it on the right
-               const ticketXPos = doc.internal.pageSize.getWidth() - doc.getTextWidth("Ticket #: " + (data.name || '')) - 10; // 10 is for some padding
-       
-               // Add ticket number below the additional text
-               doc.text("Ticket #: " + (data.name || ''), ticketXPos, 40); // Adjust position as needed
-       
-               // Function to create a section with a title and content
-               function addSection(title, content, startY) {
-                   // Set font for title
-                   doc.setFontSize(12);
-                   doc.setFont("helvetica", "bold"); // Set font to bold for title
-                   doc.text(title, xStart + 5, startY);
-                   doc.setFont("helvetica", "normal"); // 
-                   const sectionYStart = startY + 5;
-                   doc.setFontSize(10);
-                   doc.rect(xStart, sectionYStart, boxWidth, content.length * 10 + 10); // Adjust rectangle height based on content length
-       
-                   // Add content inside the rectangle
-                   let contentY = sectionYStart + 5;
-                   content.forEach((line) => {
-                       // Split label and value
-                       const [label, ...details] = line.split(':');
-                       const detailText = details.join(':');
-       
-                       // Add label in bold
-                       doc.setFont("calibri", "bold"); // Set font to bold
-                       doc.text(label + ':', xStart + 5, contentY);
-       
-                       // Add detail in normal font
-                       doc.setFont("calibri", "normal"); // Set font back to normal
-                       doc.text(detailText, xStart + 50, contentY); // Adjust spacing as needed
-                       contentY += 10; // Move down for the next line
-                   });
-               }
-       
-               // Add section I
-               const requestingPartyContent = [
-                   "Requestor: " + (data.requestor || ''),
-                   "Client Passthrough cost?: " + (data.client_passthrough || ''),
-                   "Program/Department: " + (data.program_dept || ''),
-                   "Date Requested: " + (data.date_requested || ''),
-                   "Date Required: " + (data.date_required || '')
-               ];
-               addSection("I. REQUESTING PARTY INFORMATION", requestingPartyContent, 50); // Adjust starting Y position
-       
-               // Add section II
-               const itAssetContent = [
-                   "Expenditure Category: " + (data.expenditure || ''),
-                   "IT Asset Type: " + (data.asset_type || ''),
-                   "Vendor: " + (data.vendor || ''),
-                   "Account Manager: " + (data.manager || ''),
-                   "Email/Mobile: " + (data.email_mobile || ''),
-                   "IT Asset Description: " + (data.asset_desc || '')
-               ];
-               addSection("II. IT ASSET INFORMATION", itAssetContent, 130); // Adjust starting Y position
-       
-               // Add section III
-               const itAllocationContent = [
-                   "Location: " + (data.location || ''),
-                   "Place: " + (data.place || ''), 
-                   "Business Unit Allocation: " + (data.business_unit || '')
-               ];
-               addSection("III. IT ASSET ALLOCATION", itAllocationContent, 210); // Adjust starting Y position
-       
-               // Add section IV
-               const notesContent = [
-                   "Notes: " + (data.notes || ''),
-                   "Prepared by: " + (data.prepared_by || ''),
-                   "Department: " + (data.department || ''),
-                   "Date: " + (data.prepared_date || '')
-               ];
-               addSection("IV. NOTES & ATTACHMENTS", notesContent, 260); // Adjust starting Y position
-       
-               // Save the PDF
-               doc.save('IT_Asset_PO_Request_Form.pdf');
-           };
-       };
-       </script>
-       
-       
-
 {% endblock %}
 
 {% block content %}
