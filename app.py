@@ -2,6 +2,7 @@ from flask import Flask, render_template, url_for, request, redirect, flash, ses
 from flask_login import login_required
 import sqlite3
 import os
+import csv
 from functools import wraps
 
 
@@ -68,19 +69,91 @@ def login():
 @app.route("/index")
 @login_required
 def index():
-    return render_template('index.html')
+    conn = get_db_connection()
+    assets = conn.execute('SELECT * FROM assets').fetchall()
+    conn.close()
+    return render_template('index.html', assets=assets)
 
 @app.route('/assets/', methods=["POST", "GET"])
 @login_required
 def assets():
     return render_template('assets.html')
 
+@app.route("/import-csv", methods=["POST"])
+@login_required
+def import_csv():
+    if 'csv_file' not in request.files:
+        flash('No file part')
+        return redirect(url_for('inventory'))
+    
+    file = request.files['csv_file']
+    
+    if file.filename == '':
+        flash('No selected file')
+        return redirect(url_for('inventory'))
+    
+    if file and file.filename.endswith('.csv'):
+        # Read the CSV file
+        csv_file = csv.reader(file.stream.read().decode('utf-8').splitlines())
+        next(csv_file)  # Skip header row
+
+        conn = get_db_connection()
+        
+        # Insert each row into the database
+        for row in csv_file:
+            conn.execute('INSERT INTO assets (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                         (row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12], row[13], row[14], row[15], row[16], row[17], row[18]))
+        
+        conn.commit()
+        conn.close()
+        flash('CSV file imported successfully!')
+    else:
+        flash('Invalid file format. Please upload a CSV file.')
+
+    return redirect(url_for('inventory'))
+
+@app.route("/add-asset/", methods=["POST"])
+@login_required
+def add_asset():
+    site = request.form.get('site')  # Fixed to match HTML
+    asset_type = request.form.get('asset_type')
+    brand = request.form.get('brand')
+    asset_tag = request.form.get('asset_tag')
+    serial_no = request.form.get('serial_no')  # Fixed to match HTML
+    location = request.form.get('location')  # Fixed to match HTML
+    campaign = request.form.get('campaign')
+    station_no = request.form.get('station_no')
+    pur_date = request.form.get('pur_date')  # Fixed to match HTML
+    si_num = request.form.get('si_num')
+    model = request.form.get('model')
+    specs = request.form.get('specs')
+    ram_slot = request.form.get('ram_slot')
+    ram_type = request.form.get('ram_type')
+    ram_capacity = request.form.get('ram_capacity')
+    pc_name = request.form.get('pc_name')
+    win_ver = request.form.get('win_ver')
+    last_upd = request.form.get('last_upd')
+    completed_by = request.form.get('completed_by')
+    
+    conn = get_db_connection()
+    conn.execute('INSERT INTO assets (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                 (site, asset_type, brand, asset_tag, serial_no, location,
+                campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by))
+    conn.commit()
+    conn.close()
+    return render_template('inventory.html', assets=assets)
+
 @app.route('/inventory/', methods=["POST", "GET"])
 @login_required
 def inventory():
-    conn = get_db_connection()
-    assets = conn.execute('SELECT * FROM assets').fetchall()
-    conn.close()
+    try:
+        conn = get_db_connection()
+        assets = conn.execute('SELECT * FROM assets').fetchall()
+        conn.close()
+    except Exception as e:
+        flash(f'An error occurred: {e}')
+        return redirect(url_for('index'))  # Redirect to the index or handle it as needed
+    
     return render_template('inventory.html', assets=assets)
 
 @app.route('/audit/', methods=["POST", "GET"])
