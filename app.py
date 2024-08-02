@@ -112,37 +112,6 @@ def import_csv():
 
     return redirect(url_for('inventory'))
 
-@app.route("/add-asset/", methods=["POST"])
-@login_required
-def add_asset():
-    site = request.form.get('site')  # Fixed to match HTML
-    asset_type = request.form.get('asset_type')
-    brand = request.form.get('brand')
-    asset_tag = request.form.get('asset_tag')
-    serial_no = request.form.get('serial_no')  # Fixed to match HTML
-    location = request.form.get('location')  # Fixed to match HTML
-    campaign = request.form.get('campaign')
-    station_no = request.form.get('station_no')
-    pur_date = request.form.get('pur_date')  # Fixed to match HTML
-    si_num = request.form.get('si_num')
-    model = request.form.get('model')
-    specs = request.form.get('specs')
-    ram_slot = request.form.get('ram_slot')
-    ram_type = request.form.get('ram_type')
-    ram_capacity = request.form.get('ram_capacity')
-    pc_name = request.form.get('pc_name')
-    win_ver = request.form.get('win_ver')
-    last_upd = request.form.get('last_upd')
-    completed_by = request.form.get('completed_by')
-    
-    conn = get_db_connection()
-    conn.execute('INSERT INTO assets (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                 (site, asset_type, brand, asset_tag, serial_no, location,
-                campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by))
-    conn.commit()
-    conn.close()
-    return render_template('inventory.html', assets=assets)
-
 @app.route('/inventory/', methods=["POST", "GET"])
 @login_required
 def inventory():
