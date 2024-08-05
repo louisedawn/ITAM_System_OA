@@ -130,11 +130,6 @@ def inventory():
 def audit():
     return render_template('audit.html')
 
-@app.route('/request/', methods=["POST", "GET"])
-@login_required
-def request_inventory():
-    return render_template('request.html')
-
 @app.route('/systemusers/', methods=["GET"])
 @login_required
 def system_users():
@@ -388,7 +383,141 @@ def edit_asset(asset_id):
     conn.close()
     return render_template('edit_asset.html', asset=asset)
 
+@app.route('/request/', methods=["POST", "GET"])
+@login_required
+def request():
+    try:
+        conn = get_db_connection()
+        assets = conn.execute('SELECT * FROM req_assets').fetchall()
+        conn.close()
+    except Exception as e:
+        flash(f'An error occurred: {e}')
+        return redirect(url_for('index'))  # Redirect to the index or handle it as needed
+    
+    return render_template('request.html', assets=assets)
 
+@app.route('/request-add/', methods=["GET", "POST"])
+@login_required
+def request_add():
+    if request.method == "POST":
+        # Log the incoming data for debugging
+        print(request.form)  # Print submitted data for debugging
+        print("FORM SUBMITTED!!!") 
+        
+        # Get data from the form
+        site = request.form.get('site')  
+        asset_type = request.form.get('asset_type')
+        brand = request.form.get('brand')
+        asset_tag = request.form.get('asset_tag')
+        serial_no = request.form.get('serial_no')
+        location = request.form.get('location')
+        campaign = request.form.get('campaign')
+        station_no = request.form.get('station_no')
+        pur_date = request.form.get('pur_date')
+        si_num = request.form.get('si_num')
+        model = request.form.get('model') 
+        specs = request.form.get('specs')
+        ram_slot = request.form.get('ram_slot')
+        ram_type = request.form.get('ram_type')
+        ram_capacity = request.form.get('ram_capacity')
+        pc_name = request.form.get('pc_name')
+        win_ver = request.form.get('win_ver')
+        last_upd = request.form.get('last_upd')
+        completed_by = request.form.get('completed_by')
+
+        # Insert the data into the database
+        try:
+            conn = get_db_connection()
+            conn.execute('INSERT INTO req_assets (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                         (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by))
+            conn.commit()
+            flash('New IT asset added successfully!')
+            print("Asset added successfully!")
+        except Exception as e:
+            print(f"Error: {e}")  # Log any error that occurs
+            flash('An error occurred while adding the asset.')
+        finally:
+            conn.close()
+        
+        return redirect(url_for('request'))
+    
+    return render_template('request.html')
+
+
+@app.route('/request-delete/<int:asset_id>', methods=['GET', 'POST'])
+@login_required
+def request_delete(asset_id):
+    conn = get_db_connection()
+    asset = conn.execute('SELECT * FROM assets WHERE id = ?', (asset_id,)).fetchone()
+    
+    if request.method == 'POST':
+        password = request.form.get('password')
+        user_email = session.get('user_email')
+
+        # Fetch the current user to validate password
+        user = conn.execute('SELECT * FROM user_accounts WHERE email = ?', (user_email,)).fetchone()
+
+        if user and password == user['password']:  # Assuming plain-text passwords
+            conn.execute('DELETE FROM assets WHERE id = ?', (asset_id,))
+            conn.commit()
+            flash('Asset deleted successfully.', 'success')
+            conn.close()
+            return redirect(url_for('inventory'))
+        else:
+            flash('Invalid password. Please try again.', 'danger')
+    
+    conn.close()
+    return render_template('request_delete.html', asset=asset)
+
+
+@app.route('/request-edit/<int:asset_id>', methods=['GET', 'POST'])
+@login_required
+def request_edit(asset_id):
+    conn = get_db_connection()
+    asset = conn.execute('SELECT * FROM assets WHERE id = ?', (asset_id,)).fetchone()
+
+    if not asset:
+        flash('Asset not found.')
+        return redirect(url_for('inventory'))
+
+    if request.method == 'POST':
+        # Get data from the form
+        site = request.form.get('site')
+        asset_type = request.form.get('asset_type')
+        brand = request.form.get('brand')
+        asset_tag = request.form.get('asset_tag')
+        serial_no = request.form.get('serial_no')
+        location = request.form.get('location')
+        campaign = request.form.get('campaign')
+        station_no = request.form.get('station_no')
+        pur_date = request.form.get('pur_date')
+        si_num = request.form.get('si_num')
+        model = request.form.get('model')
+        specs = request.form.get('specs')
+        ram_slot = request.form.get('ram_slot')
+        ram_type = request.form.get('ram_type')
+        ram_capacity = request.form.get('ram_capacity')
+        pc_name = request.form.get('pc_name')
+        win_ver = request.form.get('win_ver')
+        last_upd = request.form.get('last_upd')
+        completed_by = request.form.get('completed_by')
+
+        # Update the data in the database
+        try:
+            conn.execute('''UPDATE assets SET site = ?, asset_type = ?, brand = ?, asset_tag = ?, serial_no = ?, location = ?, campaign = ?, station_no = ?, pur_date = ?, si_num = ?, model = ?, specs = ?, ram_slot = ?, ram_type = ?, ram_capacity = ?, pc_name = ?, win_ver = ?, last_upd = ?, completed_by = ? WHERE id = ?''',
+                         (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by, asset_id))
+            conn.commit()
+            flash('Asset updated successfully!')
+        except Exception as e:
+            print(f"Error: {e}")
+            flash('An error occurred while updating the asset.')
+        finally:
+            conn.close()
+
+        return redirect(url_for('inventory'))
+    
+    conn.close()
+    return render_template('edit_asset.html', asset=asset)
 
 
 if __name__ == "__main__":
