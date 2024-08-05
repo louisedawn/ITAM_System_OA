@@ -16,7 +16,7 @@
         </ol>
     </div>
     <div class="form-group row justify-content-center">
-        <div class="col-md-">
+        <div class="col-md-4">
             <label for="floorSelect"><b>Select Floor</b></label>
             <select class="form-control" id="floorSelect" name="floor" onchange="showFloorImage()">
                 <option value="" disabled selected>Select Floor</option>
@@ -29,19 +29,30 @@
     </div>
     <div class="form-group row justify-content-center">
         <div class="col-md-6">
-            <img id="floorImage" src="" alt="Floor Image" style="width:100%; display:none;">
+            <img id="floorImage" src="" alt="Floor Image" style="width:100%; display:none;" onclick="toggleFullScreen()">
+        </div>
+    </div>
+    <div class="form-group row justify-content-center">
+        <div class="col-md-4">
+            <form id="uploadForm" enctype="multipart/form-data">
+                <label for="newImage"><b>Upload New Image</b></label>
+                <input type="file" class="form-control-file" id="newImage" name="newImage">
+                <button type="button" class="btn btn-primary mt-2" onclick="uploadImage()">Upload</button>
+            </form>
         </div>
     </div>
 </main>
 
 <script>
+    let currentFloor = '';
+
     function showFloorImage() {
         var floorSelect = document.getElementById('floorSelect');
         var floorImage = document.getElementById('floorImage');
-        var selectedFloor = floorSelect.value;
+        currentFloor = floorSelect.value; // Store the current floor
         
         var imageUrl = '';
-        switch(selectedFloor) {
+        switch(currentFloor) {
             case '7th Floor':
                 imageUrl = "{{ url_for('static', filename='7th_floor.jpg') }}";
                 break;
@@ -52,15 +63,51 @@
                 imageUrl = "{{ url_for('static', filename='21st.png') }}";
                 break;
             case '32nd Floor':
-                imageUrl = "{{ url_for('static', filename='images/32nd_floor.jpg') }}";
+                imageUrl = "{{ url_for('static', filename='32nd_floor.jpg') }}";
                 break;
         }
         
         if (imageUrl) {
-            floorImage.src = imageUrl;
+            floorImage.src = imageUrl + '?v=' + new Date().getTime();
             floorImage.style.display = 'block';
         } else {
             floorImage.style.display = 'none';
+        }
+    }
+
+    function uploadImage() {
+        var formData = new FormData(document.getElementById('uploadForm'));
+        formData.append('floor', currentFloor); // Use the stored current floor
+
+        fetch('/upload_floor_image', {
+            method: 'POST',
+            body: formData
+        }).then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Image uploaded successfully!');
+                // Update the displayed image
+                var floorImage = document.getElementById('floorImage');
+                var newImageUrl = `{{ url_for('static', filename='') }}${currentFloor.replace(' ', '_').toLowerCase()}.jpg?v=` + new Date().getTime();
+                floorImage.src = newImageUrl;
+                floorImage.style.display = 'block'; // Ensure the image is shown
+            } else {
+                alert('Image upload failed!');
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+            alert('Image upload failed!');
+        });
+    }
+
+    function toggleFullScreen() {
+        var floorImage = document.getElementById('floorImage');
+        if (!document.fullscreenElement) {
+            floorImage.requestFullscreen().catch(err => {
+                console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+            });
+        } else {
+            document.exitFullscreen();
         }
     }
 </script>

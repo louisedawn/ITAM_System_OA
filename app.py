@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect, flash, session
+from flask import Flask, render_template, url_for, request, redirect, flash, session, request, redirect, url_for, jsonify
 import sqlite3
 import os
 from functools import wraps
@@ -103,6 +103,29 @@ def audit():
 @login_required
 def workstation():
     return render_template('workstation.html')
+
+#for upload image 
+
+app.config['UPLOAD_FOLDER'] = 'static'
+
+@app.route('/upload_floor_image', methods=['POST'])
+def upload_floor_image():
+    if 'newImage' not in request.files or request.form['floor'] not in ['7th Floor', '19th Floor', '21st Floor', '32nd Floor']:
+        return jsonify(success=False), 400
+
+    file = request.files['newImage']
+    floor = request.form['floor']
+    
+    if file.filename == '':
+        return jsonify(success=False), 400
+    
+    if file:
+        filename = floor.replace(' ', '_').lower() + '.jpg'  # Save as .jpg
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(file_path)
+        return jsonify(success=True)
+
+    return jsonify(success=False), 500
 
 #for PO
 @app.route('/po/', methods=["POST", "GET"])
