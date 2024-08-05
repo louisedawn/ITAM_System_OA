@@ -20,7 +20,7 @@
                 // Create a PDF
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
-                const margin = 13; // Define margin
+                const margin = 20; // Define margin
                 const xStart = margin; // Starting X position with margin
                 const boxWidth = doc.internal.pageSize.getWidth() - margin * 2; // Box width considering margins
                 const pageHeight = doc.internal.pageSize.getHeight(); // Page height
@@ -90,7 +90,7 @@
     
                 // Add additional text below the title box
                 doc.setFont("calibri", "normal"); 
-                doc.setFontSize(7);
+                doc.setFontSize(10);
                 doc.text("• This form shall be accomplished for every Purchase Order requested to Finance Department.", xStart, yPos);
     
                 yPos += 10;
@@ -111,7 +111,7 @@
                 doc.setFontSize(7);
 
                 // Add additional text below the ticket
-                doc.text("This area is to be filled by the IT Asset Custodian.", ticketXPos, additionalTextYPos);
+               // doc.text("This area is to be filled by the IT Asset Custodian.", ticketXPos, additionalTextYPos);
                     
                 yPos = additionalTextYPos + 6; // Update yPos for the next section
 
@@ -183,7 +183,7 @@
 
     <div class="form-container">
         <form id="automatedForm">
-            <h4 class="mb-4">IT ASSET PO REQUEST FORM</h4>
+            <h4 class="mb-4"><b>IT ASSET PO REQUEST FORM</b></h4>
 
             <div class="form-group">
                 <label for="name">Ticket #:</label>
