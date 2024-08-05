@@ -26,20 +26,27 @@
             <li class="breadcrumb-item"><a href="/index">Dashboard</a></li>
             <li class="breadcrumb-item active" aria-current="page">Inventory</li>
         </ol>
-        <form action="/import-csv" method="POST" enctype="multipart/form-data">
-            <input type="file" name="csv_file" required>
-            <input type="submit" value="Import CSV File" class="btn btn-primary" aria-label="Import CSV File">
-        </form> 
-        <br>
+
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center"><b>Manage IT Assets</b>
-                <a href="/add-asset/" id="addAsset" value="Add New Asset" class="btn btn-primary ms-auto" aria-label="Add New Asset">Add New Asset</a></div>
+                <form action="/import-csv" method="POST" enctype="multipart/form-data" class="me-2">
+                    <input type="file" name="csv_file" required>
+                    <input type="submit" value="Import CSV File" class="btn btn-primary" aria-label="Import CSV File">
+                </form>
+                <a href="/add-asset/" id="addAsset" value="Add New Asset" class="btn btn-primary ms-auto" aria-label="Add New Asset">Add New Asset</a>
+            </div>
             <div class="card-body">
                 <div class="card mb-4">
-                    <div class="card-header">
-                        <i class="fas fa-table mr-1"></i>
-                        <b>IT Assets Table</b>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-table mr-1"></i>
+                            <b>IT Assets Table</b>
+                        </div>
+                        <div class="d-flex align-items-center"> <!-- Flex container for buttons -->
+                            <a href="/export-excel" class="btn btn-success" aria-label="Export to Excel">Export to Excel</a> <!-- Export Button -->
+                        </div>
                     </div>
+                    
                     <div class="card-body">
                         <div class="table-responsive">
                             {% if assets|length < 1 %}

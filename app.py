@@ -1,10 +1,12 @@
-from flask import Flask, render_template, url_for, request, redirect, flash, session
+from flask import Flask, render_template, url_for, request, redirect, flash, session, send_file
 from flask_login import login_required
+import pandas as pd
 import sqlite3
+import io
 import os
 import csv
 from functools import wraps
-
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -70,9 +72,40 @@ def login():
 @login_required
 def index():
     conn = get_db_connection()
-    assets = conn.execute('SELECT * FROM assets').fetchall()
+    assets = conn.execute('SELECT * FROM assets ORDER BY id DESC').fetchall()
     conn.close()
     return render_template('index.html', assets=assets)
+
+@app.route("/export-excel")
+@login_required
+def export_excel():
+    conn = get_db_connection()
+    # Fetching data with the desired order
+    assets = conn.execute('SELECT * FROM assets ORDER BY id DESC').fetchall()
+    conn.close()
+
+    # Define column names for the DataFrame
+    column_names = ['ID', 'Site', 'Asset Type', 'Brand', 'Asset Tag', 'Serial Number', 
+                    'Location', 'Campaign', 'Station Number', 'Purchase Date', 
+                    'Sales Invoice Number', 'Model', 'Specifications', 'RAM Slot', 
+                    'RAM Type', 'RAM Capacity', 'PC Name', 'Windows Version', 
+                    'Last Update/Date Installed', 'Completed By']
+
+    # Create a DataFrame from the assets with the specified column names
+    df = pd.DataFrame(assets, columns=column_names)
+
+    # Create a BytesIO object and save the DataFrame as an Excel file
+    output = io.BytesIO()
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name='Assets')
+    output.seek(0)
+
+    # Get the current date in the format YYYY-MM-DD
+    current_date = datetime.now().strftime("%Y-%m-%d")
+    filename = f"ITAssetsInventory_{current_date}.xlsx"  # Desired filename format
+
+    # Send the file to the user
+    return send_file(output, as_attachment=True, attachment_filename=filename, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
 @app.route('/assets/', methods=["POST", "GET"])
 @login_required
