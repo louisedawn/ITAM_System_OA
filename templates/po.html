@@ -62,13 +62,20 @@
                     // Add content inside the rectangle
                     let contentY = sectionYStart + 8;
                     content.forEach((line) => {
-                        // Add label and details
-                        const wrappedText = doc.splitTextToSize(line, boxWidth - 65); // Wrap text to fit in the box
-                        wrappedText.forEach((textLine, index) => {
-                            doc.text(textLine, xStart + 5, contentY + (index * 10)); // Adjust spacing for wrapped lines
-                        });
-                        contentY += wrappedText.length * 10; //
-                    });
+                        // Split field and details
+                        const [field, details] = line.split(": ");
+                        // Set the field as bold
+                        doc.setFont("calibri", "bold");
+                        doc.text(field + ":", xStart + 5, contentY);
+                        // Set the details as normal
+                        doc.setFont("calibri", "normal");
+                        const wrappedDetails = doc.splitTextToSize(details || '', boxWidth - 5 - doc.getTextWidth(field + ": ") - 5); // Wrap text for details
+        wrappedDetails.forEach((wrappedLine, index) => {
+            doc.text(wrappedLine, xStart + 5 + doc.getTextWidth(field + ": ") + 5, contentY + (index * 10)); // Adjust position for details
+        });
+        contentY += 10 * wrappedDetails.length; // Update contentY to account for all wrapped lines
+    });
+
     
                     yPos = sectionYStart + contentY - sectionYStart + 10; // Update yPos for the next section
                 }
@@ -93,8 +100,8 @@
     
                 // Add ticket number below the additional text
                 doc.text("Ticket #: " + (data.name || ''), ticketXPos, yPos); // Adjust position as needed
-                doc.setFont("calibri", "bold")
-                doc.setFontSize(11)
+                doc.setFont("calibri", "bold");
+                doc.setFontSize(11);
     
                 yPos += 10;
     
@@ -135,21 +142,20 @@
                 ];
                 addSection("IV. NOTES & ATTACHMENTS", notesContent);
     
-                // New section for Prepared by, Department, and Date
-                const preparedContent = [
-                    "Prepared by: " + (data.prepared_by || ''),
-                    "Department: " + (data.department || ''),
-                    "Date: " + (data.prepared_date || '')
-                ];
-                addSection("", preparedContent); // New section for prepared by, department, and date
+             // New section for Prepared by, Department, and Date
+            const preparedContent = [
+                "Prepared by: " + (data.prepared_by || ''),
+                "Department: " + (data.department || ''),
+                "Date: " + (data.prepared_date || '')
+            ];
+            addSection("", preparedContent); // Add a title for this section
+
     
                 // Save the PDF
                 doc.save('IT_Asset_PO_Request_Form.pdf');
             };
         };
-    </script>
-               
-       
+    </script> 
 {% endblock %}
 
 {% block content %}
