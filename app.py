@@ -1,4 +1,5 @@
-from flask import Flask, render_template, url_for, request, redirect, flash, session, send_file
+import datetime
+from flask import Flask, render_template, url_for, request, redirect, flash, session
 from flask_login import login_required
 import pandas as pd
 import sqlite3
@@ -429,79 +430,6 @@ def request_inventory():
     
     return render_template('request_inventory.html', assets=assets)
 
-@app.route('/request-add/', methods=["GET", "POST"])
-@login_required
-def request_add():
-    if request.method == "POST":
-        # Log the incoming data for debugging
-        print(request.form)  # Print submitted data for debugging
-        print("FORM SUBMITTED!!!") 
-        
-        # Get data from the form
-        site = request.form.get('site')  
-        asset_type = request.form.get('asset_type')
-        brand = request.form.get('brand')
-        asset_tag = request.form.get('asset_tag')
-        serial_no = request.form.get('serial_no')
-        location = request.form.get('location')
-        campaign = request.form.get('campaign')
-        station_no = request.form.get('station_no')
-        pur_date = request.form.get('pur_date')
-        si_num = request.form.get('si_num')
-        model = request.form.get('model') 
-        specs = request.form.get('specs')
-        ram_slot = request.form.get('ram_slot')
-        ram_type = request.form.get('ram_type')
-        ram_capacity = request.form.get('ram_capacity')
-        pc_name = request.form.get('pc_name')
-        win_ver = request.form.get('win_ver')
-        last_upd = request.form.get('last_upd')
-        completed_by = request.form.get('completed_by')
-
-        # Insert the data into the database
-        try:
-            conn = get_db_connection()
-            conn.execute('INSERT INTO req_assets (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                         (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by))
-            conn.commit()
-            flash('New IT asset requested successfully!')
-            print("Asset Request successful!")
-        except Exception as e:
-            print(f"Error: {e}")  # Log any error that occurs
-            flash('An error occurred while requesting to add the asset.')
-        finally:
-            conn.close()
-        
-        return redirect(url_for('request_inventory'))
-    
-    return render_template('request_add.html')
-
-
-@app.route('/request-delete/<int:asset_id>', methods=['GET', 'POST'])
-@login_required
-def request_delete(asset_id):
-    conn = get_db_connection()
-    asset = conn.execute('SELECT * FROM assets WHERE id = ?', (asset_id,)).fetchone()
-    
-    if request.method == 'POST':
-        password = request.form.get('password')
-        user_email = session.get('user_email')
-
-        # Fetch the current user to validate password
-        user = conn.execute('SELECT * FROM user_accounts WHERE email = ?', (user_email,)).fetchone()
-
-        if user and password == user['password']:  # Assuming plain-text passwords
-            conn.execute('DELETE FROM assets WHERE id = ?', (asset_id,))
-            conn.commit()
-            flash('Asset deleted successfully.', 'success')
-            conn.close()
-            return redirect(url_for('inventory'))
-        else:
-            flash('Invalid password. Please try again.', 'danger')
-    
-    conn.close()
-    return render_template('request_delete.html', asset=asset)
-
 
 @app.route('/request-edit/<int:asset_id>', methods=['GET', 'POST'])
 @login_required
@@ -511,46 +439,84 @@ def request_edit(asset_id):
 
     if not asset:
         flash('Asset not found.')
-        return redirect(url_for('inventory'))
+        return redirect(url_for('request_inventory'))
 
     if request.method == 'POST':
-        # Get data from the form
-        site = request.form.get('site')
-        asset_type = request.form.get('asset_type')
-        brand = request.form.get('brand')
-        asset_tag = request.form.get('asset_tag')
-        serial_no = request.form.get('serial_no')
-        location = request.form.get('location')
-        campaign = request.form.get('campaign')
-        station_no = request.form.get('station_no')
-        pur_date = request.form.get('pur_date')
-        si_num = request.form.get('si_num')
-        model = request.form.get('model')
-        specs = request.form.get('specs')
-        ram_slot = request.form.get('ram_slot')
-        ram_type = request.form.get('ram_type')
-        ram_capacity = request.form.get('ram_capacity')
-        pc_name = request.form.get('pc_name')
-        win_ver = request.form.get('win_ver')
-        last_upd = request.form.get('last_upd')
-        completed_by = request.form.get('completed_by')
-
-        # Update the data in the database
+        data = {
+            'site': request.form.get('site'),
+            'asset_type': request.form.get('asset_type'),
+            'brand': request.form.get('brand'),
+            'asset_tag': request.form.get('asset_tag'),
+            'serial_no': request.form.get('serial_no'),
+            'location': request.form.get('location'),
+            'campaign': request.form.get('campaign'),
+            'station_no': request.form.get('station_no'),
+            'pur_date': request.form.get('pur_date'),
+            'si_num': request.form.get('si_num'),
+            'model': request.form.get('model'),
+            'specs': request.form.get('specs'),
+            'ram_slot': request.form.get('ram_slot'),
+            'ram_type': request.form.get('ram_type'),
+            'ram_capacity': request.form.get('ram_capacity'),
+            'pc_name': request.form.get('pc_name'),
+            'win_ver': request.form.get('win_ver'),
+            'last_upd': request.form.get('last_upd'),
+            'completed_by': request.form.get('completed_by')
+        }
+        
         try:
-            conn.execute('''UPDATE assets SET site = ?, asset_type = ?, brand = ?, asset_tag = ?, serial_no = ?, location = ?, campaign = ?, station_no = ?, pur_date = ?, si_num = ?, model = ?, specs = ?, ram_slot = ?, ram_type = ?, ram_capacity = ?, pc_name = ?, win_ver = ?, last_upd = ?, completed_by = ? WHERE id = ?''',
-                         (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by, asset_id))
+            conn.execute('INSERT INTO req_assets (action, id, site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                         ('edit', asset_id, *data.values()))
             conn.commit()
-            flash('Asset updated successfully!')
+            flash('Edit request submitted successfully!')
         except Exception as e:
-            print(f"Error: {e}")
-            flash('An error occurred while updating the asset.')
+            flash('An error occurred while requesting to edit the asset.')
         finally:
             conn.close()
-
-        return redirect(url_for('inventory'))
+         
+        return redirect(url_for('request_inventory'))
     
     conn.close()
     return render_template('request_edit.html', asset=asset)
+
+@app.route('/manage-requests/', methods=["GET", "POST"])
+@login_required
+def manage_requests():
+    try:
+        conn = get_db_connection()
+        requests = conn.execute('SELECT * FROM req_assets WHERE approved IS NULL').fetchall()  # Only unapproved requests
+        
+        if request.method == 'POST':
+            action = request.form.get('action')
+            request_id = request.form.get('request_id')
+            
+            if action == 'approve':
+                # Approve the request
+                req_data = conn.execute('SELECT * FROM req_assets WHERE id = ?', (request_id,)).fetchone()
+                if req_data['action'] == 'add':
+                    conn.execute('INSERT INTO assets (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                                 (req_data['site'], req_data['asset_type'], req_data['brand'], req_data['asset_tag'], req_data['serial_no'], req_data['location'], req_data['campaign'], req_data['station_no'], req_data['pur_date'], req_data['si_num'], req_data['model'], req_data['specs'], req_data['ram_slot'], req_data['ram_type'], req_data['ram_capacity'], req_data['pc_name'], req_data['win_ver'], req_data['last_upd'], req_data['completed_by']))
+                elif req_data['action'] == 'edit':
+                    conn.execute('UPDATE assets SET site = ?, asset_type = ?, brand = ?, asset_tag = ?, serial_no = ?, location = ?, campaign = ?, station_no = ?, pur_date = ?, si_num = ?, model = ?, specs = ?, ram_slot = ?, ram_type = ?, ram_capacity = ?, pc_name = ?, win_ver = ?, last_upd = ?, completed_by = ? WHERE id = ?',
+                                 (req_data['site'], req_data['asset_type'], req_data['brand'], req_data['asset_tag'], req_data['serial_no'], req_data['location'], req_data['campaign'], req_data['station_no'], req_data['pur_date'], req_data['si_num'], req_data['model'], req_data['specs'], req_data['ram_slot'], req_data['ram_type'], req_data['ram_capacity'], req_data['pc_name'], req_data['win_ver'], req_data['last_upd'], req_data['completed_by'], req_data['id']))
+                elif req_data['action'] == 'delete':
+                    conn.execute('DELETE FROM assets WHERE id = ?', (req_data['id'],))
+                
+                # Mark as approved
+                conn.execute('UPDATE req_assets SET approved = ? WHERE id = ?', (datetime.now(), request_id))
+                conn.commit()
+                flash('Request approved successfully.')
+            elif action == 'reject':
+                # Handle rejection
+                conn.execute('DELETE FROM req_assets WHERE id = ?', (request_id,))
+                conn.commit()
+                flash('Request rejected successfully.')
+    except Exception as e:
+        flash(f'An error occurred: {e}')
+    finally:
+        conn.close()
+
+    return render_template('audit.html', requests=requests)
 
 
 if __name__ == "__main__":

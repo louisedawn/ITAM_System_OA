@@ -15,6 +15,36 @@
         <li class="breadcrumb-item active" aria-current="page">Audit Trail</li>
     </ol>
     </div>
-      
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Action</th>
+                <th>Asset Details</th>
+                <th>Requested By</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for request in requests %}
+            <tr>
+                <td>{{ request.id }}</td>
+                <td>{{ request.action }}</td>
+                <td>{{ request.site }} - {{ request.asset_type }}</td>
+                <td>{{ request.completed_by }}</td>
+                <td>
+                    <form method="POST" style="display:inline;">
+                        <input type="hidden" name="request_id" value="{{ request.id }}">
+                        <button type="submit" name="action" value="approve">Approve</button>
+                    </form>
+                    <form method="POST" style="display:inline;">
+                        <input type="hidden" name="request_id" value="{{ request.id }}">
+                        <button type="submit" name="action" value="reject">Reject</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </main>
 {% endblock %}

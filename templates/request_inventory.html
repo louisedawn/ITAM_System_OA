@@ -28,7 +28,6 @@
         </ol>
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center"><b>Manage IT Assets</b>
-                <a href="/request-add/" id="addAsset" value="Add New Asset" class="btn btn-primary ms-auto" aria-label="Add New Asset">Request New Asset</a></div>
             <div class="card-body">
                 <div class="card mb-4">
                     <div class="card-header">
@@ -73,10 +72,6 @@
                                             <a href="{{ url_for('request_edit', asset_id=asset.id) }}" class="btn btn-warning">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a href="{{ url_for('request_delete', asset_id=asset.id) }}" class="btn btn-danger">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </a>
-                                            
                                         </td> 
                                         <td>{{ asset.id }}</td>
                                         <td>{{ asset.site }}</td>
