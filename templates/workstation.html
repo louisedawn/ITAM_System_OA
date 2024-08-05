@@ -3,25 +3,12 @@
 {% block title %}
 <title>IT Asset Management System</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='workstation.css') }}">
-<style> 
-    document.addEventListener('DOMContentLoaded', function() {
-    const seats = document.querySelectorAll('.seat');
-    seats.forEach(seat => {
-        seat.addEventListener('click', function() {
-            const assets = this.getAttribute('data-assets');
-            alert(`Assets available at this seat: ${assets}`);
-        });
-    });
-});
-</style>
 {% endblock %}
-
 
 {% block content %}
 <main>
     <div class="container-fluid">
         <h1 class="mt-4"><i class="fas fa-laptop"></i> Workstation</h1>
-
         <br>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="/index">Dashboard</a></li>
@@ -31,7 +18,8 @@
     <div class="form-group row justify-content-center">
         <div class="col-md-6">
             <label for="floorSelect"><b>Select Floor</b></label>
-            <select class="form-control" id="floorSelect" name="floor">
+            <select class="form-control" id="floorSelect" name="floor" onchange="showFloorImage()">
+                <option value="" disabled selected>Select Floor</option>
                 <option value="7th Floor">7th Floor</option>
                 <option value="19th Floor">19th Floor</option>
                 <option value="21st Floor">21st Floor</option>
@@ -39,11 +27,41 @@
             </select>
         </div>
     </div>
-    <div class="seat-plan">
-        <div class="seat" data-assets="Laptop, Monitor, Keyboard">Seat 1</div>
-        <div class="seat" data-assets="Desktop, Monitor, Mouse">Seat 2</div>
-        <div class="seat" data-assets="Laptop, Monitor, Mouse">Seat 3</div>
-        <!-- Add more seats as needed -->
+    <div class="form-group row justify-content-center">
+        <div class="col-md-6">
+            <img id="floorImage" src="" alt="Floor Image" style="width:100%; display:none;">
+        </div>
     </div>
 </main>
+
+<script>
+    function showFloorImage() {
+        var floorSelect = document.getElementById('floorSelect');
+        var floorImage = document.getElementById('floorImage');
+        var selectedFloor = floorSelect.value;
+        
+        var imageUrl = '';
+        switch(selectedFloor) {
+            case '7th Floor':
+                imageUrl = "{{ url_for('static', filename='7th_floor.jpg') }}";
+                break;
+            case '19th Floor':
+                imageUrl = "{{ url_for('static', filename='19th.png') }}";
+                break;
+            case '21st Floor':
+                imageUrl = "{{ url_for('static', filename='21st.png') }}";
+                break;
+            case '32nd Floor':
+                imageUrl = "{{ url_for('static', filename='images/32nd_floor.jpg') }}";
+                break;
+        }
+        
+        if (imageUrl) {
+            floorImage.src = imageUrl;
+            floorImage.style.display = 'block';
+        } else {
+            floorImage.style.display = 'none';
+        }
+    }
+</script>
 {% endblock %}
