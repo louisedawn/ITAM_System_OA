@@ -72,7 +72,7 @@ def login():
 @login_required
 def index():
     conn = get_db_connection()
-    assets = conn.execute('SELECT * FROM assets ORDER BY id DESC').fetchall()
+    assets = conn.execute('SELECT * FROM assets ORDER BY updated_at DESC').fetchall()
     conn.close()
     return render_template('index.html', assets=assets)
 
@@ -325,17 +325,17 @@ def add_asset():
         # Insert the data into the database
         try:
             conn = get_db_connection()
-            conn.execute('INSERT INTO assets (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            conn.execute('''INSERT INTO assets (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by, updated_at)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)''',
                          (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by))
             conn.commit()
-            flash('New IT asset added successfully!')
-            print("Asset added successfully!")
+            flash('Asset added successfully!')
         except Exception as e:
-            print(f"Error: {e}")  # Log any error that occurs
+            print(f"Error: {e}")
             flash('An error occurred while adding the asset.')
         finally:
             conn.close()
-        
+
         return redirect(url_for('inventory'))
     
     return render_template('add_asset.html')
@@ -401,7 +401,7 @@ def edit_asset(asset_id):
 
         # Update the data in the database
         try:
-            conn.execute('''UPDATE assets SET site = ?, asset_type = ?, brand = ?, asset_tag = ?, serial_no = ?, location = ?, campaign = ?, station_no = ?, pur_date = ?, si_num = ?, model = ?, specs = ?, ram_slot = ?, ram_type = ?, ram_capacity = ?, pc_name = ?, win_ver = ?, last_upd = ?, completed_by = ? WHERE id = ?''',
+            conn.execute('''UPDATE assets SET site = ?, asset_type = ?, brand = ?, asset_tag = ?, serial_no = ?, location = ?, campaign = ?, station_no = ?, pur_date = ?, si_num = ?, model = ?, specs = ?, ram_slot = ?, ram_type = ?, ram_capacity = ?, pc_name = ?, win_ver = ?, last_upd = ?, completed_by = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?''',
                          (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by, asset_id))
             conn.commit()
             flash('Asset updated successfully!')
