@@ -26,14 +26,9 @@
             <li class="breadcrumb-item"><a href="/index">Dashboard</a></li>
             <li class="breadcrumb-item active" aria-current="page">Inventory</li>
         </ol>
-        <form action="/import-csv" method="POST" enctype="multipart/form-data">
-            <input type="file" name="csv_file" required>
-            <input type="submit" value="Import CSV File" class="btn btn-primary" aria-label="Import CSV File">
-        </form> 
-        <br>
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center"><b>Manage IT Assets</b>
-                <a href="/add-asset/" id="addAsset" value="Add New Asset" class="btn btn-primary ms-auto" aria-label="Add New Asset">Add New Asset</a></div>
+                <a href="/request-add/" id="addAsset" value="Add New Asset" class="btn btn-primary ms-auto" aria-label="Add New Asset">Request New Asset</a></div>
             <div class="card-body">
                 <div class="card mb-4">
                     <div class="card-header">
@@ -75,10 +70,10 @@
                                     {% for asset in assets %}
                                     <tr>
                                         <td>
-                                            <a href="{{ url_for('edit_asset', asset_id=asset.id) }}" class="btn btn-warning">
+                                            <a href="{{ url_for('request_edit', asset_id=asset.id) }}" class="btn btn-warning">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a href="{{ url_for('delete_asset', asset_id=asset.id) }}" class="btn btn-danger">
+                                            <a href="{{ url_for('request_delete', asset_id=asset.id) }}" class="btn btn-danger">
                                                 <i class="fas fa-trash-alt"></i>
                                             </a>
                                             

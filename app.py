@@ -383,18 +383,18 @@ def edit_asset(asset_id):
     conn.close()
     return render_template('edit_asset.html', asset=asset)
 
-@app.route('/request/', methods=["POST", "GET"])
+@app.route('/request-inventory/', methods=["POST", "GET"])
 @login_required
-def request():
+def request_inventory():
     try:
         conn = get_db_connection()
-        assets = conn.execute('SELECT * FROM req_assets').fetchall()
+        assets = conn.execute('SELECT * FROM assets').fetchall()
         conn.close()
     except Exception as e:
         flash(f'An error occurred: {e}')
         return redirect(url_for('index'))  # Redirect to the index or handle it as needed
     
-    return render_template('request.html', assets=assets)
+    return render_template('request_inventory.html', assets=assets)
 
 @app.route('/request-add/', methods=["GET", "POST"])
 @login_required
@@ -431,17 +431,17 @@ def request_add():
             conn.execute('INSERT INTO req_assets (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
                          (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by))
             conn.commit()
-            flash('New IT asset added successfully!')
-            print("Asset added successfully!")
+            flash('New IT asset requested successfully!')
+            print("Asset Request successful!")
         except Exception as e:
             print(f"Error: {e}")  # Log any error that occurs
-            flash('An error occurred while adding the asset.')
+            flash('An error occurred while requesting to add the asset.')
         finally:
             conn.close()
         
-        return redirect(url_for('request'))
+        return redirect(url_for('request_inventory'))
     
-    return render_template('request.html')
+    return render_template('request_add.html')
 
 
 @app.route('/request-delete/<int:asset_id>', methods=['GET', 'POST'])
@@ -517,7 +517,7 @@ def request_edit(asset_id):
         return redirect(url_for('inventory'))
     
     conn.close()
-    return render_template('edit_asset.html', asset=asset)
+    return render_template('request_edit.html', asset=asset)
 
 
 if __name__ == "__main__":
