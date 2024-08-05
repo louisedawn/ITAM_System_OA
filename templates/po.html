@@ -90,20 +90,31 @@
     
                 // Add additional text below the title box
                 doc.setFont("calibri", "normal"); 
-                doc.setFontSize(10);
+                doc.setFontSize(7);
                 doc.text("• This form shall be accomplished for every Purchase Order requested to Finance Department.", xStart, yPos);
     
                 yPos += 10;
     
                 // Calculate the x position for the ticket number to align it on the right
-                const ticketXPos = doc.internal.pageSize.getWidth() - doc.getTextWidth("Ticket #: " + (data.name || '')) - margin - 10; // 10 is for some padding
-    
+                const ticketXPos = doc.internal.pageSize.getWidth() - doc.getTextWidth("Ticket #: " + (data.name || '')) - margin - 6; // 10 is for some padding
+
+                // Add additional text below the title
+                doc.setFont("calibri", "normal"); 
+                doc.setFontSize(10);
+
+                // Calculate the y position for the additional text (just below the ticket number)
+                const additionalTextYPos = yPos + 10; // Adjust the spacing as needed
+
                 // Add ticket number below the additional text
                 doc.text("Ticket #: " + (data.name || ''), ticketXPos, yPos); // Adjust position as needed
-                doc.setFont("calibri", "bold");
-                doc.setFontSize(11);
-    
-                yPos += 10;
+                doc.setFont("calibri", "normal ");
+                doc.setFontSize(7);
+
+                // Add additional text below the ticket
+                doc.text("This area is to be filled by the IT Asset Custodian.", ticketXPos, additionalTextYPos);
+                    
+                yPos = additionalTextYPos + 6; // Update yPos for the next section
+
     
                 // Adjust the starting Y position for each section
                 const sectionStartY = yPos + 10; // Starting Y position after title and additional text
@@ -156,6 +167,8 @@
             };
         };
     </script> 
+
+    
 {% endblock %}
 
 {% block content %}
