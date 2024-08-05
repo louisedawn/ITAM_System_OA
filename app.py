@@ -1,5 +1,5 @@
 import datetime
-from flask import Flask, render_template, url_for, request, redirect, flash, session
+from flask import Flask, render_template, url_for, request, redirect, flash, session, send_file
 from flask_login import login_required
 import pandas as pd
 import sqlite3
@@ -162,7 +162,18 @@ def inventory():
 @app.route('/audit/', methods=["POST", "GET"])
 @login_required
 def audit():
-    return render_template('audit.html')
+    try:
+        conn = get_db_connection()
+        assets = conn.execute('SELECT * FROM assets ORDER BY id DESC').fetchall()
+        users = conn.execute('SELECT * FROM user_accounts ORDER BY email DESC').fetchall()
+        conn.close()
+    except Exception as e:
+        print("An error occurred:", e)
+        return "An error occurred while fetching data.", 500  # Return a 500 error
+
+    return render_template('audit.html', assets=assets, users=users)
+
+
 
 @app.route('/systemusers/', methods=["GET"])
 @login_required
