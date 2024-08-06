@@ -442,15 +442,12 @@ def request_inventory():
     return render_template('request_inventory.html', assets=assets)
 
 
-@app.route('/request-edit/<int:asset_id>', methods=['GET', 'POST'])
+@app.route('/assets/<int:id>/edit', methods=['GET', 'POST'])
 @login_required
-def request_edit(asset_id):
+def edit_asset_request(id):
     conn = get_db_connection()
-    asset = conn.execute('SELECT * FROM assets WHERE id = ?', (asset_id,)).fetchone()
-
-    if not asset:
-        flash('Asset not found.')
-        return redirect(url_for('request_inventory'))
+    asset = conn.execute('SELECT * FROM assets WHERE id = ?', (id,)).fetchone()
+    conn.close()
 
     if request.method == 'POST':
         data = {
@@ -477,7 +474,7 @@ def request_edit(asset_id):
         
         try:
             conn.execute('INSERT INTO req_assets (action, id, site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                         ('edit', asset_id, *data.values()))
+                         ('edit', id, *data.values()))
             conn.commit()
             flash('Edit request submitted successfully!')
         except Exception as e:
