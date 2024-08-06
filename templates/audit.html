@@ -4,25 +4,22 @@
 <title>IT Asset Management System</title>
 {% endblock %}
 
-
 {% block content %}
 <main>
     <div class="container-fluid">
         <h1 class="mt-4"><i class="fas fa-clock"></i> Audit Trail (History Log)</h1>
 
-    <br><ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item"><a href="/index">Dashboard</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Audit Trail</li>
-    </ol>
+        <br><ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="/index">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Audit Trail</li>
+        </ol>
     </div>
     <div class="container-fluid">
-    <div class="card mb-4">
-        <div class="card-header">Audit Trail (History Logs)</div>
-        <div class="card-body"> 
-            <div class="card mb-4">
+        <!-- IT Consolidated Assets Section -->
+        <div class="card mb-4">
             <div class="card-header"> 
                 <i class="fas fa-table mr-1"></i>
-                <b>Latest Consolidated Assets</b> 
+                <b>Latest Approved Consolidated Assets</b> 
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -49,6 +46,7 @@
                                 <th>Windows Version</th>
                                 <th>Last Update/Date Installed</th>
                                 <th>Completed By</th>
+                                <th>Latest Update At</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -71,6 +69,7 @@
                                 <td>{{ asset.win_ver }}</td>
                                 <td>{{ asset.last_upd }}</td>
                                 <td>{{ asset.completed_by }}</td>
+                                <td>{{ asset.updated_at }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -79,6 +78,77 @@
                 </div>
             </div>
         </div>
+
+        <!-- Pending Asset Edit Requests Section -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-edit mr-1"></i>
+                <b>Pending Asset Movement Requests</b>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    {% if edit_assets|length < 1 %}
+                    <h4>There are no pending asset edit requests.</h4>
+                    {% else %}
+                    <table class="table table-bordered" id="editAssetsTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Site</th>
+                                <th>Asset Type</th>
+                                <th>Brand</th>
+                                <th>Asset Tag</th>
+                                <th>Serial Number</th>
+                                <th>Location/User</th>
+                                <th>Campaign/Vendor</th>
+                                <th>Station Number</th>
+                                <th>Purchased Date</th>
+                                <th>Model</th>
+                                <th>Specifications</th>
+                                <th>RAM Slot</th>
+                                <th>PC Name</th>
+                                <th>Windows Version</th>
+                                <th>Last Update/Date Installed</th>
+                                <th>Requested By</th>
+                                <th>Requested At</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for edit_asset in edit_assets %}
+                            <tr>
+                                <td>{{ edit_asset.id }}</td>
+                                <td>{{ edit_asset.site }}</td>
+                                <td>{{ edit_asset.asset_type }}</td>
+                                <td>{{ edit_asset.brand }}</td>
+                                <td>{{ edit_asset.asset_tag }}</td>
+                                <td>{{ edit_asset.serial_no }}</td>
+                                <td>{{ edit_asset.location }}</td>
+                                <td>{{ edit_asset.campaign }}</td>
+                                <td>{{ edit_asset.station_no }}</td>
+                                <td>{{ edit_asset.pur_date }}</td>
+                                <td>{{ edit_asset.model }}</td>
+                                <td>{{ edit_asset.specs }}</td>
+                                <td>{{ edit_asset.ram_slot }}</td>
+                                <td>{{ edit_asset.pc_name }}</td>
+                                <td>{{ edit_asset.win_ver }}</td>
+                                <td>{{ edit_asset.last_upd }}</td>
+                                <td>{{ edit_asset.requested_by }}</td>
+                                <td>{{ edit_asset.updated_at }}</td>
+                                <td>
+                                    <a href="{{ url_for('approve_edit', edit_id=edit_asset.id) }}" class="btn btn-success">Approve</a>
+                                    <a href="{{ url_for('reject_edit', edit_id=edit_asset.id) }}" class="btn btn-danger">Reject</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Latest System Users Update Section -->
         <div class="card mb-4">
             <div class="card-header">
                 <i class="fas fa-users"></i>
@@ -114,6 +184,5 @@
             </div>
         </div>
     </div>
-</div>
 </main>
 {% endblock %}
