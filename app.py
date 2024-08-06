@@ -445,9 +445,9 @@ def request_inventory():
 
 @app.route('/assets/<int:id>/edit', methods=['GET', 'POST'])
 @login_required
-def edit_asset_request(id):
+def request_edit(asset_id):
     conn = get_db_connection()
-    asset = conn.execute('SELECT * FROM assets WHERE id = ?', (id,)).fetchone()
+    asset = conn.execute('SELECT * FROM assets WHERE id = ?', (asset_id,)).fetchone()
     conn.close()
 
     if request.method == 'POST':

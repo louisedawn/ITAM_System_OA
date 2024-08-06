@@ -35,18 +35,21 @@
                                 <th>Brand</th>
                                 <th>Asset Tag</th>
                                 <th>Serial Number</th>
-                                <th>Location/User</th>
-                                <th>Campaign/Vendor</th>
+                                <th>Location</th>
+                                <th>Campaign</th>
                                 <th>Station Number</th>
-                                <th>Purchased Date</th>
+                                <th>Purchase Date</th>
+                                <th>Sales Invoice Number</th>
                                 <th>Model</th>
                                 <th>Specifications</th>
                                 <th>RAM Slot</th>
+                                <th>RAM Type</th>
+                                <th>RAM Capacity</th>
                                 <th>PC Name</th>
                                 <th>Windows Version</th>
                                 <th>Last Update/Date Installed</th>
                                 <th>Completed By</th>
-                                <th>Latest Update At</th>
+                                <th>Last Update At</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -62,9 +65,12 @@
                                 <td>{{ asset.campaign }}</td>
                                 <td>{{ asset.station_no }}</td>
                                 <td>{{ asset.pur_date }}</td>
+                                <td>{{ asset.si_num }}</td>
                                 <td>{{ asset.model }}</td>
                                 <td>{{ asset.specs }}</td>
                                 <td>{{ asset.ram_slot }}</td>
+                                <td>{{ asset.ram_type }}</td>
+                                <td>{{ asset.ram_capacity }}</td>
                                 <td>{{ asset.pc_name }}</td>
                                 <td>{{ asset.win_ver }}</td>
                                 <td>{{ asset.last_upd }}</td>
@@ -93,53 +99,64 @@
                     <table class="table table-bordered" id="editAssetsTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
+                                <th>Actions</th>
                                 <th>ID</th>
                                 <th>Site</th>
                                 <th>Asset Type</th>
                                 <th>Brand</th>
                                 <th>Asset Tag</th>
                                 <th>Serial Number</th>
-                                <th>Location/User</th>
-                                <th>Campaign/Vendor</th>
+                                <th>Location</th>
+                                <th>Campaign</th>
                                 <th>Station Number</th>
-                                <th>Purchased Date</th>
+                                <th>Purchase Date</th>
+                                <th>Sales Invoice Number</th>
                                 <th>Model</th>
                                 <th>Specifications</th>
                                 <th>RAM Slot</th>
+                                <th>RAM Type</th>
+                                <th>RAM Capacity</th>
                                 <th>PC Name</th>
                                 <th>Windows Version</th>
                                 <th>Last Update/Date Installed</th>
                                 <th>Requested By</th>
                                 <th>Requested At</th>
-                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for edit_asset in edit_assets %}
                             <tr>
-                                <td>{{ edit_asset.id }}</td>
-                                <td>{{ edit_asset.site }}</td>
-                                <td>{{ edit_asset.asset_type }}</td>
-                                <td>{{ edit_asset.brand }}</td>
-                                <td>{{ edit_asset.asset_tag }}</td>
-                                <td>{{ edit_asset.serial_no }}</td>
-                                <td>{{ edit_asset.location }}</td>
-                                <td>{{ edit_asset.campaign }}</td>
-                                <td>{{ edit_asset.station_no }}</td>
-                                <td>{{ edit_asset.pur_date }}</td>
-                                <td>{{ edit_asset.model }}</td>
-                                <td>{{ edit_asset.specs }}</td>
-                                <td>{{ edit_asset.ram_slot }}</td>
-                                <td>{{ edit_asset.pc_name }}</td>
-                                <td>{{ edit_asset.win_ver }}</td>
-                                <td>{{ edit_asset.last_upd }}</td>
-                                <td>{{ edit_asset.requested_by }}</td>
-                                <td>{{ edit_asset.updated_at }}</td>
-                                <td>
-                                    <a href="{{ url_for('approve_edit', edit_id=edit_asset.id) }}" class="btn btn-success">Approve</a>
-                                    <a href="{{ url_for('reject_edit', edit_id=edit_asset.id) }}" class="btn btn-danger">Reject</a>
-                                </td>
-                            </tr>
+                            <td>
+                                <a href="{{ url_for('approve_edit', edit_id=edit_asset.id) }}" class="btn btn-warning">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{{ url_for('reject_edit', edit_id=edit_asset.id) }}" class="btn btn-danger">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                                
+                            </td> 
+                            <td>{{ edit_asset.id }}</td>
+                            <td>{{ edit_asset.site }}</td>
+                            <td>{{ edit_asset.asset_type }}</td>
+                            <td>{{ edit_asset.brand }}</td>
+                            <td>{{ edit_asset.asset_tag }}</td>
+                            <td>{{ edit_asset.serial_no }}</td>
+                            <td>{{ edit_asset.location }}</td>
+                            <td>{{ edit_asset.campaign }}</td>
+                            <td>{{ edit_asset.station_no }}</td>
+                            <td>{{ edit_asset.pur_date }}</td>
+                            <td>{{ edit_asset.si_num }}</td>
+                            <td>{{ edit_asset.model }}</td>
+                            <td>{{ edit_asset.specs }}</td>
+                            <td>{{ edit_asset.ram_slot }}</td>
+                            <td>{{ edit_asset.ram_type }}</td>
+                            <td>{{ edit_asset.ram_capacity }}</td>
+                            <td>{{ edit_asset.pc_name }}</td>
+                            <td>{{ edit_asset.win_ver }}</td>
+                            <td>{{ edit_asset.last_upd }}</td>
+                            <td>{{ edit_asset.requested_by }}</td>
+                            <td>{{ edit_asset.updated_at }}</td>
+                        </tr>
                             {% endfor %}
                         </tbody>
                     </table>

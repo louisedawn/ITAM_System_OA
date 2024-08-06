@@ -67,13 +67,14 @@
                                         <th>Windows Version</th>
                                         <th>Last Update/Date Installed</th>
                                         <th>Completed By</th>
+                                        <th>Last Update At</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for asset in assets %}
                                     <tr>
                                         <td>
-                                            <a href="{{ url_for('edit_asset', asset_id=asset.id) }}" class="btn btn-warning">
+                                            <a href="{{ url_for('edit_asset', asset_id=asset['id']) }}" class="btn btn-warning">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             
@@ -98,6 +99,7 @@
                                         <td>{{ asset.win_ver }}</td>
                                         <td>{{ asset.last_upd }}</td>
                                         <td>{{ asset.completed_by }}</td>
+                                        <td>{{ asset.updated_at }}</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
