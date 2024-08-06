@@ -443,7 +443,7 @@ def request_inventory():
     return render_template('request_inventory.html', assets=assets)
 
 
-@app.route('/assets/<int:id>/edit', methods=['GET', 'POST'])
+@app.route('/request-edit/<int:asset_id>', methods=['GET', 'POST'])
 @login_required
 def request_edit(asset_id):
     conn = get_db_connection()
@@ -484,7 +484,7 @@ def request_edit(asset_id):
         finally:
             conn.close()
          
-        return redirect(url_for('audit'))
+        return redirect(url_for('request_inventory'))
     
     conn.close()
     return render_template('request_edit.html', asset=asset)
