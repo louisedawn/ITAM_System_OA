@@ -40,10 +40,10 @@
                             Inventory
                         </a>
                         {% endif %}
-                        {% if session['user_role'] in ['Super-User'] %}
+                        {% if session['user_role'] in ['Super-User', 'Admin'] %}
                         <a class="nav-link" href="/request/">
                             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                            Inventory
+                            Request Form
                         </a>
                         {% endif %}
                         <a class="nav-link" href="/assets/">
@@ -68,11 +68,11 @@
                             Audit Trail (History Log)
                         </a>
                         {% endif %}
-                        {% if session['user_role'] in ['Super-Admin', 'Admin'] %}
-                        <!-- New Request Form Section -->
+                        {% if session['user_role'] in ['Admin'] %}
+                        <!-- Purchase Order New Request Form Section -->
                         <a class="nav-link" href="/po/">
                             <div class="sb-nav-link-icon"><i class="fas fa-file-alt"></i></div>
-                            Request Form
+                            PO Request Form
                         </a>
                         <!-- End of Request Form Section -->
                         {% endif %}
