@@ -124,7 +124,8 @@
                     "Department: " + (data.department || ''),
                     "Date: " + (data.prepared_date || '')
                 ];
-                addSection("V. PREPARED BY", preparedContent); // Add a title for this section
+
+                 addSection("", preparedContent); // just blank for this section
     
                 // Save the PDF
                 doc.save('IT_Asset_PO_Request_Form.pdf');
@@ -255,6 +256,9 @@
                         <label><input type="radio" name="place" value="Davao (Filandia)"> Davao (Filandia)</label>
                         <label><input type="radio" name="place" value="Davao (Matina)"> Davao (Matina)</label>
                         <label><input type="radio" name="place" value="Summit"> Summit</label>
+                        <label><input type="radio" name="place" value="Summit"> Makati (Test) </label>
+        
+
                     </div>
                 </div>
             </div>
