@@ -21,7 +21,6 @@
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
                 const margin = 20; // Define margin
-                const xStart = margin; // Starting X position with margin
                 const boxWidth = doc.internal.pageSize.getWidth() - margin * 2; // Box width considering margins
                 const pageHeight = doc.internal.pageSize.getHeight(); // Page height
     
@@ -29,95 +28,61 @@
     
                 // Function to create a section with a title and table content
                 function addSection(title, content) {
-                    // Calculate content height by taking the number of lines it would take
-                    const contentHeight = content.reduce((totalHeight, line) => {
-                        const wrappedText = doc.splitTextToSize(line, boxWidth - 65); // Wrap text to fit in the box
-                        return totalHeight + wrappedText.length * 10; // Each line takes 10 units of height
-                    }, 0);
-    
-                    const sectionHeight = contentHeight + 20; // Add space for the title and padding
-    
-                    // Check if the section fits on the current page, if not create a new page
-                    if (yPos + sectionHeight > pageHeight - margin) {
-                        doc.addPage();
-                        yPos = margin; // Reset y position for the new page
+                    if (title) {
+                        // Draw the filled rectangle for the section title
+                        doc.setFillColor(0, 0, 0); // Set fill color to black
+                        doc.rect(margin, yPos, boxWidth, 10, 'F'); // Draw filled rectangle
+                        doc.setFontSize(12);
+                        doc.setFont("calibri", "bold");
+                        doc.setTextColor(255, 255, 255); // Set text color to white
+                        doc.text(title, margin + 5, yPos + 7); // Add title
+                        yPos += 12; // Adjust yPos to be closer to the table
                     }
     
-                    // Set fill color to black and text color to white for the title
-                    doc.setFillColor(0, 0, 0); // Black fill color
-                    doc.setTextColor(255, 255, 255); // White text color
-                    doc.setFontSize(12);
-                    doc.setFont("calibri", "bold");
-                    doc.rect(xStart, yPos, boxWidth, 10, 'F'); // Draw rectangle with fill color
-                    doc.text(title, xStart + 5, yPos + 7); // Add title inside the rectangle
-    
-                    // Reset text color to black for the content
-                    doc.setTextColor(0, 0, 0);
-                    doc.setFont("calibri", "");
-                    doc.setFontSize(12);
-    
-                    const sectionYStart = yPos + 10; // Start drawing the section content below the title
-                    doc.rect(xStart, sectionYStart, boxWidth, sectionHeight - 10); // Draw the rectangle for the section
-    
-                    // Add content inside the rectangle
-                    let contentY = sectionYStart + 8;
-                    content.forEach((line) => {
-                        // Split field and details
+                    // Prepare data for the table without headers
+                    const tableData = content.map(line => {
                         const [field, details] = line.split(": ");
-                        // Set the field as bold
-                        doc.setFont("calibri", "bold");
-                        doc.text(field + ":", xStart + 5, contentY);
-                        // Set the details as normal
-                        doc.setFont("calibri", "normal");
-                        const wrappedDetails = doc.splitTextToSize(details || '', boxWidth - 5 - doc.getTextWidth(field + ": ") - 5); // Wrap text for details
-        wrappedDetails.forEach((wrappedLine, index) => {
-            doc.text(wrappedLine, xStart + 5 + doc.getTextWidth(field + ": ") + 5, contentY + (index * 10)); // Adjust position for details
-        });
-        contentY += 10 * wrappedDetails.length; // Update contentY to account for all wrapped lines
-    });
-
+                        return [field + ":", details || '']; // Create a row for each field and detail
+                    });
     
-                    yPos = sectionYStart + contentY - sectionYStart + 10; // Update yPos for the next section
+                    // Add table to the PDF
+                    doc.autoTable({
+                        body: tableData,
+                        startY: yPos,
+                        theme: 'grid',
+                        margin: { left: margin, right: margin },
+                        styles: { font: 'calibri', fontSize: 12 },
+                        bodyStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0] },
+                    });
+    
+                    // Update yPos for the next section
+                    yPos = doc.lastAutoTable.finalY + 5; // Reduce space after the table
                 }
     
                 // Add title box
                 doc.setFontSize(16);
                 doc.setFont("calibri", "bold");
-                doc.rect(xStart, yPos, boxWidth, 15);
+                doc.rect(margin, yPos, boxWidth, 15);
                 doc.text("IT ASSET PO REQUEST FORM", doc.internal.pageSize.getWidth() / 2, yPos + 10, null, null, 'center');
     
                 yPos += 20;
     
                 // Add additional text below the title box
-                doc.setFont("calibri", "normal"); 
+                doc.setFont("calibri", "normal");
                 doc.setFontSize(10);
-                doc.text("• This form shall be accomplished for every Purchase Order requested to Finance Department.", xStart, yPos);
+                doc.text("• This form shall be accomplished for every Purchase Order requested to Finance Department.", margin, yPos);
     
                 yPos += 10;
     
                 // Calculate the x position for the ticket number to align it on the right
-                const ticketXPos = doc.internal.pageSize.getWidth() - doc.getTextWidth("Ticket #: " + (data.name || '')) - margin - 6; // 10 is for some padding
-
-                // Add additional text below the title
-                doc.setFont("calibri", "normal"); 
-                doc.setFontSize(10);
-
-                // Calculate the y position for the additional text (just below the ticket number)
-                const additionalTextYPos = yPos + 10; // Adjust the spacing as needed
-
-                // Add ticket number below the additional text
-                doc.text("Ticket #: " + (data.name || ''), ticketXPos, yPos); // Adjust position as needed
-                doc.setFont("calibri", "normal ");
-                doc.setFontSize(7);
-
-                // Add additional text below the ticket
-               // doc.text("This area is to be filled by the IT Asset Custodian.", ticketXPos, additionalTextYPos);
-                    
-                yPos = additionalTextYPos + 6; // Update yPos for the next section
-
+                const ticketXPos = doc.internal.pageSize.getWidth() - doc.getTextWidth("Ticket #: " + (data.name || '')) - margin - 6;
     
-                // Adjust the starting Y position for each section
-                const sectionStartY = yPos + 10; // Starting Y position after title and additional text
+                // Add ticket number below the additional text
+                doc.setFontSize(12);
+                doc.setFont("calibri" , "bold" );
+                doc.text("Ticket #: " + (data.name || ''), ticketXPos, yPos);
+    
+                yPos += 10; // Update yPos for the next section
     
                 // Add section I
                 const requestingPartyContent = [
@@ -153,21 +118,19 @@
                 ];
                 addSection("IV. NOTES & ATTACHMENTS", notesContent);
     
-             // New section for Prepared by, Department, and Date
-            const preparedContent = [
-                "Prepared by: " + (data.prepared_by || ''),
-                "Department: " + (data.department || ''),
-                "Date: " + (data.prepared_date || '')
-            ];
-            addSection("", preparedContent); // Add a title for this section
-
+                // New section for Prepared by, Department, and Date
+                const preparedContent = [
+                    "Prepared by: " + (data.prepared_by || ''),
+                    "Department: " + (data.department || ''),
+                    "Date: " + (data.prepared_date || '')
+                ];
+                addSection("V. PREPARED BY", preparedContent); // Add a title for this section
     
                 // Save the PDF
                 doc.save('IT_Asset_PO_Request_Form.pdf');
             };
         };
-    </script> 
-
+    </script>
     
 {% endblock %}
 
