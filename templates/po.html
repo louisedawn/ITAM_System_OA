@@ -41,7 +41,7 @@
     
                     // Prepare data for the table without headers
                     const tableData = content.map(line => {
-                        const [field, details] = line.split(": ");
+                        const [field, details] = line.split(":");
                         return [field + ":", details || '']; // Create a row for each field and detail
                     });
     
@@ -56,7 +56,7 @@
                     });
     
                     // Update yPos for the next section
-                    yPos = doc.lastAutoTable.finalY + 5; // Reduce space after the table
+                    yPos = doc.lastAutoTable.finalY + 7; // Reduce space after the table
                 }
     
                 // Add title box
@@ -117,7 +117,12 @@
                     "Notes: " + (data.notes || ''),
                 ];
                 addSection("IV. NOTES & ATTACHMENTS", notesContent);
-    
+                
+                // New section for Prepared by, Department, and Date
+                doc.addPage(); // Force a new page before this section
+                yPos = margin; // Reset yPos for the new page
+
+                
                 // New section for Prepared by, Department, and Date
                 const preparedContent = [
                     "Prepared by: " + (data.prepared_by || ''),
