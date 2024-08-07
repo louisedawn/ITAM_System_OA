@@ -330,9 +330,14 @@ def add_asset():
                 flash('Serial number already exists. Please use a unique serial number.')
                 return redirect(url_for('add_asset'))
 
+            existing_asset_tag = conn.execute('SELECT COUNT(*) FROM assets WHERE asset_tag = ? AND asset_tag != "N/A"', (asset_tag,)).fetchone()[0]
+            if existing_asset_tag > 0:
+                flash('Asset tag already exists. Please use a unique asset tag.')
+                return redirect(url_for('add_asset'))
+
             # Insert the data into the database
-            conn.execute('''INSERT INTO assets (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by, updated_at)
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)''',
+            conn.execute('''INSERT INTO assets (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
                          (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by))
             conn.commit()
             flash('Asset added successfully!')
@@ -345,7 +350,6 @@ def add_asset():
         return redirect(url_for('inventory'))
     
     return render_template('add_asset.html')
-
 
 
 @app.route('/delete-asset/<int:asset_id>', methods=['GET', 'POST'])
@@ -406,8 +410,19 @@ def edit_asset(asset_id):
         last_upd = request.form.get('last_upd')
         completed_by = request.form.get('completed_by')
 
-        # Update the data in the database
+        # Check for unique serial number and asset tag, excluding the current asset
         try:
+            existing_serial = conn.execute('SELECT COUNT(*) FROM assets WHERE serial_no = ? AND id != ?', (serial_no, asset_id)).fetchone()[0]
+            if existing_serial > 0:
+                flash('Serial number already exists. Please use a unique serial number.')
+                return redirect(url_for('edit_asset', asset_id=asset_id))
+
+            existing_asset_tag = conn.execute('SELECT COUNT(*) FROM assets WHERE asset_tag = ? AND id != ?', (asset_tag, asset_id)).fetchone()[0]
+            if existing_asset_tag > 0:
+                flash('Asset tag already exists. Please use a unique asset tag.')
+                return redirect(url_for('edit_asset', asset_id=asset_id))
+
+            # Update the data in the database
             conn.execute('''UPDATE assets SET site = ?, asset_type = ?, brand = ?, asset_tag = ?, serial_no = ?, location = ?, campaign = ?, station_no = ?, pur_date = ?, si_num = ?, model = ?, specs = ?, ram_slot = ?, ram_type = ?, ram_capacity = ?, pc_name = ?, win_ver = ?, last_upd = ?, completed_by = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?''',
                          (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by, asset_id))
             conn.commit()
@@ -422,6 +437,7 @@ def edit_asset(asset_id):
     
     conn.close()
     return render_template('edit_asset.html', asset=asset)
+
 
 @app.route('/request-inventory/', methods=["POST", "GET"])
 @login_required
