@@ -1,5 +1,5 @@
 import datetime
-from flask import Flask, render_template, url_for, request, redirect, flash, session, send_file
+from flask import Flask, render_template, url_for, request, redirect, flash, session, request, redirect, url_for, jsonify, send_file
 from flask_login import login_required
 import pandas as pd
 import sqlite3
@@ -175,6 +175,46 @@ def audit():
     return render_template('audit.html', assets=assets, users=users, edit_assets=edit_assets)
 
 
+    return render_template('audit.html')
+
+#for workstation
+@app.route('/workstation/', methods=["POST", "GET"])
+@login_required
+def workstation():
+    return render_template('workstation.html')
+
+#for upload image 
+
+app.config['UPLOAD_FOLDER'] = 'static'
+
+@app.route('/upload_floor_image', methods=['POST'])
+def upload_floor_image():
+    if 'newImage' not in request.files or request.form['floor'] not in ['7th Floor', '19th Floor', '21st Floor', '32nd Floor']:
+        return jsonify(success=False), 400
+
+    file = request.files['newImage']
+    floor = request.form['floor']
+    
+    if file.filename == '':
+        return jsonify(success=False), 400
+    
+    if file:
+        filename = floor.replace(' ', '_').lower() + '.jpg'  # Save as .jpg
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(file_path)
+        return jsonify(success=True)
+
+    return jsonify(success=False), 500
+
+#for PO
+@app.route('/po/', methods=["POST", "GET"])
+def po():
+    return render_template('po.html')
+
+@app.route('/request/', methods=["POST", "GET"])
+@login_required
+def request_inventory():
+    return render_template('request.html')
 
 @app.route('/systemusers/', methods=["GET"])
 @login_required
@@ -541,6 +581,8 @@ def reject_edit(id):
         conn.close()
     
     return redirect(url_for('audit'))
+
+
 
 
 

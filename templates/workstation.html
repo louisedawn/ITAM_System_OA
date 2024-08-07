@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>IT Asset Management System</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='workstation.css') }}">
+{% endblock %}
+
+{% block content %}
+<main>
+    <div class="container-fluid">
+        <h1 class="mt-4"><i class="fas fa-laptop"></i> Workstation</h1>
+        <br>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="/index">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Workstation</li>
+        </ol>
+    </div>
+    <div class="form-group row justify-content-center">
+        <div class="col-md-4">
+            <label for="floorSelect"><b>Select Floor</b></label>
+            <select class="form-control" id="floorSelect" name="floor" onchange="showFloorImage()">
+                <option value="" disabled selected>Select Floor</option>
+                <option value="7th Floor">7th Floor</option>
+                <option value="19th Floor">19th Floor</option>
+                <option value="21st Floor">21st Floor</option>
+                <option value="32nd Floor">32nd Floor</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row justify-content-center">
+        <div class="col-md-6">
+            <img id="floorImage" src="" alt="Floor Image" style="width:100%; display:none;" onclick="toggleFullScreen()">
+        </div>
+    </div>
+    <div class="form-group row justify-content-center">
+        <div class="col-md-4">
+            <form id="uploadForm" enctype="multipart/form-data">
+                <label for="newImage"><b>Upload New Image</b></label>
+                <input type="file" class="form-control-file" id="newImage" name="newImage">
+                <button type="button" class="btn btn-primary mt-2" onclick="uploadImage()">Upload</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+<script>
+    let currentFloor = '';
+
+    function showFloorImage() {
+        var floorSelect = document.getElementById('floorSelect');
+        var floorImage = document.getElementById('floorImage');
+        currentFloor = floorSelect.value; // Store the current floor
+        
+        var imageUrl = '';
+        switch(currentFloor) {
+            case '7th Floor':
+                imageUrl = "{{ url_for('static', filename='7th_floor.jpg') }}";
+                break;
+            case '19th Floor':
+                imageUrl = "{{ url_for('static', filename='19th.png') }}";
+                break;
+            case '21st Floor':
+                imageUrl = "{{ url_for('static', filename='21st.png') }}";
+                break;
+            case '32nd Floor':
+                imageUrl = "{{ url_for('static', filename='32nd_floor.jpg') }}";
+                break;
+        }
+        
+        if (imageUrl) {
+            floorImage.src = imageUrl + '?v=' + new Date().getTime();
+            floorImage.style.display = 'block';
+        } else {
+            floorImage.style.display = 'none';
+        }
+    }
+
+    function uploadImage() {
+        var formData = new FormData(document.getElementById('uploadForm'));
+        formData.append('floor', currentFloor); // Use the stored current floor
+
+        fetch('/upload_floor_image', {
+            method: 'POST',
+            body: formData
+        }).then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Image uploaded successfully!');
+                // Update the displayed image
+                var floorImage = document.getElementById('floorImage');
+                var newImageUrl = `{{ url_for('static', filename='') }}${currentFloor.replace(' ', '_').toLowerCase()}.jpg?v=` + new Date().getTime();
+                floorImage.src = newImageUrl;
+                floorImage.style.display = 'block'; // Ensure the image is shown
+            } else {
+                alert('Image upload failed!');
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+            alert('Image upload failed!');
+        });
+    }
+
+    function toggleFullScreen() {
+        var floorImage = document.getElementById('floorImage');
+        if (!document.fullscreenElement) {
+            floorImage.requestFullscreen().catch(err => {
+                console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    }
+</script>
+{% endblock %}
