@@ -481,10 +481,10 @@ def request_edit(asset_id):
         try:
             conn.execute(
                 '''INSERT INTO edit_assets 
-                (asset_id, site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, 
+                (id, site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, 
                 si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, requested_by) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
-                (data['asset_id'], data['site'], data['asset_type'], data['brand'], data['asset_tag'], data['serial_no'],
+                (data['id'], data['site'], data['asset_type'], data['brand'], data['asset_tag'], data['serial_no'],
                  data['location'], data['campaign'], data['station_no'], data['pur_date'], data['si_num'], data['model'],
                  data['specs'], data['ram_slot'], data['ram_type'], data['ram_capacity'], data['pc_name'], data['win_ver'],
                  data['last_upd'], data['requested_by'])
