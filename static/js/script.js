@@ -116,22 +116,20 @@ $(document).ready(function() {
 
     });
   }
- /*  function ajaxCallLocation() {
-    $.ajax({
-      data: {
-        location: $("#location_name").val(),
-      },
-      type: "POST",
-      url: "dub-locations",
-    }).done(function (data) {
-      if(data.output) {
-        console.log(data.output)
+
+  // Column visibility toggle functionality
+  $('.column-toggle').on('change', function() {
+    var column = $(this).val();
+    var isChecked = $(this).is(':checked');
+    var table = $('#dataTable');
+
+    table.find('tr').each(function() {
+      if (isChecked) {
+        $(this).find('td:eq(' + column + '), th:eq(' + column + ')').show();
       } else {
-        alert("This Name is already used, please choose other one.");
-        return false;
+        $(this).find('td:eq(' + column + '), th:eq(' + column + ')').hide();
       }
     });
-  } */
-
+  });
 
 });

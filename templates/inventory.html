@@ -48,6 +48,97 @@
                     </div>
                     
                     <div class="card-body">
+                        <div class="mb-3">
+                            <label>Select Columns to Display:</label>
+                            <div class="form-check">
+                                <input class="form-check-input column-toggle" type="checkbox" value="0" id="toggleActions" checked>
+                                <label class="form-check-label" for="toggleActions">Actions</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input column-toggle" type="checkbox" value="1" id="toggleID" checked>
+                                <label class="form-check-label" for="toggleID">ID</label>
+                            </div>
+                            <!-- Add more checkboxes for other columns here -->
+                            <div class="form-check">
+                                <input class="form-check-input column-toggle" type="checkbox" value="2" id="toggleSite" checked>
+                                <label class="form-check-label" for="toggleSite">Site</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
+                                <label class="form-check-label" for="toggleAssetType">Asset Type</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
+                                <label class="form-check-label" for="toggleAssetType">Brand</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
+                                <label class="form-check-label" for="toggleAssetType">Asset Tag</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
+                                <label class="form-check-label" for="toggleAssetType">Serial Number</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
+                                <label class="form-check-label" for="toggleAssetType">Location</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
+                                <label class="form-check-label" for="toggleAssetType">Campaign</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
+                                <label class="form-check-label" for="toggleAssetType">Station Number</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
+                                <label class="form-check-label" for="toggleAssetType">Purchase Date</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
+                                <label class="form-check-label" for="toggleAssetType">Sales Invoice Number</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
+                                <label class="form-check-label" for="toggleAssetType">Model</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
+                                <label class="form-check-label" for="toggleAssetType">Specifications</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
+                                <label class="form-check-label" for="toggleAssetType">RAM Slot</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
+                                <label class="form-check-label" for="toggleAssetType">RAM Type</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
+                                <label class="form-check-label" for="toggleAssetType">RAM Capacity</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
+                                <label class="form-check-label" for="toggleAssetType">PC Name</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
+                                <label class="form-check-label" for="toggleAssetType">Windows Version</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
+                                <label class="form-check-label" for="toggleAssetType">Last Update/Date Installed</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
+                                <label class="form-check-label" for="toggleAssetType">Completed By</label>
+                            </div>
+                            <!-- Continue adding checkboxes for all other columns -->
+                            <!-- ... -->
+                        </div>
+
                         <div class="table-responsive">
                             {% if assets|length < 1 %}
                             <h4>There are no assets, add one above</h4>
@@ -131,6 +222,20 @@
                 flashMessages.style.display = 'none'; // Hide the flash messages
             }
         }, 5000); // 5000 milliseconds = 5 seconds
+
+        // Handle column visibility
+        document.querySelectorAll('.column-toggle').forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                var column = this.value;
+                var isChecked = this.checked;
+                var table = document.getElementById('dataTable');
+                var rows = table.querySelectorAll('tr');
+
+                rows.forEach(function(row) {
+                    row.cells[column].style.display = isChecked ? '' : 'none';
+                });
+            });
+        });
     });
 </script>
 {% endblock %}
