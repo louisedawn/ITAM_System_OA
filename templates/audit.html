@@ -7,6 +7,16 @@
 {% block content %}
 <main>
     <div class="container-fluid">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="alert alert-danger" id="flash-messages">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
         <h1 class="mt-4"><i class="fas fa-clock"></i> Audit Trail (History Log)</h1>
 
         <br><ol class="breadcrumb mb-4">
@@ -169,7 +179,7 @@
                 </div>
             </div>
         </div>
-
+        {% if session['user_role'] in ['Super-Admin'] %}
         <!-- Latest System Users Update Section -->
         <div class="card mb-4">
             <div class="card-header">
@@ -205,6 +215,19 @@
                 </div>
             </div>
         </div>
+        {% endif %}
     </div>
 </main>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set a timer to remove flash messages after 5 seconds
+        setTimeout(function() {
+            var flashMessages = document.getElementById('flash-messages');
+            if (flashMessages) {
+                flashMessages.style.display = 'none'; // Hide the flash messages
+            }
+        }, 5000); // 5000 milliseconds = 5 seconds
+    });
+</script>
+
 {% endblock %}

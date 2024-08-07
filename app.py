@@ -538,7 +538,7 @@ def request_edit(asset_id):
 
 @app.route('/audit/approve/<int:id>', methods=['POST'])
 @login_required
-def approve_edit(id):
+def approve_edit(asset_id):
     conn = get_db_connection()
     try:
         edit_request = conn.execute('SELECT * FROM edit_assets WHERE id = ?', (id,)).fetchone()
@@ -549,7 +549,7 @@ def approve_edit(id):
         
         conn.execute('''UPDATE assets SET site = ?, asset_type = ?, brand = ?, asset_tag = ?, serial_no = ?, location = ?, campaign = ?, station_no = ?, pur_date = ?, si_num = ?, model = ?, specs = ?, ram_slot = ?, ram_type = ?, ram_capacity = ?, pc_name = ?, win_ver = ?, last_upd = ?, completed_by = ? WHERE id = ?''',
                      (edit_request['site'], edit_request['asset_type'], edit_request['brand'], edit_request['asset_tag'], edit_request['serial_no'], edit_request['location'], edit_request['campaign'], edit_request['station_no'], edit_request['pur_date'], edit_request['si_num'], edit_request['model'], edit_request['specs'], edit_request['ram_slot'], edit_request['ram_type'], edit_request['ram_capacity'], edit_request['pc_name'], edit_request['win_ver'], edit_request['last_upd'], edit_request['completed_by'], edit_request['id']))
-        conn.execute('UPDATE edit_assets SET status = "approved" WHERE id = ?', (id,))
+        conn.execute('UPDATE edit_assets SET status = "approved" WHERE id = ?', (asset_id,))
         conn.commit()
         
         flash('Edit request approved and applied.', 'success')
