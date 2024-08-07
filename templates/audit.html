@@ -127,6 +127,7 @@
                             {% for edit_asset in edit_assets %}
                             <tr>
                             <td>
+                                <div class="d-flex">
                                 <form action="{{ url_for('approve_edit', id=edit_asset.id) }}" method="POST" style="display:inline;">
                                     <button type="submit" class="btn btn-success" onclick="return confirm('Are you sure you want to approve this request?');">
                                         <i class="far fa-thumbs-up"></i>
@@ -137,7 +138,7 @@
                                         <i class="	far fa-times-circle"></i>
                                     </button>
                                 </form>
-                                                                
+                                </div>                           
                             </td> 
                             <td>{{ edit_asset.id }}</td>
                             <td>{{ edit_asset.site }}</td>
