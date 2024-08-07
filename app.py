@@ -211,11 +211,6 @@ def upload_floor_image():
 def po():
     return render_template('po.html')
 
-@app.route('/request/', methods=["POST", "GET"])
-@login_required
-def request_inventory():
-    return render_template('request.html')
-
 @app.route('/systemusers/', methods=["GET"])
 @login_required
 def system_users():
