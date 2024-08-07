@@ -452,6 +452,7 @@ def request_edit(asset_id):
 
     if request.method == 'POST':
         data = {
+            'id': request.form.get('id'),
             'site': request.form.get('site'),
             'asset_type': request.form.get('asset_type'),
             'brand': request.form.get('brand'),
@@ -470,49 +471,75 @@ def request_edit(asset_id):
             'pc_name': request.form.get('pc_name'),
             'win_ver': request.form.get('win_ver'),
             'last_upd': request.form.get('last_upd'),
-            'requested_by': request.form.get('requested_by')
+            'requested_by': request.form.get('completed_by')  # Correct field from the form
         }
-        
+
+        # Verify the values are correctly fetched
+        print(data)  # Debugging purposes
+
         conn = get_db_connection()
         try:
-            conn.execute('INSERT INTO edit_assets (id, site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, requested_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                         ('edit', id, *data.values()))
+            conn.execute(
+                '''INSERT INTO edit_assets 
+                (asset_id, site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, 
+                si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, requested_by) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
+                (data['asset_id'], data['site'], data['asset_type'], data['brand'], data['asset_tag'], data['serial_no'],
+                 data['location'], data['campaign'], data['station_no'], data['pur_date'], data['si_num'], data['model'],
+                 data['specs'], data['ram_slot'], data['ram_type'], data['ram_capacity'], data['pc_name'], data['win_ver'],
+                 data['last_upd'], data['requested_by'])
+            )
             conn.commit()
-            flash('Edit request submitted successfully!')
+            flash('Edit request submitted successfully!', 'success')
         except Exception as e:
-            flash('An error occurred while requesting to edit the asset.')
+            flash(f'An error occurred while requesting to edit the asset: {e}', 'danger')
         finally:
             conn.close()
-         
+
         return redirect(url_for('request_inventory'))
-    
-    conn.close()
+
     return render_template('request_edit.html', asset=asset)
+
 
 @app.route('/audit/approve/<int:id>', methods=['POST'])
 @login_required
 def approve_edit(id):
     conn = get_db_connection()
-    edit_request = conn.execute('SELECT * FROM edit_assets WHERE id = ?', (id,)).fetchone()
-    
-    if edit_request:
+    try:
+        edit_request = conn.execute('SELECT * FROM edit_assets WHERE id = ?', (id,)).fetchone()
+        
+        if not edit_request:
+            flash('Edit request not found.', 'danger')
+            return redirect(url_for('audit'))
+        
         conn.execute('''UPDATE assets SET site = ?, asset_type = ?, brand = ?, asset_tag = ?, serial_no = ?, location = ?, campaign = ?, station_no = ?, pur_date = ?, si_num = ?, model = ?, specs = ?, ram_slot = ?, ram_type = ?, ram_capacity = ?, pc_name = ?, win_ver = ?, last_upd = ?, completed_by = ? WHERE id = ?''',
-                            (edit_request['site'], edit_request['asset_type'], edit_request['brand'], edit_request['asset_tag'], edit_request['serial_no'], edit_request['location'], edit_request['campaign'], edit_request['station_no'], edit_request['pur_date'], edit_request['si_num'], edit_request['model'], edit_request['specs'], edit_request['ram_slot'], edit_request['ram_type'], edit_request['ram_capacity'], edit_request['pc_name'], edit_request['win_ver'], edit_request['last_upd'], edit_request['completed_by'], edit_request['asset_id']))
+                     (edit_request['site'], edit_request['asset_type'], edit_request['brand'], edit_request['asset_tag'], edit_request['serial_no'], edit_request['location'], edit_request['campaign'], edit_request['station_no'], edit_request['pur_date'], edit_request['si_num'], edit_request['model'], edit_request['specs'], edit_request['ram_slot'], edit_request['ram_type'], edit_request['ram_capacity'], edit_request['pc_name'], edit_request['win_ver'], edit_request['last_upd'], edit_request['completed_by'], edit_request['id']))
         conn.execute('UPDATE edit_assets SET status = "approved" WHERE id = ?', (id,))
         conn.commit()
+        
+        flash('Edit request approved and applied.', 'success')
+    except Exception as e:
+        print("An error occurred during approval:", e)
+        flash('An error occurred while approving the edit request.', 'danger')
+    finally:
+        conn.close()
     
-    conn.close()
-    flash('Edit request approved and applied.', 'success')
     return redirect(url_for('audit'))
 
-@app.route('/reject_edit/<int:edit_id>', methods=['POST'])
+@app.route('/reject_edit/<int:id>', methods=['POST'])
 @login_required
-def reject_edit(edit_id):
+def reject_edit(id):
     conn = get_db_connection()
-    conn.execute('DELETE FROM edit_assets WHERE id = ?', (edit_id,))
-    conn.commit()
-    conn.close()
-    flash('The edit request has been rejected.', 'success')
+    try:
+        conn.execute('DELETE FROM edit_assets WHERE id = ?', (id,))
+        conn.commit()
+        flash('The edit request has been rejected.', 'success')
+    except Exception as e:
+        print("An error occurred while rejecting the edit request:", e)
+        flash('An error occurred while rejecting the edit request.', 'danger')
+    finally:
+        conn.close()
+    
     return redirect(url_for('audit'))
 
 
