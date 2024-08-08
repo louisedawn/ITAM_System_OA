@@ -81,19 +81,21 @@ def index():
 @login_required
 def export_excel():
     conn = get_db_connection()
-    # Fetching data with the desired order
     assets = conn.execute('SELECT * FROM assets ORDER BY id DESC').fetchall()
     conn.close()
 
-    # Define column names for the DataFrame
-    column_names = ['ID', 'Site', 'Asset Type', 'Brand', 'Asset Tag', 'Serial Number', 
-                    'Location', 'Campaign', 'Station Number', 'Purchase Date', 
-                    'Sales Invoice Number', 'Model', 'Specifications', 'RAM Slot', 
-                    'RAM Type', 'RAM Capacity', 'PC Name', 'Windows Version', 
-                    'Last Update/Date Installed', 'Completed By']
+    # Convert sqlite3.Row to dictionary to handle correctly with pandas
+    assets_list = [dict(row) for row in assets]
 
-    # Create a DataFrame from the assets with the specified column names
-    df = pd.DataFrame(assets, columns=column_names)
+    # Define column names for the DataFrame
+    column_names = ['id', 'site', 'asset_type', 'brand', 'asset_tag', 'serial_no', 
+                    'location', 'campaign', 'station_no', 'pur_date', 
+                    'si_num', 'model', 'specs', 'ram_slot', 
+                    'ram_type', 'ram_capacity', 'pc_name', 'win_ver', 
+                    'last_upd', 'completed_by']
+
+    # Create a DataFrame from the assets list of dictionaries
+    df = pd.DataFrame(assets_list, columns=column_names)
 
     # Create a BytesIO object and save the DataFrame as an Excel file
     output = io.BytesIO()
@@ -106,7 +108,7 @@ def export_excel():
     filename = f"ITAssetsInventory_{current_date}.xlsx"  # Desired filename format
 
     # Send the file to the user
-    return send_file(output, as_attachment=True, attachment_filename=filename, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    return send_file(output, as_attachment=True, download_name=filename, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
 @app.route('/assets/', methods=["POST", "GET"])
 @login_required
