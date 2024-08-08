@@ -4,7 +4,6 @@
 <title>IT Asset Management System</title>
 {% endblock %}
 
-
 {% block content %}
 <main>
     <div class="container-fluid">
@@ -27,7 +26,6 @@
                         <table class="table table-bordered" id="dashboardTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
                                     <th>Site</th>
                                     <th>Asset Type</th>
                                     <th>sBrand</th>
@@ -49,7 +47,6 @@
                             <tbody>
                                 {% for asset in assets %}
                                 <tr>
-                                    <td>{{ asset.id }}</td>
                                     <td>{{ asset.site }}</td>
                                     <td>{{ asset.asset_type }}</td>
                                     <td>{{ asset.brand }}</td>
@@ -76,7 +73,6 @@
             </div>
         </div>
     </div>
-
        
 </main>
 {% endblock %}
