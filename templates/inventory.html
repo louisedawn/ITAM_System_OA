@@ -43,7 +43,7 @@
                             <b>IT Assets Table</b>
                         </div>
                         <div class="d-flex align-items-center"> <!-- Flex container for buttons -->
-                            <a href="/export-excel" class="btn btn-success" aria-label="Export to Excel">Export to Excel</a> <!-- Export Button -->
+                            <a href="#" class="btn btn-success" aria-label="Export to Excel" onclick="exportSelectedColumns()">Export to Excel</a> <!-- Export Button -->
                         </div>
                     </div>
                     
@@ -51,89 +51,84 @@
                         <div class="mb-3">
                             <label>Select Columns to Display:</label>
                             <div class="form-check">
-                                <input class="form-check-input column-toggle" type="checkbox" value="0" id="toggleActions" checked>
-                                <label class="form-check-label" for="toggleActions">Actions</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input column-toggle" type="checkbox" value="1" id="toggleID" checked>
+                                <input class="form-check-input column-toggle" type="checkbox" value="id" id="toggleID" checked>
                                 <label class="form-check-label" for="toggleID">ID</label>
                             </div>
-                            <!-- Add more checkboxes for other columns here -->
                             <div class="form-check">
-                                <input class="form-check-input column-toggle" type="checkbox" value="2" id="toggleSite" checked>
+                                <input class="form-check-input column-toggle" type="checkbox" value="site" id="toggleSite" checked>
                                 <label class="form-check-label" for="toggleSite">Site</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
+                                <input class="form-check-input column-toggle" type="checkbox" value="asset_type" id="toggleAssetType" checked>
                                 <label class="form-check-label" for="toggleAssetType">Asset Type</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
-                                <label class="form-check-label" for="toggleAssetType">Brand</label>
+                                <input class="form-check-input column-toggle" type="checkbox" value="brand" id="toggleBrand" checked>
+                                <label class="form-check-label" for="toggleBrand">Brand</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
-                                <label class="form-check-label" for="toggleAssetType">Asset Tag</label>
+                                <input class="form-check-input column-toggle" type="checkbox" value="asset_tag" id="toggleAssetTag" checked>
+                                <label class="form-check-label" for="toggleAssetTag">Asset Tag</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
-                                <label class="form-check-label" for="toggleAssetType">Serial Number</label>
+                                <input class="form-check-input column-toggle" type="checkbox" value="serial_no" id="toggleSerialNo" checked>
+                                <label class="form-check-label" for="toggleSerialNo">Serial Number</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
-                                <label class="form-check-label" for="toggleAssetType">Location</label>
+                                <input class="form-check-input column-toggle" type="checkbox" value="location" id="toggleLocation" checked>
+                                <label class="form-check-label" for="toggleLocation">Location</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
-                                <label class="form-check-label" for="toggleAssetType">Campaign</label>
+                                <input class="form-check-input column-toggle" type="checkbox" value="campaign" id="toggleCampaign" checked>
+                                <label class="form-check-label" for="toggleCampaign">Campaign</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
-                                <label class="form-check-label" for="toggleAssetType">Station Number</label>
+                                <input class="form-check-input column-toggle" type="checkbox" value="station_no" id="toggleStationNo" checked>
+                                <label class="form-check-label" for="toggleStationNo">Station Number</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
-                                <label class="form-check-label" for="toggleAssetType">Purchase Date</label>
+                                <input class="form-check-input column-toggle" type="checkbox" value="pur_date" id="togglePurDate" checked>
+                                <label class="form-check-label" for="togglePurDate">Purchase Date</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
-                                <label class="form-check-label" for="toggleAssetType">Sales Invoice Number</label>
+                                <input class="form-check-input column-toggle" type="checkbox" value="si_num" id="toggleSiNum" checked>
+                                <label class="form-check-label" for="toggleSiNum">Sales Invoice Number</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
-                                <label class="form-check-label" for="toggleAssetType">Model</label>
+                                <input class="form-check-input column-toggle" type="checkbox" value="model" id="toggleModel" checked>
+                                <label class="form-check-label" for="toggleModel">Model</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
-                                <label class="form-check-label" for="toggleAssetType">Specifications</label>
+                                <input class="form-check-input column-toggle" type="checkbox" value="specs" id="toggleSpecs" checked>
+                                <label class="form-check-label" for="toggleSpecs">Specifications</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
-                                <label class="form-check-label" for="toggleAssetType">RAM Slot</label>
+                                <input class="form-check-input column-toggle" type="checkbox" value="ram_slot" id="toggleRamSlot" checked>
+                                <label class="form-check-label" for="toggleRamSlot">RAM Slot</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
-                                <label class="form-check-label" for="toggleAssetType">RAM Type</label>
+                                <input class="form-check-input column-toggle" type="checkbox" value="ram_type" id="toggleRamType" checked>
+                                <label class="form-check-label" for="toggleRamType">RAM Type</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
-                                <label class="form-check-label" for="toggleAssetType">RAM Capacity</label>
+                                <input class="form-check-input column-toggle" type="checkbox" value="ram_capacity" id="toggleRamCapacity" checked>
+                                <label class="form-check-label" for="toggleRamCapacity">RAM Capacity</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
-                                <label class="form-check-label" for="toggleAssetType">PC Name</label>
+                                <input class="form-check-input column-toggle" type="checkbox" value="pc_name" id="togglePcName" checked>
+                                <label class="form-check-label" for="togglePcName">PC Name</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
-                                <label class="form-check-label" for="toggleAssetType">Windows Version</label>
+                                <input class="form-check-input column-toggle" type="checkbox" value="win_ver" id="toggleWinVer" checked>
+                                <label class="form-check-label" for="toggleWinVer">Windows Version</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
-                                <label class="form-check-label" for="toggleAssetType">Last Update/Date Installed</label>
+                                <input class="form-check-input column-toggle" type="checkbox" value="last_upd" id="toggleLastUpd" checked>
+                                <label class="form-check-label" for="toggleLastUpd">Last Update/Date Installed</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input column-toggle" type="checkbox" value="3" id="toggleAssetType" checked>
-                                <label class="form-check-label" for="toggleAssetType">Completed By</label>
+                                <input class="form-check-input column-toggle" type="checkbox" value="completed_by" id="toggleCompletedBy" checked>
+                                <label class="form-check-label" for="toggleCompletedBy">Completed By</label>
                             </div>
                             <!-- Continue adding checkboxes for all other columns -->
                             <!-- ... -->
@@ -237,5 +232,29 @@
             });
         });
     });
+    function exportSelectedColumns() {
+            const selectedColumns = Array.from(document.querySelectorAll('.column-toggle:checked'))
+                .map(checkbox => checkbox.value);
+
+            fetch('/export-excel', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ selectedColumns })
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'ITAssetsInventory.xlsx';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(error => console.error('Error exporting to Excel:', error));
+        }
 </script>
 {% endblock %}
