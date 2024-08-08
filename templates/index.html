@@ -8,79 +8,104 @@
 <main>
     <div class="container-fluid">
         <h1 class="mt-4"><i class="fas fa-home"></i> Dashboard</h1>
-        <!-- wait! <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item active">Dashboard</li>-->
         <br>
         <div class="card mb-4">
             <div class="card-header">Dashboard</div>
-            <div class="card-body"> 
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="filterCheckboxes"><b>Filter by Location:</b></label>
+                    <div id="filterCheckboxes" class="d-flex flex-wrap">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="storageRoom" name="location" value="Storage Room">
+                            <label class="form-check-label" for="storageRoom">Storage Room</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="7thFloor" name="location" value="7th Floor">
+                            <label class="form-check-label" for="7thFloor">7th Floor</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="19thFloor" name="location" value="19th Floor">
+                            <label class="form-check-label" for="19thFloor">19th Floor</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="32ndFloor" name="location" value="32nd Floor">
+                            <label class="form-check-label" for="32ndFloor">32nd Floor</label>
+                        </div>
+                    </div>
+                </div>
                 <div class="card mb-4">
-                <div class="card-header"> 
-                    <i class="fas fa-table mr-1"></i>
-                    Latest IT Assets Movement
-                <div class="card-body">
-                    <div class="table-responsive">
-                        {% if assets|length < 1 %}
-                        <h4>There are no assets, you may add one in the Inventory</h4>
-                        {% else %}
-                        <table class="table table-bordered" id="dashboardTable" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>Site</th>
-                                    <th>Asset Type</th>
-                                    <th>Brand</th>
-
-                                    <th>Serial Number</th>
-                                    <th>Location</th>
-                                    <th>Campaign</th>
-                                    <th>Station Number</th>
-
-
-                                    <th>Model</th>
-
-
-
-
-
- 
-
-
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for asset in assets %}
-                                <tr>
-                                    <td>{{ asset.site }}</td>
-                                    <td>{{ asset.asset_type }}</td>
-                                    <td>{{ asset.brand }}</td>
-
-                                    <td>{{ asset.serial_no }}</td>
-                                    <td>{{ asset.location }}</td>
-                                    <td>{{ asset.campaign }}</td>
-                                    <td>{{ asset.station_no }}</td>
-
-
-                                    <td>{{ asset.model }}</td>
-
-
-
-
-
- 
-
-
-
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                        {% endif %}
+                    <div class="card-header">
+                        <i class="fas fa-table mr-1"></i>
+                        Latest IT Assets Movement
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            {% if assets|length < 1 %}
+                            <h4>There are no assets, you may add one in the Inventory</h4>
+                            {% else %}
+                            <table class="table table-bordered" id="dashboardTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Site</th>
+                                        <th>Asset Type</th>
+                                        <th>Brand</th>
+                                        <th>Serial Number</th>
+                                        <th>Location</th>
+                                        <th>Campaign</th>
+                                        <th>Station Number</th>
+                                        <th>Model</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for asset in assets %}
+                                    <tr>
+                                        <td>{{ asset.site }}</td>
+                                        <td>{{ asset.asset_type }}</td>
+                                        <td>{{ asset.brand }}</td>
+                                        <td>{{ asset.serial_no }}</td>
+                                        <td>{{ asset.location }}</td>
+                                        <td>{{ asset.campaign }}</td>
+                                        <td>{{ asset.station_no }}</td>
+                                        <td>{{ asset.model }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-       
 </main>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const checkboxes = document.querySelectorAll("#filterCheckboxes input[type='checkbox']");
+    const table = document.getElementById("dashboardTable");
+    const rows = table.querySelectorAll("tbody tr");
+
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener("change", function() {
+            filterTable();
+        });
+    });
+
+    function filterTable() {
+        const checkedBoxes = Array.from(checkboxes).filter(checkbox => checkbox.checked);
+        const filterValues = checkedBoxes.map(checkbox => checkbox.value);
+
+        rows.forEach(row => {
+            const locationCell = row.querySelector("td:nth-child(5)").textContent;
+            if (filterValues.length === 0 || filterValues.includes(locationCell)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    }
+});
+</script>
+
 {% endblock %}
