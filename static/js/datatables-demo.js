@@ -9,3 +9,9 @@ $(document).ready(function() {
     "ordering": false
   });
 });
+
+$(document).ready(function() {
+  $('#usersTable').DataTable({
+    "ordering": false
+  });
+});

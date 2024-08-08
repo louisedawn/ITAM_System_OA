@@ -165,7 +165,7 @@ def audit():
     try:
         conn = get_db_connection()
         assets = conn.execute('SELECT * FROM assets ORDER BY updated_at DESC').fetchall()
-        users = conn.execute('SELECT * FROM user_accounts ORDER BY email ASC').fetchall()
+        users = conn.execute('SELECT * FROM user_accounts ORDER BY updated_at DESC').fetchall()
         edit_assets = conn.execute('SELECT * FROM edit_assets WHERE status = "pending" ORDER BY updated_at DESC').fetchall()
         conn.close()
     except Exception as e:
