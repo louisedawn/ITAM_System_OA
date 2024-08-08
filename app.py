@@ -134,19 +134,51 @@ def import_csv():
         next(csv_file)  # Skip header row
 
         conn = get_db_connection()
+
+        # Create a list to store updated rows
+        updated_rows = []
+        unique_rows = []
         
-        # Insert each row into the database
+        # Check each row in the CSV
         for row in csv_file:
+            location = row[5]      # Assuming location is the 6th column (index 5)
+            campaign = row[6]      # Assuming campaign is the 7th column (index 6)
+            station_no = row[7]    # Assuming station_no is the 8th column (index 7)
+            serial_no = row[4]      # Assuming serial_no is the 5th column (index 4)
+
+            # Check for existing rows with the same location, campaign, station_no, and serial_no
+            existing_row = conn.execute('SELECT * FROM assets WHERE location = ? AND campaign = ? AND station_no = ? AND serial_no = ?',
+                                         (location, campaign, station_no, serial_no)).fetchone()
+            
+            if existing_row:
+                # Update the existing row with new data
+                conn.execute('UPDATE assets SET site = ?, asset_type = ?, brand = ?, asset_tag = ?, serial_no = ?, location = ?, campaign = ?, station_no = ?, pur_date = ?, si_num = ?, model = ?, specs = ?, ram_slot = ?, ram_type = ?, ram_capacity = ?, pc_name = ?, win_ver = ?, last_upd = ?, completed_by = ? WHERE id = ?',
+                             (row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12], row[13], row[14], row[15], row[16], row[17], row[18], existing_row[0]))  # Use existing row's id for the update
+                updated_rows.append(row)
+            else:
+                # If no duplicate found, add to unique rows for insertion
+                unique_rows.append(row)
+
+        # Insert unique rows into the database
+        for row in unique_rows:
             conn.execute('INSERT INTO assets (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
                          (row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12], row[13], row[14], row[15], row[16], row[17], row[18]))
-        
+
         conn.commit()
         conn.close()
-        flash('CSV file imported successfully!')
+
+        # Flash messages
+        if updated_rows:
+            update_messages = [f"Updated: {', '.join(row)}" for row in updated_rows]
+            flash('The following rows were updated:\n' + '\n'.join(update_messages))
+        if unique_rows:
+            flash('CSV file imported successfully!')
+
     else:
         flash('Invalid file format. Please upload a CSV file.')
 
     return redirect(url_for('inventory'))
+
 
 @app.route('/inventory/', methods=["POST", "GET"])
 @login_required
