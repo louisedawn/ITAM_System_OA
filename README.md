@@ -49,6 +49,7 @@ $ venv\Scripts\activate (for windows), . venv/bin/activate  (for mac)
 > pip install pandas 
 > pip install flask_login
 > pip install datetime
+> pip install mariadb
 
 
 **Run the application (app.py) in the terminal of VSCode**
