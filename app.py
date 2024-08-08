@@ -73,7 +73,7 @@ def login():
 @login_required
 def index():
     conn = get_db_connection()
-    assets = conn.execute('SELECT * FROM assets ORDER BY id DESC').fetchall()
+    assets = conn.execute('SELECT * FROM assets ORDER BY updated_at DESC').fetchall()
     conn.close()
     return render_template('index.html', assets=assets)
 
@@ -164,7 +164,7 @@ def inventory():
 def audit():
     try:
         conn = get_db_connection()
-        assets = conn.execute('SELECT * FROM assets ORDER BY id DESC').fetchall()
+        assets = conn.execute('SELECT * FROM assets ORDER BY updated_at DESC').fetchall()
         users = conn.execute('SELECT * FROM user_accounts ORDER BY email ASC').fetchall()
         edit_assets = conn.execute('SELECT * FROM edit_assets WHERE status = "pending" ORDER BY updated_at DESC').fetchall()
         conn.close()
@@ -449,8 +449,11 @@ def edit_asset(asset_id):
 
         # Update the data in the database
         try:
-            conn.execute('''UPDATE assets SET site = ?, asset_type = ?, brand = ?, asset_tag = ?, serial_no = ?, location = ?, campaign = ?, station_no = ?, pur_date = ?, si_num = ?, model = ?, specs = ?, ram_slot = ?, ram_type = ?, ram_capacity = ?, pc_name = ?, win_ver = ?, last_upd = ?, completed_by = ? WHERE id = ?''',
-                         (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by, asset_id))
+            conn.execute('''
+                UPDATE assets 
+                SET site = ?, asset_type = ?, brand = ?, asset_tag = ?, serial_no = ?, location = ?, campaign = ?, station_no = ?, pur_date = ?, si_num = ?, model = ?, specs = ?, ram_slot = ?, ram_type = ?, ram_capacity = ?, pc_name = ?, win_ver = ?, last_upd = ?, completed_by = ?, updated_at = CURRENT_TIMESTAMP 
+                WHERE id = ?''',
+                (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by, asset_id))
             conn.commit()
             flash('Asset updated successfully!')
         except Exception as e:
@@ -463,6 +466,7 @@ def edit_asset(asset_id):
     
     conn.close()
     return render_template('edit_asset.html', asset=asset)
+
 
 @app.route('/request-inventory/', methods=["POST", "GET"])
 @login_required
@@ -547,7 +551,7 @@ def approve_edit(id):
             return redirect(url_for('audit'))
         
         # Update the assets table with the edit request data
-        conn.execute('''UPDATE assets SET site = ?, asset_type = ?, brand = ?, asset_tag = ?, serial_no = ?, location = ?, campaign = ?, station_no = ?, pur_date = ?, si_num = ?, model = ?, specs = ?, ram_slot = ?, ram_type = ?, ram_capacity = ?, pc_name = ?, win_ver = ?, last_upd = ?, completed_by = ? WHERE id = ?''',
+        conn.execute('''UPDATE assets SET site = ?, asset_type = ?, brand = ?, asset_tag = ?, serial_no = ?, location = ?, campaign = ?, station_no = ?, pur_date = ?, si_num = ?, model = ?, specs = ?, ram_slot = ?, ram_type = ?, ram_capacity = ?, pc_name = ?, win_ver = ?, last_upd = ?, completed_by = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?''',
                      (edit_request['site'], edit_request['asset_type'], edit_request['brand'], edit_request['asset_tag'], edit_request['serial_no'], edit_request['location'], edit_request['campaign'], edit_request['station_no'], edit_request['pur_date'], edit_request['si_num'], edit_request['model'], edit_request['specs'], edit_request['ram_slot'], edit_request['ram_type'], edit_request['ram_capacity'], edit_request['pc_name'], edit_request['win_ver'], edit_request['last_upd'], edit_request['requested_by'], edit_request['id']))
 
         # Mark the edit request as approved
