@@ -1,10 +1,10 @@
-# Flask Inventory Managment project
+# Flask Inventory Managment for Open Access IT Assets Management
 
-## Inventory Management Web Application
+## IT Asset Management System
 
-### The goal is to create a web application using Flask framework to manage inventory of a list of products in respective warehouses. Imagine this application will be used in a shop or a warehouse that needs to keep track of various products and various locations.
+### The goal is to create a web application using Flask framework to manage inventory of IT assets deployed in workstations.
 
-## Python, Flask, SQLAlchemy 
+## Python, Flask, SQLite3
 
 ## Installation
 
@@ -32,41 +32,26 @@ $ pipenv shell
 Or use pip + virtualenv:
 
 ```bash
-$ virtualenv venv
-$ . venv/bin/activate  # on Windows, use "venv\Scripts\activate" instead
 $ pip install -r requirements.txt
+$ virtualenv venv
+$ venv\Scripts\activate (for windows), . venv/bin/activate  (for mac)
 ```
 ## How to Run the Application?
+**Before running the application, make sure you have activated the virtual enviroment:**
 
-**Before run the application, make sure you have activated the virtual enviroment:**
+**Make sure to have DB Browser for SQLite3 installed** 
 
-```bash
+**Make sure to have VSCode installed**
+
+**Make sure to have python installed**
+**in the terminal or cmd install these libraries...
+> pip install flask 
+> pip install pandas 
+> pip install flask_login
+> pip install datetime
+
+
+**Run the application (app.py) in the terminal of VSCode**
+```bash 
 $ flask run
 ```
-
-## Screenshots
-
-#### This shows the first part of the dashboard which contains the Products and Locations sections
-
-![screenshot for project](screenshots/scs1.png "This shows the first part of the dashboard which contains the Products and Locations sections")
-
-
-#### This shows the second part of the dashboard while you can add and display locations
-
-![screenshot for project](screenshots/scs2.png "This shows the second part of the dashboard while you can add and display locations")
-
-
-#### This shows the Movements section which add movements and display all recorded movements 
-
-### It also show the navigation of the current page
-
-![screenshot for project](screenshots/scs3.png "This shows the Movements section which add movements and display all recorded movements")
-
-#### a Preview of the Movements records
-
-![screenshot for project](screenshots/scs4.png "a Preview of the Movements records")
-
-
-### The last one shows the Product Balance Report page, which dispaly the total quantity of each product in each Location (warehouse)
-
-![screenshot for project](screenshots/scs5.png "The last one shows the Product Balance Report page, which dispaly the total quantity of each product in each Location (warehouse)")
