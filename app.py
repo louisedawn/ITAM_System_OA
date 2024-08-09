@@ -141,14 +141,16 @@ def import_csv():
         
         # Check each row in the CSV
         for row in csv_file:
-            location = row[5]      # Assuming location is the 6th column (index 5)
-            campaign = row[6]      # Assuming campaign is the 7th column (index 6)
-            station_no = row[7]    # Assuming station_no is the 8th column (index 7)
-            serial_no = row[4]      # Assuming serial_no is the 5th column (index 4)
+            #location = row[5]      # Assuming location is the 6th column (index 5)
+            #campaign = row[6]      # Assuming campaign is the 7th column (index 6)
+            #station_no = row[7]    # Assuming station_no is the 8th column (index 7)
+            asset_type = row[1]      # Assuming asset_type is the 5th column (index 4)
+            asset_tag = row[3]      # Assuming asset_type is the 5th column (index 4)
+            serial_no = row[4]      # Assuming asset_type is the 5th column (index 4)
 
             # Check for existing rows with the same location, campaign, station_no, and serial_no
-            existing_row = conn.execute('SELECT * FROM assets WHERE location = ? AND campaign = ? AND station_no = ? AND serial_no = ?',
-                                         (location, campaign, station_no, serial_no)).fetchone()
+            existing_row = conn.execute('SELECT * FROM assets WHERE asset_type = ? AND asset_tag = ? AND serial_no = ?',
+                                         (asset_type, asset_tag, serial_no)).fetchone()
             
             if existing_row:
                 # Update the existing row with new data
@@ -485,7 +487,7 @@ def edit_asset(asset_id):
         try:
             conn.execute('''
                 UPDATE assets 
-                SET site = ?, asset_type = ?, brand = ?, asset_tag = ?, serial_no = ?, location = ?, campaign = ?, station_no = ?, pur_date = ?, si_num = ?, model = ?, specs = ?, ram_slot = ?, ram_type = ?, ram_capacity = ?, pc_name = ?, win_ver = ?, last_upd = ?, completed_by = ?, updated_at = CURRENT_TIMESTAMP 
+                SET site = ?, asset_type = ?, brand = ?, asset_tag = ?, serial_no = ?, location = ?, campaign = ?, station_no = ?, pur_date = ?, si_num = ?, model = ?, specs = ?, ram_slot = ?, ram_type = ?, ram_capacity = ?, pc_name = ?, win_ver = ?, last_upd = ?, completed_by = ?, updated_at = TEXT 
                 WHERE id = ?''',
                 (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by, asset_id))
             conn.commit()
@@ -585,7 +587,7 @@ def approve_edit(id):
             return redirect(url_for('audit'))
         
         # Update the assets table with the edit request data
-        conn.execute('''UPDATE assets SET site = ?, asset_type = ?, brand = ?, asset_tag = ?, serial_no = ?, location = ?, campaign = ?, station_no = ?, pur_date = ?, si_num = ?, model = ?, specs = ?, ram_slot = ?, ram_type = ?, ram_capacity = ?, pc_name = ?, win_ver = ?, last_upd = ?, completed_by = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?''',
+        conn.execute('''UPDATE assets SET site = ?, asset_type = ?, brand = ?, asset_tag = ?, serial_no = ?, location = ?, campaign = ?, station_no = ?, pur_date = ?, si_num = ?, model = ?, specs = ?, ram_slot = ?, ram_type = ?, ram_capacity = ?, pc_name = ?, win_ver = ?, last_upd = ?, completed_by = ?, updated_at = TEXT WHERE id = ?''',
                      (edit_request['site'], edit_request['asset_type'], edit_request['brand'], edit_request['asset_tag'], edit_request['serial_no'], edit_request['location'], edit_request['campaign'], edit_request['station_no'], edit_request['pur_date'], edit_request['si_num'], edit_request['model'], edit_request['specs'], edit_request['ram_slot'], edit_request['ram_type'], edit_request['ram_capacity'], edit_request['pc_name'], edit_request['win_ver'], edit_request['last_upd'], edit_request['requested_by'], edit_request['id']))
 
         # Mark the edit request as approved
