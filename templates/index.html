@@ -9,16 +9,23 @@
     <div class="container-fluid">
         <h1 class="mt-4"><i class="fas fa-home"></i> Dashboard</h1>
         <br>
+
+        <!-- Storage Room Assets Counter -->
+        <div class="card mb-4 shadow-lg">
+            <div class="card-header bg-primary text-white">
+                <h3 class="m-0">Storage Room Assets</h3>
+            </div>
+            <div class="card-body text-center bg-light">
+                <h4 id="storageRoomCount" class="font-weight-bold text-dark">Assets in Storage Room: 0</h4>
+            </div>
+        </div>
+
         <div class="card mb-4">
             <div class="card-header">Dashboard</div>
             <div class="card-body">
                 <div class="form-group">
                     <label for="filterCheckboxes"><b>Filter by Location:</b></label>
                     <div id="filterCheckboxes" class="d-flex flex-wrap">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="storageRoom" name="location" value="Storage Room">
-                            <label class="form-check-label" for="storageRoom">Storage Room</label>
-                        </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="checkbox" id="7thFloor" name="location" value="7th Floor">
                             <label class="form-check-label" for="7thFloor">7th Floor</label>
@@ -28,11 +35,20 @@
                             <label class="form-check-label" for="19thFloor">19th Floor</label>
                         </div>
                         <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="21stFloor" name="location" value="21st Floor">
+                            <label class="form-check-label" for="21stFloor">21st Floor</label>
+                        </div>
+                        <div class="form-check form-check-inline">
                             <input class="form-check-input" type="checkbox" id="32ndFloor" name="location" value="32nd Floor">
                             <label class="form-check-label" for="32ndFloor">32nd Floor</label>
                         </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="storageRoom" name="location" value="Storage Room">
+                            <label class="form-check-label" for="storageRoom">Storage Room</label>
+                        </div>
                     </div>
                 </div>
+
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-table mr-1"></i>
@@ -79,33 +95,58 @@
         </div>
     </div>
 </main>
-
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const checkboxes = document.querySelectorAll("#filterCheckboxes input[type='checkbox']");
-    const table = document.getElementById("dashboardTable");
-    const rows = table.querySelectorAll("tbody tr");
-
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener("change", function() {
-            filterTable();
+    document.addEventListener("DOMContentLoaded", function() {
+        const checkboxes = document.querySelectorAll("#filterCheckboxes input[type='checkbox']");
+        const table = document.getElementById("dashboardTable");
+        const rows = table.querySelectorAll("tbody tr");
+    
+        // Function to count assets in Storage Room
+        function countStorageRoomAssets() {
+            let storageRoomCount = 0;
+            rows.forEach(row => {
+                const stationNoCell = row.querySelector("td:nth-child(7)").textContent.trim();
+                if (stationNoCell === "Storage Room") {
+                    storageRoomCount++;
+                }
+            });
+            document.getElementById("storageRoomCount").textContent = `Assets in Storage Room: ${storageRoomCount}`;
+        }
+    
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener("change", function() {
+                filterTable();
+            });
         });
+    
+        function filterTable() {
+            const checkedBoxes = Array.from(checkboxes).filter(checkbox => checkbox.checked);
+            const filterValues = checkedBoxes.map(checkbox => checkbox.value.trim().toLowerCase());
+    
+            console.log("Checked filter values:", filterValues); // Debugging output
+    
+            rows.forEach(row => {
+                const locationCell = row.querySelector("td:nth-child(5)").textContent.trim().toLowerCase();
+                const stationNoCell = row.querySelector("td:nth-child(7)").textContent.trim().toLowerCase();
+    
+                // Check if row matches any of the selected filters
+                const matchesLocation = filterValues.includes(locationCell);
+                const matchesStorageRoom = filterValues.includes('storage room') && stationNoCell === 'storage room';
+    
+                console.log("Row data - Location:", locationCell, "Station No:", stationNoCell); // Debugging output
+    
+                if (filterValues.length === 0 || matchesLocation || matchesStorageRoom) {
+                    row.style.display = ""; // Show row
+                } else {
+                    row.style.display = "none"; // Hide row
+                }
+            });
+        }
+    
+        // Initial filtering and count update
+        filterTable();
+        countStorageRoomAssets();
     });
-
-    function filterTable() {
-        const checkedBoxes = Array.from(checkboxes).filter(checkbox => checkbox.checked);
-        const filterValues = checkedBoxes.map(checkbox => checkbox.value);
-
-        rows.forEach(row => {
-            const locationCell = row.querySelector("td:nth-child(5)").textContent;
-            if (filterValues.length === 0 || filterValues.includes(locationCell)) {
-                row.style.display = "";
-            } else {
-                row.style.display = "none";
-            }
-        });
-    }
-});
-</script>
-
+    </script>
+    
 {% endblock %}
