@@ -130,8 +130,6 @@
                                 <input class="form-check-input column-toggle" type="checkbox" value="completed_by" id="toggleCompletedBy" checked>
                                 <label class="form-check-label" for="toggleCompletedBy">Completed By</label>
                             </div>
-                            <!-- Continue adding checkboxes for all other columns -->
-                            <!-- ... -->
                         </div>
 
                         <div class="table-responsive">
@@ -173,8 +171,7 @@
                                             </a>
                                             <a href="{{ url_for('delete_asset', asset_id=asset.id) }}" class="btn btn-danger">
                                                 <i class="fas fa-trash-alt"></i>
-                                            </a>
-                                            
+                                            </a>   
                                         </td> 
                                         <td>{{ asset.id }}</td>
                                         <td>{{ asset.site }}</td>
