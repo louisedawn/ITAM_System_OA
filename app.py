@@ -79,10 +79,21 @@ def index():
 
     # Count the number of assets in the Storage Room
     storage_room_count = conn.execute('SELECT COUNT(*) FROM assets WHERE station_no = "Storage Room"').fetchone()[0]
+    seventh_floor_count = conn.execute('SELECT COUNT(*) FROM assets WHERE location = "7th Floor"').fetchone()[0]
+    nineteenth_floor_count = conn.execute('SELECT COUNT(*) FROM assets WHERE location = "19th Floor"').fetchone()[0]
+    twenty_first_floor_count = conn.execute('SELECT COUNT(*) FROM assets WHERE location = "21st Floor"').fetchone()[0]
+    thirty_second_floor_count = conn.execute('SELECT COUNT(*) FROM assets WHERE location = "32nd Floor"').fetchone()[0]
+
 
     conn.close()
-    return render_template('index.html', assets=assets, storage_room_count=storage_room_count)
-
+    return render_template('index.html', 
+                       assets=assets, 
+                       storage_room_count=storage_room_count,
+                       seventh_floor_count=seventh_floor_count,
+                       nineteenth_floor_count=nineteenth_floor_count,
+                       twenty_first_floor_count=twenty_first_floor_count,
+                       thirty_second_floor_count=thirty_second_floor_count)
+    
 
 
 @app.route("/export-excel")

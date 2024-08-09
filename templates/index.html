@@ -10,13 +10,44 @@
         <h1 class="mt-4"><i class="fas fa-home"></i> Dashboard</h1>
         <br>
 
-        <!-- Storage Room Assets Counter -->
+        <!-- Assets Counter Table -->
         <div class="card mb-4 shadow-lg">
             <div class="card-header bg-primary text-white">
-                <h3 class="m-0">Storage Room Assets</h3>
+                <h3 class="m-0">Assets Overview</h3>
             </div>
-            <div class="card-body text-center bg-white">
-                <h4 id="storageRoomCount" class="font-weight-bold text-dark">Assets in Storage Room: {{ storage_room_count }}</h4>
+            <div class="card-body bg-white">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="assetsCounterTable" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Location</th>
+                                <th>Asset Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Storage Room</td>
+                                <td id="storageRoomCount" class="font-weight-bold text-dark">Assets: {{ storage_room_count }}</td>
+                            </tr>
+                            <tr>
+                                <td>7th Floor</td>
+                                <td id="seventhFloorCount" class="font-weight-bold text-dark">Assets: {{ seventh_floor_count }}</td>
+                            </tr>
+                            <tr>
+                                <td>19th Floor</td>
+                                <td id="nineteenthFloorCount" class="font-weight-bold text-dark">Assets: {{ nineteenth_floor_count }}</td>
+                            </tr>
+                            <tr>
+                                <td>21st Floor</td>
+                                <td id="twentyFirstFloorCount" class="font-weight-bold text-dark">Assets: {{ twenty_first_floor_count }}</td>
+                            </tr>
+                            <tr>
+                                <td>32nd Floor</td>
+                                <td id="thirtySecondFloorCount" class="font-weight-bold text-dark">Assets: {{ thirty_second_floor_count }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
