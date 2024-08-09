@@ -97,9 +97,18 @@ def index():
     
 
 
-@app.route("/export-excel")
+@app.route("/export-excel", methods=["POST"])
 @login_required
 def export_excel():
+    data = request.get_json()
+    selected_columns = data.get('selectedColumns', [])
+
+    if not selected_columns:
+        flash('No columns selected for export.')
+        return redirect(url_for('inventory'))
+
+    columns_string = ', '.join(selected_columns)
+
     conn = get_db_connection()
     assets = conn.execute('SELECT * FROM assets ORDER BY id DESC').fetchall()
     conn.close()
@@ -117,7 +126,6 @@ def export_excel():
     # Create a DataFrame from the assets list of dictionaries
     df = pd.DataFrame(assets_list, columns=column_names)
 
-    # Create a BytesIO object and save the DataFrame as an Excel file
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine='openpyxl') as writer:
         df.to_excel(writer, index=False, sheet_name='Assets')
@@ -403,7 +411,7 @@ def add_asset():
     if request.method == "POST":
         # Log the incoming data for debugging
         print(request.form)  # Print submitted data for debugging
-        print("FORM SUBMITTED!!!") 
+        print("FORM SUBMITTED!!!")
         
         # Get data from the form
         site = request.form.get('site')  
@@ -426,20 +434,31 @@ def add_asset():
         last_upd = request.form.get('last_upd')
         completed_by = request.form.get('completed_by')
 
-        # Insert the data into the database
+        # Check if the serial number already exists, except for "N/A"
         try:
             conn = get_db_connection()
-            conn.execute('INSERT INTO assets (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            existing_serial = conn.execute('SELECT COUNT(*) FROM assets WHERE serial_no = ? AND serial_no != "N/A"', (serial_no,)).fetchone()[0]
+            if existing_serial > 0:
+                flash('Serial number already exists. Please use a unique serial number.')
+                return redirect(url_for('add_asset'))
+
+            existing_asset_tag = conn.execute('SELECT COUNT(*) FROM assets WHERE asset_tag = ? AND asset_tag != "N/A"', (asset_tag,)).fetchone()[0]
+            if existing_asset_tag > 0:
+                flash('Asset tag already exists. Please use a unique asset tag.')
+                return redirect(url_for('add_asset'))
+
+            # Insert the data into the database
+            conn.execute('''INSERT INTO assets (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
                          (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by))
             conn.commit()
-            flash('New IT asset added successfully!')
-            print("Asset added successfully!")
+            flash('Asset added successfully!')
         except Exception as e:
-            print(f"Error: {e}")  # Log any error that occurs
-            flash('An error occurred while adding the asset.')
+            print(f"Error while adding asset: {e}")  # More detailed error logging
+            flash('An error occurred while adding the asset: {}'.format(str(e)))  # Show the error message to the user
         finally:
             conn.close()
-        
+
         return redirect(url_for('inventory'))
     
     return render_template('add_asset.html')
@@ -503,13 +522,21 @@ def edit_asset(asset_id):
         last_upd = request.form.get('last_upd')
         completed_by = request.form.get('completed_by')
 
-        # Update the data in the database
+        # Check for unique serial number and asset tag, excluding the current asset
         try:
-            conn.execute('''
-                UPDATE assets 
-                SET site = ?, asset_type = ?, brand = ?, asset_tag = ?, serial_no = ?, location = ?, campaign = ?, station_no = ?, pur_date = ?, si_num = ?, model = ?, specs = ?, ram_slot = ?, ram_type = ?, ram_capacity = ?, pc_name = ?, win_ver = ?, last_upd = ?, completed_by = ?, updated_at = ? 
-                WHERE id = ?''',
-                (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by, asset_id))
+            existing_serial = conn.execute('SELECT COUNT(*) FROM assets WHERE serial_no = ? AND id != ?', (serial_no, asset_id)).fetchone()[0]
+            if existing_serial > 0:
+                flash('Serial number already exists. Please use a unique serial number.')
+                return redirect(url_for('edit_asset', asset_id=asset_id))
+
+            existing_asset_tag = conn.execute('SELECT COUNT(*) FROM assets WHERE asset_tag = ? AND id != ?', (asset_tag, asset_id)).fetchone()[0]
+            if existing_asset_tag > 0:
+                flash('Asset tag already exists. Please use a unique asset tag.')
+                return redirect(url_for('edit_asset', asset_id=asset_id))
+
+            # Update the data in the database
+            conn.execute('''UPDATE assets SET site = ?, asset_type = ?, brand = ?, asset_tag = ?, serial_no = ?, location = ?, campaign = ?, station_no = ?, pur_date = ?, si_num = ?, model = ?, specs = ?, ram_slot = ?, ram_type = ?, ram_capacity = ?, pc_name = ?, win_ver = ?, last_upd = ?, completed_by = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?''',
+                         (site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by, asset_id))
             conn.commit()
             flash('Asset updated successfully!')
         except Exception as e:
