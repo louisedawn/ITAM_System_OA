@@ -51,12 +51,12 @@
             </div>
         </div>
 
-        <div class="card mb-4">
+        <div class="card mb-4 shadow-lg">
             <div class="card-header"><b>Dashboard</b></div>
             <div class="card-body">
                 <div class="form-group">
                     <label for="filterCheckboxes"><b>Filter by Location:</b></label>
-                    <div id="filterCheckboxes" class="d-flex flex-wrap">
+                    <div id="filterCheckboxes" class="d-flex flex-wrap mb-3">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="checkbox" id="7thFloor" name="location" value="7th Floor">
                             <label class="form-check-label" for="7thFloor">7th Floor&nbsp;&nbsp;&nbsp;&nbsp;</label>
@@ -80,7 +80,7 @@
                     </div>
                 </div>
 
-                <div class="card mb-4">
+                <div class="card mb-4 shadow-lg">
                     <div class="card-header">
                         <i class="fas fa-table mr-1"></i>
                         Latest IT Assets Movement
@@ -90,7 +90,7 @@
                             {% if assets|length < 1 %}
                             <h4>There are no assets, you may add one in the Inventory</h4>
                             {% else %}
-                            <table class="table table-bordered" id="dashboardTable" width="100%" cellspacing="0">
+                            <table class="table table-bordered table-hover" id="dashboardTable" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
                                         <th>Site</th>
