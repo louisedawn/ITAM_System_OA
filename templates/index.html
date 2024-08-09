@@ -16,7 +16,7 @@
                 <h3 class="m-0">Storage Room Assets</h3>
             </div>
             <div class="card-body text-center bg-white">
-                <h4 id="storageRoomCount" class="font-weight-bold text-dark">Assets in Storage Room: 0</h4>
+                <h4 id="storageRoomCount" class="font-weight-bold text-dark">Assets in Storage Room: {{ storage_room_count }}</h4>
             </div>
         </div>
 
@@ -95,23 +95,12 @@
         </div>
     </div>
 </main>
+
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     const checkboxes = document.querySelectorAll("#filterCheckboxes input[type='checkbox']");
     const table = document.getElementById("dashboardTable");
     const rows = table.querySelectorAll("tbody tr");
-
-    // Function to count assets in Storage Room
-    function countStorageRoomAssets() {
-        let storageRoomCount = 0;
-        rows.forEach(row => {
-            const stationNoCell = row.querySelector("td:nth-child(7)").textContent.trim();
-            if (stationNoCell === "Storage Room") {
-                storageRoomCount++;
-            }
-        });
-        document.getElementById("storageRoomCount").textContent = `Assets in Storage Room: ${storageRoomCount}`;
-    }
 
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener("change", function() {
@@ -123,8 +112,6 @@ document.addEventListener("DOMContentLoaded", function() {
         const checkedBoxes = Array.from(checkboxes).filter(checkbox => checkbox.checked);
         const filterValues = checkedBoxes.map(checkbox => checkbox.value.trim().toLowerCase());
 
-        console.log("Checked filter values:", filterValues); // Debugging output
-
         rows.forEach(row => {
             const locationCell = row.querySelector("td:nth-child(5)").textContent.trim().toLowerCase();
             const stationNoCell = row.querySelector("td:nth-child(7)").textContent.trim().toLowerCase();
@@ -132,8 +119,6 @@ document.addEventListener("DOMContentLoaded", function() {
             // Check if row matches any of the selected filters
             const matchesLocation = filterValues.includes(locationCell);
             const matchesStorageRoom = filterValues.includes('storage room') && stationNoCell === 'storage room';
-
-            console.log("Row data - Location:", locationCell, "Station No:", stationNoCell); // Debugging output
 
             if (filterValues.length === 0 || matchesLocation || matchesStorageRoom) {
                 row.style.display = ""; // Show row
@@ -143,9 +128,8 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    // Initial filtering and count update
+    // Initial filtering
     filterTable();
-    countStorageRoomAssets();
 });
 </script>
 

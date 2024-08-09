@@ -73,9 +73,17 @@ def login():
 @login_required
 def index():
     conn = get_db_connection()
+    
+    # Fetch all assets
     assets = conn.execute('SELECT * FROM assets ORDER BY updated_at DESC').fetchall()
+
+    # Count the number of assets in the Storage Room
+    storage_room_count = conn.execute('SELECT COUNT(*) FROM assets WHERE station_no = "Storage Room"').fetchone()[0]
+
     conn.close()
-    return render_template('index.html', assets=assets)
+    return render_template('index.html', assets=assets, storage_room_count=storage_room_count)
+
+
 
 @app.route("/export-excel")
 @login_required
