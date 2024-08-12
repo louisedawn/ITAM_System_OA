@@ -28,24 +28,49 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>Storage Room</td>
-                                        <td id="storageRoomCount" class="font-weight-normal text-dark"> {{ storage_room_count }}</td>
+                                        <td>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="storageRoom" name="location" value="Storage Room">
+                                                <label class="form-check-label" for="storageRoom">Storage Room</label>
+                                            </div>
+                                        </td>
+                                        <td id="storageRoomCount" class="font-weight-normal text-dark">{{ storage_room_count }}</td>
                                     </tr>
                                     <tr>
-                                        <td>7th Floor</td>
-                                        <td id="seventhFloorCount" class="font-weight-normal text-dark"> {{ seventh_floor_count }}</td>
+                                        <td>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="7thFloor" name="location" value="7th Floor">
+                                                <label class="form-check-label" for="7thFloor">7th Floor</label>
+                                            </div>
+                                        </td>
+                                        <td id="seventhFloorCount" class="font-weight-normal text-dark">{{ seventh_floor_count }}</td>
                                     </tr>
                                     <tr>
-                                        <td>19th Floor</td>
-                                        <td id="nineteenthFloorCount" class="font-weight-normal text-dark"> {{ nineteenth_floor_count }}</td>
+                                        <td>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="19thFloor" name="location" value="19th Floor">
+                                                <label class="form-check-label" for="19thFloor">19th Floor</label>
+                                            </div>
+                                        </td>
+                                        <td id="nineteenthFloorCount" class="font-weight-normal text-dark">{{ nineteenth_floor_count }}</td>
                                     </tr>
                                     <tr>
-                                        <td>21st Floor</td>
-                                        <td id="twentyFirstFloorCount" class="font-weight-normal text-dark"> {{ twenty_first_floor_count }}</td>
+                                        <td>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="21stFloor" name="location" value="21st Floor">
+                                                <label class="form-check-label" for="21stFloor">21st Floor</label>
+                                            </div>
+                                        </td>
+                                        <td id="twentyFirstFloorCount" class="font-weight-normal text-dark">{{ twenty_first_floor_count }}</td>
                                     </tr>
                                     <tr>
-                                        <td>32nd Floor</td>
-                                        <td id="thirtySecondFloorCount" class="font-weight-normal text-dark"> {{ thirty_second_floor_count }}</td>
+                                        <td>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="32ndFloor" name="location" value="32nd Floor">
+                                                <label class="form-check-label" for="32ndFloor">32nd Floor</label>
+                                            </div>
+                                        </td>
+                                        <td id="thirtySecondFloorCount" class="font-weight-normal text-dark">{{ thirty_second_floor_count }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -66,75 +91,44 @@
         </div>
 
         <div class="card mb-4 shadow-lg">
-            <div class="card-header"><b>Dashboard</b></div>
+            <div class="card-header">
+                <i class="fas fa-table mr-1"></i>
+                Latest IT Assets Movement
+            </div>
             <div class="card-body">
-                <div class="form-group">
-                    <label for="filterCheckboxes"><b>Filter by Location:</b></label>
-                    <div id="filterCheckboxes" class="d-flex flex-wrap mb-3">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="7thFloor" name="location" value="7th Floor">
-                            <label class="form-check-label" for="7thFloor">7th Floor&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="19thFloor" name="location" value="19th Floor">
-                            <label class="form-check-label" for="19thFloor">19th Floor&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="21stFloor" name="location" value="21st Floor">
-                            <label class="form-check-label" for="21stFloor">21st Floor&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="32ndFloor" name="location" value="32nd Floor">
-                            <label class="form-check-label" for="32ndFloor">32nd Floor&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="storageRoom" name="location" value="Storage Room">
-                            <label class="form-check-label" for="storageRoom">Storage Room&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card mb-4 shadow-lg">
-                    <div class="card-header">
-                        <i class="fas fa-table mr-1"></i>
-                        Latest IT Assets Movement
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            {% if assets|length < 1 %}
-                            <h4>There are no assets, you may add one in the Inventory</h4>
-                            {% else %}
-                            <table class="table table-bordered table-hover" id="dashboardTable" width="100%" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th>Site</th>
-                                        <th>Asset Type</th>
-                                        <th>Brand</th>
-                                        <th>Serial Number</th>
-                                        <th>Location</th>
-                                        <th>Campaign</th>
-                                        <th>Station Number</th>
-                                        <th>Model</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for asset in assets %}
-                                    <tr>
-                                        <td>{{ asset.site }}</td>
-                                        <td>{{ asset.asset_type }}</td>
-                                        <td>{{ asset.brand }}</td>
-                                        <td>{{ asset.serial_no }}</td>
-                                        <td>{{ asset.location }}</td>
-                                        <td>{{ asset.campaign }}</td>
-                                        <td>{{ asset.station_no }}</td>
-                                        <td>{{ asset.model }}</td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                            {% endif %}
-                        </div>
-                    </div>
+                <div class="table-responsive">
+                    {% if assets|length < 1 %}
+                    <h4>There are no assets, you may add one in the Inventory</h4>
+                    {% else %}
+                    <table class="table table-bordered table-hover" id="dashboardTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Site</th>
+                                <th>Asset Type</th>
+                                <th>Brand</th>
+                                <th>Serial Number</th>
+                                <th>Location</th>
+                                <th>Campaign</th>
+                                <th>Station Number</th>
+                                <th>Model</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for asset in assets %}
+                            <tr data-url="{{ url_for('inventory') }}">  <!-- Update this line with your inventory route -->
+                                <td>{{ asset.site }}</td>
+                                <td>{{ asset.asset_type }}</td>
+                                <td>{{ asset.brand }}</td>
+                                <td>{{ asset.serial_no }}</td>
+                                <td>{{ asset.location }}</td>
+                                <td>{{ asset.campaign }}</td>
+                                <td>{{ asset.station_no }}</td>
+                                <td>{{ asset.model }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -145,75 +139,84 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const checkboxes = document.querySelectorAll("#filterCheckboxes input[type='checkbox']");
-    const table = document.getElementById("dashboardTable");
-    const rows = table.querySelectorAll("tbody tr");
-
-    // Pie chart data
-    const ctx = document.getElementById('assetsPieChart').getContext('2d');
-    const assetCounts = [
-        {{ storage_room_count }},
-        {{ seventh_floor_count }},
-        {{ nineteenth_floor_count }},
-        {{ twenty_first_floor_count }},
-        {{ thirty_second_floor_count }}
-    ];
-    const locations = ['Storage Room', '7th Floor', '19th Floor', '21st Floor', '32nd Floor'];
-
-    const assetsPieChart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: locations,
-            datasets: [{
-                label: 'Asset Distribution',
-                data: assetCounts,
-                backgroundColor: [
-                    '#FF6384',
-                    '#36A2EB',
-                    '#FFCE56',
-                    '#4BC0C0',
-                    '#9966FF'
-                ],
-                borderColor: '#fff',
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-        }
-    });
-
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener("change", function() {
-            filterTable();
-        });
-    });
-
-    function filterTable() {
-        const checkedBoxes = Array.from(checkboxes).filter(checkbox => checkbox.checked);
-        const filterValues = checkedBoxes.map(checkbox => checkbox.value.trim().toLowerCase());
-
-        rows.forEach(row => {
-            const locationCell = row.querySelector("td:nth-child(5)").textContent.trim().toLowerCase();
-            const stationNoCell = row.querySelector("td:nth-child(7)").textContent.trim().toLowerCase();
-
-            // Check if row matches any of the selected filters
-            const matchesLocation = filterValues.includes(locationCell);
-            const matchesStorageRoom = filterValues.includes('storage room') && stationNoCell === 'storage room';
-
-            if (filterValues.length === 0 || matchesLocation || matchesStorageRoom) {
-                row.style.display = ""; // Show row
-            } else {
-                row.style.display = "none"; // Hide row
+    document.addEventListener("DOMContentLoaded", function() {
+        const checkboxes = document.querySelectorAll(".form-check-input");
+        const table = document.getElementById("dashboardTable");
+        const rows = table.querySelectorAll("tbody tr");
+    
+        // Pie chart data
+        const ctx = document.getElementById('assetsPieChart').getContext('2d');
+        const assetCounts = [
+            {{ storage_room_count }},
+            {{ seventh_floor_count }},
+            {{ nineteenth_floor_count }},
+            {{ twenty_first_floor_count }},
+            {{ thirty_second_floor_count }}
+        ];
+        const locations = ['Storage Room', '7th Floor', '19th Floor', '21st Floor', '32nd Floor'];
+    
+        const assetsPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: locations,
+                datasets: [{
+                    label: 'Asset Distribution',
+                    data: assetCounts,
+                    backgroundColor: [
+                        '#FF6384',
+                        '#36A2EB',
+                        '#FFCE56',
+                        '#4BC0C0',
+                        '#9966FF'
+                    ],
+                    borderColor: '#fff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
             }
         });
-    }
-
-    // Initial filtering
-    filterTable();
-});
-</script>
+    
+        // Add click event to rows
+        rows.forEach(row => {
+            row.addEventListener("click", function() {
+                const url = this.getAttribute("data-url");
+                if (url) {
+                    window.location.href = url;
+                }
+            });
+        });
+    
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener("change", function() {
+                filterTable();
+            });
+        });
+    
+        function filterTable() {
+            const checkedBoxes = Array.from(checkboxes).filter(checkbox => checkbox.checked);
+            const filterValues = checkedBoxes.map(checkbox => checkbox.value.trim().toLowerCase());
+    
+            rows.forEach(row => {
+                const locationCell = row.querySelector("td:nth-child(5)").textContent.trim().toLowerCase();
+                const stationNoCell = row.querySelector("td:nth-child(7)").textContent.trim().toLowerCase();
+    
+                const matchesLocation = filterValues.includes(locationCell);
+                const matchesStorageRoom = filterValues.includes('storage room') && stationNoCell === 'storage room';
+    
+                if (filterValues.length === 0 || matchesLocation || matchesStorageRoom) {
+                    row.style.display = ""; // Show row
+                } else {
+                    row.style.display = "none"; // Hide row
+                }
+            });
+        }
+    
+        // Initial filtering
+        filterTable();
+    });
+    </script>    
 
 {% endblock %}
