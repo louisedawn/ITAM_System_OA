@@ -115,7 +115,7 @@
                         </thead>
                         <tbody>
                             {% for asset in assets %}
-                            <tr data-url="{{ url_for('inventory') }}">  <!-- Update this line with your inventory route -->
+                            <tr data-url="{{ url_for('inventory') }}">
                                 <td>{{ asset.site }}</td>
                                 <td>{{ asset.asset_type }}</td>
                                 <td>{{ asset.brand }}</td>
@@ -143,7 +143,7 @@
         const checkboxes = document.querySelectorAll(".form-check-input");
         const table = document.getElementById("dashboardTable");
         const rows = table.querySelectorAll("tbody tr");
-    
+
         // Pie chart data
         const ctx = document.getElementById('assetsPieChart').getContext('2d');
         const assetCounts = [
@@ -153,8 +153,9 @@
             {{ twenty_first_floor_count }},
             {{ thirty_second_floor_count }}
         ];
+        
         const locations = ['Storage Room', '7th Floor', '19th Floor', '21st Floor', '32nd Floor'];
-    
+
         const assetsPieChart = new Chart(ctx, {
             type: 'pie',
             data: {
@@ -176,9 +177,27 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right', // Positions the legend on the right side
+                        align: 'center',  // Aligns the legend vertically in the center
+                        labels: {
+                            boxWidth: 20, // Sets the width of the legend box
+                            padding: 20   // Adds padding between the legend items
+                        }
+                    }
+                },
+                layout: {
+                    padding: {
+                        top: 10,
+                        bottom: 10,
+                        left: 10,
+                        right: 10
+                    }
+                }
             }
         });
-    
+
         // Add click event to rows
         rows.forEach(row => {
             row.addEventListener("click", function() {
@@ -188,24 +207,24 @@
                 }
             });
         });
-    
+
         checkboxes.forEach(checkbox => {
             checkbox.addEventListener("change", function() {
                 filterTable();
             });
         });
-    
+
         function filterTable() {
             const checkedBoxes = Array.from(checkboxes).filter(checkbox => checkbox.checked);
             const filterValues = checkedBoxes.map(checkbox => checkbox.value.trim().toLowerCase());
-    
+
             rows.forEach(row => {
                 const locationCell = row.querySelector("td:nth-child(5)").textContent.trim().toLowerCase();
                 const stationNoCell = row.querySelector("td:nth-child(7)").textContent.trim().toLowerCase();
-    
+
                 const matchesLocation = filterValues.includes(locationCell);
                 const matchesStorageRoom = filterValues.includes('storage room') && stationNoCell === 'storage room';
-    
+
                 if (filterValues.length === 0 || matchesLocation || matchesStorageRoom) {
                     row.style.display = ""; // Show row
                 } else {
@@ -213,10 +232,10 @@
                 }
             });
         }
-    
+
         // Initial filtering
         filterTable();
     });
-    </script>    
+</script>
 
 {% endblock %}
