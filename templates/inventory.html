@@ -43,7 +43,7 @@
                             <b>IT Assets Table</b>
                         </div>
                         <div class="d-flex align-items-center"> <!-- Flex container for buttons -->
-                            <a href="#" class="btn btn-success" aria-label="Export to Excel" onclick="exportSelectedColumns()">Export to Excel</a> <!-- Export Button -->
+                            <a href="#" class="btn btn-success" aria-label="Export to Excel" id="exportButton">Export to Excel</a> <!-- Export Button -->
                         </div>
                     </div>
                     
@@ -207,7 +207,7 @@
                                     </tr>
                                     {% endfor %}
                                 </tbody>
-                            </table>                            
+                            </table>                                                        
                             {% endif %}
                         </div>
                     </div>
@@ -243,7 +243,47 @@
         document.querySelectorAll('.column-toggle').forEach(function(checkbox) {
             checkbox.dispatchEvent(new Event('change'));
         });
+
+        // Handle export to Excel
+        document.getElementById('exportButton').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default link behavior
+            
+            // Get selected columns
+            let selectedColumns = [];
+            document.querySelectorAll('.column-toggle:checked').forEach(function(checkbox) {
+                selectedColumns.push(checkbox.value);
+            });
+
+            // Send selected columns to the backend
+            fetch('/export-excel', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ selectedColumns: selectedColumns })
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.blob(); // Return the file as a blob
+                } else {
+                    throw new Error('Export failed.');
+                }
+            })
+            .then(blob => {
+                // Create a link to download the file
+                const url = window.URL.createObjectURL(new Blob([blob]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'ITAssetsInventory.xlsx');
+                document.body.appendChild(link);
+                link.click();
+                link.parentNode.removeChild(link);
+            })
+            .catch(error => {
+                console.error('Error exporting file:', error);
+                alert('Failed to export the file.');
+            });
+        });
     });
 </script>
-
 {% endblock %}
