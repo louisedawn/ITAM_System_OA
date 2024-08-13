@@ -115,7 +115,15 @@
                         </thead>
                         <tbody>
                             {% for asset in assets %}
+                            {% if session['user_role'] in ['Super-Admin', 'Admin'] %}
                             <tr data-serial="{{ asset.serial_no }}" onclick="redirectToInventory('{{ asset.serial_no }}')">
+                            {% endif %}
+                            {% if session['user_role'] in ['Super-User'] %}
+                            <tr data-serial="{{ asset.serial_no }}" onclick="redirectToRequestInventory('{{ asset.serial_no }}')">
+                            {% endif %}
+                            {% if session['user_role'] in ['User'] %}
+                            <tr>
+                            {% endif %}
                                 <td>{{ asset.site }}</td>
                                 <td>{{ asset.asset_type }}</td>
                                 <td>{{ asset.brand }}</td>
@@ -148,6 +156,12 @@
         window.redirectToInventory = function(serialNo) {
             // Redirect to the inventory section with the asset's serial number
             window.location.href = `/inventory?serial_no=${serialNo}`;
+        };
+
+        // Function to redirect to Super-User Inventory
+        window.redirectToRequestInventory = function(serialNo) {
+            // Redirect to the inventory section with the asset's serial number
+            window.location.href = `/request-inventory?serial_no=${serialNo}`;
         };
 
         // Pie chart data
