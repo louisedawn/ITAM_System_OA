@@ -224,15 +224,28 @@ def import_csv():
 @app.route('/inventory/', methods=["POST", "GET"])
 @login_required
 def inventory():
+    serial_no = request.args.get('serial_no')
     try:
         conn = get_db_connection()
-        assets = conn.execute('SELECT * FROM assets ORDER BY updated_at DESC').fetchall()
+        if serial_no:
+            # Fetch the specific asset based on the serial number
+            asset = conn.execute('SELECT * FROM assets WHERE serial_no = ?', (serial_no,)).fetchone()
+            if asset:
+                assets = [asset]  # Show only the selected asset
+            else:
+                flash(f'No asset found with serial number: {serial_no}')
+                assets = []
+        else:
+            # Fetch all assets if no serial number is provided
+            assets = conn.execute('SELECT * FROM assets ORDER BY updated_at DESC').fetchall()
         conn.close()
     except Exception as e:
         flash(f'An error occurred: {e}')
         return redirect(url_for('index'))  # Redirect to the index or handle it as needed
     
     return render_template('inventory.html', assets=assets)
+
+    
 
 @app.route('/audit/', methods=["POST", "GET"])
 @login_required
