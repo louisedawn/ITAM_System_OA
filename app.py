@@ -634,7 +634,7 @@ def request_edit(asset_id):
             'pc_name': request.form.get('pc_name'),
             'win_ver': request.form.get('win_ver'),
             'last_upd': request.form.get('last_upd'),
-            'requested_by': request.form.get('completed_by')  # Correct field from the form
+            'completed_by': request.form.get('completed_by')  # Correct field from the form
         }
 
         # Verify the values are correctly fetched
@@ -645,12 +645,12 @@ def request_edit(asset_id):
             conn.execute(
                 '''INSERT INTO edit_assets 
                 (id, site, asset_type, brand, asset_tag, serial_no, location, campaign, station_no, pur_date, 
-                si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, requested_by) 
+                si_num, model, specs, ram_slot, ram_type, ram_capacity, pc_name, win_ver, last_upd, completed_by) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
                 (data['id'], data['site'], data['asset_type'], data['brand'], data['asset_tag'], data['serial_no'],
                  data['location'], data['campaign'], data['station_no'], data['pur_date'], data['si_num'], data['model'],
                  data['specs'], data['ram_slot'], data['ram_type'], data['ram_capacity'], data['pc_name'], data['win_ver'],
-                 data['last_upd'], data['requested_by'])
+                 data['last_upd'], data['completed_by'])
             )
             conn.commit()
             flash('Edit request submitted successfully!', 'success')
