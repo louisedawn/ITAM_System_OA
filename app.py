@@ -226,7 +226,7 @@ def import_csv():
 def inventory():
     try:
         conn = get_db_connection()
-        assets = conn.execute('SELECT * FROM assets').fetchall()
+        assets = conn.execute('SELECT * FROM assets ORDER BY updated_at DESC').fetchall()
         conn.close()
     except Exception as e:
         flash(f'An error occurred: {e}')
@@ -448,12 +448,12 @@ def add_asset():
         # Check if the serial number already exists, except for "N/A"
         try:
             conn = get_db_connection()
-            existing_serial = conn.execute('SELECT COUNT(*) FROM assets WHERE serial_no = ? AND serial_no != "N/A"', (serial_no,)).fetchone()[0]
+            existing_serial = conn.execute('SELECT COUNT(*) FROM assets WHERE serial_no = ? AND serial_no != "N/A" AND serial_no != ""', (serial_no,)).fetchone()[0]
             if existing_serial > 0:
                 flash('Serial number already exists. Please use a unique serial number.')
                 return redirect(url_for('add_asset'))
 
-            existing_asset_tag = conn.execute('SELECT COUNT(*) FROM assets WHERE asset_tag = ? AND asset_tag != "N/A"', (asset_tag,)).fetchone()[0]
+            existing_asset_tag = conn.execute('SELECT COUNT(*) FROM assets WHERE asset_tag = ? AND asset_tag != "N/A" AND asset_tag != ""', (asset_tag,)).fetchone()[0]
             if existing_asset_tag > 0:
                 flash('Asset tag already exists. Please use a unique asset tag.')
                 return redirect(url_for('add_asset'))
