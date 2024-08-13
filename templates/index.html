@@ -115,7 +115,7 @@
                         </thead>
                         <tbody>
                             {% for asset in assets %}
-                            <tr data-url="{{ url_for('inventory') }}">
+                            <tr>
                                 <td>{{ asset.site }}</td>
                                 <td>{{ asset.asset_type }}</td>
                                 <td>{{ asset.brand }}</td>
@@ -179,11 +179,11 @@
                 maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        position: 'right', // Positions the legend on the right side
-                        align: 'center',  // Aligns the legend vertically in the center
+                        position: 'right',
+                        align: 'center',
                         labels: {
-                            boxWidth: 20, // Sets the width of the legend box
-                            padding: 20   // Adds padding between the legend items
+                            boxWidth: 20,
+                            padding: 20
                         }
                     }
                 },
@@ -196,16 +196,6 @@
                     }
                 }
             }
-        });
-
-        // Add click event to rows
-        rows.forEach(row => {
-            row.addEventListener("click", function() {
-                const url = this.getAttribute("data-url");
-                if (url) {
-                    window.location.href = url;
-                }
-            });
         });
 
         checkboxes.forEach(checkbox => {

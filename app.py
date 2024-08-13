@@ -1,6 +1,7 @@
 import datetime
 from flask import Flask, render_template, url_for, request, redirect, flash, session, request, redirect, url_for, jsonify, send_file, send_from_directory
 from flask_login import login_required
+from numpy import e
 import pandas as pd
 import sqlite3
 import io
@@ -78,6 +79,9 @@ def index():
     # Fetch all assets
     assets = conn.execute('SELECT * FROM assets ORDER BY updated_at DESC').fetchall()
 
+    # Debug: Print assets to ensure data is being fetched
+    print("Assets:", assets)
+
     # Count the number of assets in the Storage Room
     storage_room_count = conn.execute('SELECT COUNT(*) FROM assets WHERE station_no = "Storage Room"').fetchone()[0]
     seventh_floor_count = conn.execute('SELECT COUNT(*) FROM assets WHERE location = "7th Floor"').fetchone()[0]
@@ -85,16 +89,23 @@ def index():
     twenty_first_floor_count = conn.execute('SELECT COUNT(*) FROM assets WHERE location = "21st Floor"').fetchone()[0]
     thirty_second_floor_count = conn.execute('SELECT COUNT(*) FROM assets WHERE location = "32nd Floor"').fetchone()[0]
 
+     # Debug: Print counts to ensure correct counts are being fetched
+    print("Storage Room Count:", storage_room_count)
+    print("7th Floor Count:", seventh_floor_count)
+    print("19th Floor Count:", nineteenth_floor_count)
+    print("21st Floor Count:", twenty_first_floor_count)
+    print("32nd Floor Count:", thirty_second_floor_count)
 
     conn.close()
-    return render_template('index.html', 
-                       assets=assets, 
-                       storage_room_count=storage_room_count,
-                       seventh_floor_count=seventh_floor_count,
-                       nineteenth_floor_count=nineteenth_floor_count,
-                       twenty_first_floor_count=twenty_first_floor_count,
-                       thirty_second_floor_count=thirty_second_floor_count)
+
     
+    return render_template('index.html', 
+                           assets=assets, 
+                           storage_room_count=storage_room_count,
+                           seventh_floor_count=seventh_floor_count,
+                           nineteenth_floor_count=nineteenth_floor_count,
+                           twenty_first_floor_count=twenty_first_floor_count,
+                           thirty_second_floor_count=thirty_second_floor_count)
 
 
 @app.route("/export-excel", methods=["POST"])
