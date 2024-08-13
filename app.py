@@ -277,22 +277,28 @@ app.config['UPLOAD_FOLDER'] = 'static'
 
 @app.route('/upload_floor_image', methods=['POST'])
 def upload_floor_image():
-    if 'newImage' not in request.files or request.form['floor'] not in ['7th Floor', '19th Floor', '21st Floor', '32nd Floor']:
-        return jsonify(success=False), 400
+    if 'newImage' not in request.files:
+        return jsonify({'success': False, 'error': 'No file part'})
 
     file = request.files['newImage']
-    floor = request.form['floor']
-    
     if file.filename == '':
-        return jsonify(success=False), 400
-    
-    if file:
-        filename = floor.replace(' ', '_').lower() + '.jpg'  # Save as .jpg
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(file_path)
-        return jsonify(success=True)
+        return jsonify({'success': False, 'error': 'No selected file'})
 
-    return jsonify(success=False), 500
+    if file:
+        floor = request.form['floor']
+        filename = f"{floor.replace(' ', '_').lower()}.jpg"
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+        # Delete old image if it exists
+        if os.path.exists(filepath):
+            os.remove(filepath)
+
+        # Save the new image
+        file.save(filepath)
+
+        return jsonify({'success': True, 'filename': filename})
+
+    return jsonify({'success': False})
 
 #for PO
 @app.route('/po/', methods=["POST", "GET"])
