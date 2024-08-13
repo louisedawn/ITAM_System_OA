@@ -226,7 +226,7 @@ def import_csv():
 def inventory():
     try:
         conn = get_db_connection()
-        assets = conn.execute('SELECT * FROM assets').fetchall()
+        assets = conn.execute('SELECT * FROM assets ORDER BY updated_at DESC').fetchall()
         conn.close()
     except Exception as e:
         flash(f'An error occurred: {e}')
