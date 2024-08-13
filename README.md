@@ -50,6 +50,7 @@ $ venv\Scripts\activate (for windows), . venv/bin/activate  (for mac)
 > pip install flask_login
 > pip install datetime
 > pip install mariadb
+> pip install openpyxl
 
 
 **Run the application (app.py) in the terminal of VSCode**
