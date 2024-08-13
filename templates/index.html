@@ -82,9 +82,9 @@
             <!-- Pie Chart Section -->
             <div class="col-lg-6 mb-4">
                 <div class="card mb-4 shadow-lg">
-                    <div class="card-header"><b>Assets Distribution by Location</b></div>
+                    <div class="card-header bg-primary text-white"><b>Assets Distribution by Location</b></div>
                     <div class="card-body">
-                        <canvas id="assetsPieChart"></canvas>
+                        <canvas id="assetsPieChart" height="300"></canvas>
                     </div>
                 </div>
             </div>
@@ -177,7 +177,14 @@
                         '#9966FF'
                     ],
                     borderColor: '#fff',
-                    borderWidth: 2
+                    borderWidth: 2,
+                    hoverBackgroundColor: [
+                        '#FF7394',
+                        '#46B2FB',
+                        '#FFD366',
+                        '#5BD0D0',
+                        '#AA76FF'
+                    ]
                 }]
             },
             options: {
@@ -189,7 +196,29 @@
                         align: 'center',
                         labels: {
                             boxWidth: 20,
-                            padding: 20
+                            padding: 20,
+                            font: {
+                                size: 14,
+                                family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+                                weight: 'bold',
+                            },
+                            color: '#333',
+                        }
+                    },
+                    tooltip: {
+                        enabled: true,
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                        titleFont: {
+                            size: 16,
+                            weight: 'bold',
+                        },
+                        bodyFont: {
+                            size: 14,
+                        },
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return `${tooltipItem.label}: ${tooltipItem.raw} assets`;
+                            }
                         }
                     }
                 },
@@ -200,6 +229,10 @@
                         left: 10,
                         right: 10
                     }
+                },
+                animation: {
+                    animateRotate: true,
+                    animateScale: true
                 }
             }
         });
@@ -222,15 +255,12 @@
                 const matchesStorageRoom = filterValues.includes('storage room') && stationNoCell === 'storage room';
 
                 if (filterValues.length === 0 || matchesLocation || matchesStorageRoom) {
-                    row.style.display = ""; // Show row
+                    row.style.display = "";
                 } else {
-                    row.style.display = "none"; // Hide row
+                    row.style.display = "none";
                 }
             });
         }
-
-        // Initial filtering
-        filterTable();
     });
 </script>
 
