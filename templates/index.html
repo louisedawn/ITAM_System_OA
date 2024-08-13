@@ -115,7 +115,7 @@
                         </thead>
                         <tbody>
                             {% for asset in assets %}
-                            <tr>
+                            <tr data-serial="{{ asset.serial_no }}" onclick="redirectToInventory('{{ asset.serial_no }}')">
                                 <td>{{ asset.site }}</td>
                                 <td>{{ asset.asset_type }}</td>
                                 <td>{{ asset.brand }}</td>
@@ -143,6 +143,12 @@
         const checkboxes = document.querySelectorAll(".form-check-input");
         const table = document.getElementById("dashboardTable");
         const rows = table.querySelectorAll("tbody tr");
+
+        // Function to redirect to inventory
+        window.redirectToInventory = function(serialNo) {
+            // Redirect to the inventory section with the asset's serial number
+            window.location.href = `/inventory?serial_no=${serialNo}`;
+        };
 
         // Pie chart data
         const ctx = document.getElementById('assetsPieChart').getContext('2d');
