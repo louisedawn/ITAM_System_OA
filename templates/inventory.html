@@ -53,10 +53,7 @@
                             <div class="row">
                                 <!-- First Column -->
                                 <div class="col-md-4">
-                                    <div class="form-check">
-                                        <input class="form-check-input column-toggle" type="checkbox" value="id" id="toggleID" checked>
-                                        <label class="form-check-label" for="toggleID">ID</label>
-                                    </div>
+                                    
                                     <div class="form-check">
                                         <input class="form-check-input column-toggle" type="checkbox" value="site" id="toggleSite" checked>
                                         <label class="form-check-label" for="toggleSite">Site</label>
@@ -110,13 +107,13 @@
                                         <input class="form-check-input column-toggle" type="checkbox" value="specs" id="toggleSpecs" checked>
                                         <label class="form-check-label" for="toggleSpecs">Specifications</label>
                                     </div>
-                                </div>
-                                <!-- Third Column -->
-                                <div class="col-md-4">
                                     <div class="form-check">
                                         <input class="form-check-input column-toggle" type="checkbox" value="ram_slot" id="toggleRamSlot" checked>
                                         <label class="form-check-label" for="toggleRamSlot">RAM Slot</label>
                                     </div>
+                                </div>
+                                <!-- Third Column -->
+                                <div class="col-md-4">
                                     <div class="form-check">
                                         <input class="form-check-input column-toggle" type="checkbox" value="ram_type" id="toggleRamType" checked>
                                         <label class="form-check-label" for="toggleRamType">RAM Type</label>
@@ -156,65 +153,61 @@
                                 <thead>
                                     <tr>
                                         <th>Actions</th>
-                                        <th>Site</th>
-                                        <th>Asset Type</th>
-                                        <th>Brand</th>
-                                        <th>Asset Tag</th>
-                                        <th>Serial Number</th>
-                                        <th>Location</th>
-                                        <th>Campaign</th>
-                                        <th>Station Number</th>
-                                        <th>Purchase Date</th>
-                                        <th>Sales Invoice Number</th>
-                                        <th>Model</th>
-                                        <th>Specifications</th>
-                                        <th>RAM Slot</th>
-                                        <th>RAM Type</th>
-                                        <th>RAM Capacity</th>
-                                        <th>PC Name</th>
-                                        <th>Windows Version</th>
-                                        <th>Last Update/Date Installed</th>
-                                        <th>Completed By</th>
-                                        <th>Last Update At</th>
+                                        <th class="site">Site</th>
+                                        <th class="asset_type">Asset Type</th>
+                                        <th class="brand">Brand</th>
+                                        <th class="asset_tag">Asset Tag</th>
+                                        <th class="serial_no">Serial Number</th>
+                                        <th class="location">Location</th>
+                                        <th class="campaign">Campaign</th>
+                                        <th class="station_no">Station Number</th>
+                                        <th class="pur_date">Purchase Date</th>
+                                        <th class="si_num">Sales Invoice Number</th>
+                                        <th class="model">Model</th>
+                                        <th class="specs">Specifications</th>
+                                        <th class="ram_slot">RAM Slot</th>
+                                        <th class="ram_type">RAM Type</th>
+                                        <th class="ram_capacity">RAM Capacity</th>
+                                        <th class="pc_name">PC Name</th>
+                                        <th class="win_ver">Windows Version</th>
+                                        <th class="last_upd">Last Update/Date Installed</th>
+                                        <th class="completed_by">Completed By</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for asset in assets %}
                                     <tr>
                                         <td>
-                                            <div class="d-flex">
-                                                <a href="{{ url_for('edit_asset', asset_id=asset.id) }}" class="btn btn-warning me-5">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <a href="{{ url_for('delete_asset', asset_id=asset.id) }}" class="btn btn-danger me-5">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </a>
-                                            </div>
-                                        </td>                                        
-                                        <td>{{ asset.site }}</td>
-                                        <td>{{ asset.asset_type }}</td>
-                                        <td>{{ asset.brand }}</td>
-                                        <td>{{ asset.asset_tag }}</td>
-                                        <td>{{ asset.serial_no }}</td>
-                                        <td>{{ asset.location }}</td>
-                                        <td>{{ asset.campaign }}</td>
-                                        <td>{{ asset.station_no }}</td>
-                                        <td>{{ asset.pur_date }}</td>
-                                        <td>{{ asset.si_num }}</td>
-                                        <td>{{ asset.model }}</td>
-                                        <td>{{ asset.specs }}</td>
-                                        <td>{{ asset.ram_slot }}</td>
-                                        <td>{{ asset.ram_type }}</td>
-                                        <td>{{ asset.ram_capacity }}</td>
-                                        <td>{{ asset.pc_name }}</td>
-                                        <td>{{ asset.win_ver }}</td>
-                                        <td>{{ asset.last_upd }}</td>
-                                        <td>{{ asset.completed_by }}</td>
-                                        <td>{{ asset.updated_at }}</td>
+                                            <a href="{{ url_for('edit_asset', asset_id=asset.id) }}" class="btn btn-warning">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="{{ url_for('delete_asset', asset_id=asset.id) }}" class="btn btn-danger">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>   
+                                        </td>
+                                        <td class="site">{{ asset.site }}</td>
+                                        <td class="asset_type">{{ asset.asset_type }}</td>
+                                        <td class="brand">{{ asset.brand }}</td>
+                                        <td class="asset_tag">{{ asset.asset_tag }}</td>
+                                        <td class="serial_no">{{ asset.serial_no }}</td>
+                                        <td class="location">{{ asset.location }}</td>
+                                        <td class="campaign">{{ asset.campaign }}</td>
+                                        <td class="station_no">{{ asset.station_no }}</td>
+                                        <td class="pur_date">{{ asset.pur_date }}</td>
+                                        <td class="si_num">{{ asset.si_num }}</td>
+                                        <td class="model">{{ asset.model }}</td>
+                                        <td class="specs">{{ asset.specs }}</td>
+                                        <td class="ram_slot">{{ asset.ram_slot }}</td>
+                                        <td class="ram_type">{{ asset.ram_type }}</td>
+                                        <td class="ram_capacity">{{ asset.ram_capacity }}</td>
+                                        <td class="pc_name">{{ asset.pc_name }}</td>
+                                        <td class="win_ver">{{ asset.win_ver }}</td>
+                                        <td class="last_upd">{{ asset.last_upd }}</td>
+                                        <td class="completed_by">{{ asset.completed_by }}</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
-                            </table>
+                            </table>                            
                             {% endif %}
                         </div>
                     </div>
@@ -236,40 +229,21 @@
         // Handle column visibility
         document.querySelectorAll('.column-toggle').forEach(function(checkbox) {
             checkbox.addEventListener('change', function() {
-                var column = this.value;
+                var columnClass = this.value;
                 var isChecked = this.checked;
-                var table = document.getElementById('dataTable');
-                var rows = table.querySelectorAll('tr');
-
-                rows.forEach(function(row) {
-                    row.cells[column].style.display = isChecked ? '' : 'none';
+                var cells = document.querySelectorAll('.' + columnClass);
+                
+                cells.forEach(function(cell) {
+                    cell.style.display = isChecked ? '' : 'none';
                 });
             });
         });
-    });
-    function exportSelectedColumns() {
-            const selectedColumns = Array.from(document.querySelectorAll('.column-toggle:checked'))
-                .map(checkbox => checkbox.value);
 
-            fetch('/export-excel', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ selectedColumns })
-            })
-            .then(response => response.blob())
-            .then(blob => {
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.style.display = 'none';
-                a.href = url;
-                a.download = 'ITAssetsInventory.xlsx';
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
-            })
-            .catch(error => console.error('Error exporting to Excel:', error));
-        }
+        // Initially trigger change event for each checkbox to set column visibility on page load
+        document.querySelectorAll('.column-toggle').forEach(function(checkbox) {
+            checkbox.dispatchEvent(new Event('change'));
+        });
+    });
 </script>
+
 {% endblock %}
