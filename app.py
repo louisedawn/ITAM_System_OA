@@ -519,7 +519,6 @@ def delete_asset(asset_id):
     conn.close()
     return render_template('delete_asset.html', asset=asset)
 
-
 @app.route('/edit-asset/<int:asset_id>', methods=['GET', 'POST'])
 @login_required
 def edit_asset(asset_id):
@@ -552,15 +551,33 @@ def edit_asset(asset_id):
         last_upd = request.form.get('last_upd')
         completed_by = request.form.get('completed_by')
 
-        # Check for unique serial number and asset tag, excluding the current asset
+        # Check for unique serial number and asset tag, excluding "N/A" values and the current asset
         try:
-            existing_serial = conn.execute('SELECT COUNT(*) FROM assets WHERE serial_no = ? AND id != ?', (serial_no, asset_id)).fetchone()[0]
-            if existing_serial > 0:
+            # Debugging: Print the serial number being checked
+            print(f"Checking serial number: {serial_no} for asset ID: {asset_id}")
+            
+            # Check if the serial number already exists, excluding the current asset and serial numbers that are "N/A"
+            existing_serial = conn.execute(
+                'SELECT id FROM assets WHERE serial_no = ? AND id != ? AND serial_no != "N/A"', 
+                (serial_no, asset_id)
+            ).fetchall()
+            print(f"Matching assets with serial number: {existing_serial}")  # Debugging: Print matching asset IDs
+            
+            if len(existing_serial) > 0:
                 flash('Serial number already exists. Please use a unique serial number.')
                 return redirect(url_for('edit_asset', asset_id=asset_id))
 
-            existing_asset_tag = conn.execute('SELECT COUNT(*) FROM assets WHERE asset_tag = ? AND id != ?', (asset_tag, asset_id)).fetchone()[0]
-            if existing_asset_tag > 0:
+            # Debugging: Print the asset tag being checked
+            print(f"Checking asset tag: {asset_tag} for asset ID: {asset_id}")
+            
+            # Check if the asset tag already exists, excluding the current asset and asset tags that are "N/A"
+            existing_asset_tag = conn.execute(
+                'SELECT id FROM assets WHERE asset_tag = ? AND id != ? AND asset_tag != "N/A"', 
+                (asset_tag, asset_id)
+            ).fetchall()
+            print(f"Matching assets with asset tag: {existing_asset_tag}")  # Debugging: Print matching asset tag IDs
+            
+            if len(existing_asset_tag) > 0:
                 flash('Asset tag already exists. Please use a unique asset tag.')
                 return redirect(url_for('edit_asset', asset_id=asset_id))
 
@@ -579,6 +596,7 @@ def edit_asset(asset_id):
     
     conn.close()
     return render_template('edit_asset.html', asset=asset)
+
 
 
 @app.route('/request-inventory/', methods=["POST", "GET"])
