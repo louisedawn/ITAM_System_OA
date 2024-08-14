@@ -47,7 +47,23 @@
                                         <td>32nd Floor</td>
                                         <td id="thirtySecondFloorCount" class="font-weight-normal text-dark">{{ thirty_second_floor_count }}</td>
                                     </tr>
-                                </tbody>
+                                    <tr>
+                                        <td>WFH</td>
+                                        <td id="wfhCount" class="font-weight-normal text-dark">{{ wfh_count }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Wise Production Area</td>
+                                        <td id="wiseProductionAreaCount" class="font-weight-normal text-dark">{{ wise_production_area_count }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Vendor</td>
+                                        <td id="vendorCount" class="font-weight-normal text-dark">{{ vendor_count }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>JAKA - 5th Floor</td>
+                                        <td id="jakaFifthFloorCount" class="font-weight-normal text-dark">{{ jaka_fifth_floor_count }}</td>
+                                    </tr>
+                                </tbody>                                
                             </table>
                         </div>
                     </div>
@@ -140,16 +156,29 @@
         };
 
         // Pie chart data
-        const ctx = document.getElementById('assetsPieChart').getContext('2d');
-        const assetCounts = [
-            {{ storage_room_count }},
-            {{ seventh_floor_count }},
-            {{ nineteenth_floor_count }},
-            {{ twenty_first_floor_count }},
-            {{ thirty_second_floor_count }}
-        ];
-        
-        const locations = ['Storage Room', '7th Floor', '19th Floor', '21st Floor', '32nd Floor'];
+    const assetCounts = [
+    {{ storage_room_count }},
+    {{ seventh_floor_count }},
+    {{ nineteenth_floor_count }},
+    {{ twenty_first_floor_count }},
+    {{ thirty_second_floor_count }},
+    {{ wfh_count }},
+    {{ wise_production_area_count }},
+    {{ vendor_count }},
+    {{ jaka_fifth_floor_count }}
+];
+
+const locations = [
+    'Storage Room', 
+    '7th Floor', 
+    '19th Floor', 
+    '21st Floor', 
+    '32nd Floor', 
+    'WFH', 
+    'Wise Production Area', 
+    'Vendor', 
+    'JAKA - 5th Floor'
+];
 
         const assetsPieChart = new Chart(ctx, {
             type: 'pie',

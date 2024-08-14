@@ -79,34 +79,30 @@ def index():
     # Fetch all assets
     assets = conn.execute('SELECT * FROM assets ORDER BY updated_at DESC').fetchall()
 
-    # Debug: Print assets to ensure data is being fetched
-    print("Assets:", assets)
-
-    # Count the number of assets in the Storage Room
+    # Count the number of assets in each location
     storage_room_count = conn.execute('SELECT COUNT(*) FROM assets WHERE station_no or campaign= "Storage Room"').fetchone()[0]
     seventh_floor_count = conn.execute('SELECT COUNT(*) FROM assets WHERE location = "7th Floor"').fetchone()[0]
     nineteenth_floor_count = conn.execute('SELECT COUNT(*) FROM assets WHERE location = "19th Floor"').fetchone()[0]
     twenty_first_floor_count = conn.execute('SELECT COUNT(*) FROM assets WHERE location = "21st Floor"').fetchone()[0]
     thirty_second_floor_count = conn.execute('SELECT COUNT(*) FROM assets WHERE location = "32nd Floor"').fetchone()[0]
-
-     # Debug: Print counts to ensure correct counts are being fetched
-    print("Storage Room Count:", storage_room_count)
-    print("7th Floor Count:", seventh_floor_count)
-    print("19th Floor Count:", nineteenth_floor_count)
-    print("21st Floor Count:", twenty_first_floor_count)
-    print("32nd Floor Count:", thirty_second_floor_count)
+    wfh_count = conn.execute('SELECT COUNT(*) FROM assets WHERE location = "WFH"').fetchone()[0]
+    wise_production_area_count = conn.execute('SELECT COUNT(*) FROM assets WHERE location = "Wise Production Area"').fetchone()[0]
+    vendor_count = conn.execute('SELECT COUNT(*) FROM assets WHERE location = "Vendor"').fetchone()[0]
+    jaka_fifth_floor_count = conn.execute('SELECT COUNT(*) FROM assets WHERE location = "JAKA - 5th Floor"').fetchone()[0]
 
     conn.close()
 
-    
     return render_template('index.html', 
                            assets=assets, 
                            storage_room_count=storage_room_count,
                            seventh_floor_count=seventh_floor_count,
                            nineteenth_floor_count=nineteenth_floor_count,
                            twenty_first_floor_count=twenty_first_floor_count,
-                           thirty_second_floor_count=thirty_second_floor_count)
-
+                           thirty_second_floor_count=thirty_second_floor_count,
+                           wfh_count=wfh_count,
+                           wise_production_area_count=wise_production_area_count,
+                           vendor_count=vendor_count,
+                           jaka_fifth_floor_count=jaka_fifth_floor_count)
 
 @app.route("/export-excel", methods=["POST"])
 @login_required
