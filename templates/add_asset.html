@@ -1,10 +1,7 @@
 {% extends 'base.html' %}
-
 {% block title %}
 <title>Add New Asset</title>
 {% endblock %}
-
-
 {% block content %}
 <main>
     <div class="container-fluid">
@@ -19,16 +16,13 @@
             {% endif %}
         {% endwith %}
             <h1 class="mt-4"><i class="fas fa-laptop"></i> Add New Asset</h1>
-
         <br><ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="/index">Dashboard</a></li>
             <li class="breadcrumb-item"><a href="/inventory">Inventory</a></li>
             <li class="breadcrumb-item active" aria-current="page">Add New Asset</li>
         </ol>
-
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center"><b>New IT Asset Details</b></div> 
-
             <div class="card-body">
                 <form action="/add-asset/" method="POST" id="product_form"> 
                     <div class="row">
