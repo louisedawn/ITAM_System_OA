@@ -120,7 +120,12 @@ def export_excel():
         df.to_excel(writer, index=False, sheet_name='Assets')
     output.seek(0)
 
-    return send_file(output, as_attachment=True, download_name="ITAssetsInventory.xlsx", mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    # Get the current date in the format YYYY-MM-DD
+    current_date = datetime.now().strftime("%Y-%m-%d")
+    filename = f"ITAssetsInventory_{current_date}.xlsx"  # Desired filename format
+
+    # Send the file to the user
+    return send_file(output, as_attachment=True, download_name=filename, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
 @app.route('/assets/', methods=["POST", "GET"])
 @login_required
