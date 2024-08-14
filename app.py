@@ -121,34 +121,21 @@ def export_excel():
     columns_string = ', '.join(selected_columns)
 
     conn = get_db_connection()
-    assets = conn.execute('SELECT * FROM assets ORDER BY id DESC').fetchall()
+    query = f'SELECT {columns_string} FROM assets ORDER BY id DESC'
+    assets = conn.execute(query).fetchall()
     conn.close()
 
-    # Convert sqlite3.Row to dictionary to handle correctly with pandas
     assets_list = [dict(row) for row in assets]
 
-    # Define column names for the DataFrame
-    column_names = ['id', 'site', 'asset_type', 'brand', 'asset_tag', 'serial_no', 
-                    'location', 'campaign', 'station_no', 'pur_date', 
-                    'si_num', 'model', 'specs', 'ram_slot', 
-                    'ram_type', 'ram_capacity', 'pc_name', 'win_ver', 
-                    'last_upd', 'completed_by']
-
-    # Create a DataFrame from the assets list of dictionaries
-    df = pd.DataFrame(assets_list, columns=column_names)
+    df = pd.DataFrame(assets_list, columns=selected_columns)
 
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine='openpyxl') as writer:
         df.to_excel(writer, index=False, sheet_name='Assets')
     output.seek(0)
 
-    # Get the current date in the format YYYY-MM-DD
-    current_date = datetime.now().strftime("%Y-%m-%d")
-    filename = f"ITAssetsInventory_{current_date}.xlsx"  # Desired filename format
-
-    # Send the file to the user
-    return send_file(output, as_attachment=True, download_name=filename, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-
+    return send_file(output, as_attachment=True, download_name="ITAssetsInventory.xlsx", mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    
 @app.route('/assets/', methods=["POST", "GET"])
 @login_required
 def assets():
