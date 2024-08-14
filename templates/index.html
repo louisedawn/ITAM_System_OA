@@ -263,12 +263,14 @@
 
             rows.forEach(row => {
                 const locationCell = row.querySelector("td:nth-child(5)").textContent.trim().toLowerCase();
+                const campaignCell = row.querySelector("td:nth-child(6)").textContent.trim().toLowerCase();
                 const stationNoCell = row.querySelector("td:nth-child(7)").textContent.trim().toLowerCase();
 
                 const matchesLocation = filterValues.includes(locationCell);
+                const matchesStorageRoomCamp = filterValues.includes('storage room') && campaignCell === 'storage room';
                 const matchesStorageRoom = filterValues.includes('storage room') && stationNoCell === 'storage room';
 
-                if (filterValues.length === 0 || matchesLocation || matchesStorageRoom) {
+                if (filterValues.length === 0 || matchesLocation || matchesStorageRoomCamp ||matchesStorageRoom) {
                     row.style.display = "";
                 } else {
                     row.style.display = "none";
