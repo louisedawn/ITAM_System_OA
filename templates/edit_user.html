@@ -42,17 +42,11 @@
                     <div class="form-group row mb-3">
                         <label for="confirm_password" class="col-sm-2 col-form-label">Confirm New Password</label>
                         <div class="col-sm-4">
-                            <input type="password" class="form-control form-control-sm" name="confirm_password" id="confirm_password">
-                        </div>
-                    </div>
-
+                            <input type="password" class="form-control form-control-sm" name="confirm_password" id="confirm_password"></div></div>
                     <div class="form-group row mb-3">
                         <label for="super_admin_password" class="col-sm-2 col-form-label">Enter Your Super-Admin Password</label>
                         <div class="col-sm-4">
-                            <input type="password" class="form-control form-control-sm" name="super_admin_password" id="super_admin_password" required>
-                        </div>
-                    </div>
-
+                            <input type="password" class="form-control form-control-sm" name="super_admin_password" id="super_admin_password" required></div></div>
                     <div class="form-group row mb-3">
                         <label for="role" class="col-sm-2 col-form-label">User-Role</label>
                         <div class="col-sm-4">
@@ -61,32 +55,17 @@
                                 <option value="Super-Admin">Super-Admin</option>
                                 <option value="Admin">Admin</option>
                                 <option value="Super-User">Super-User</option>
-                                <option value="User">User</option>
-                            </select>
-                        </div>
-                    </div>
-
+                                <option value="User">User</option></select></div></div>
                     <div class="form-group row">
                         <div class="col-sm-4 offset-sm-2">
                             <button type="submit" class="btn btn-primary">Update User</button>
-                            <a href="{{ url_for('system_users') }}" class="btn btn-secondary">Cancel</a>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</main>
+                            <a href="{{ url_for('system_users') }}" class="btn btn-secondary">Cancel</a></div></div></form></div></div></div>
+                    </main>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Set a timer to remove flash messages after 5 seconds
         setTimeout(function() {
             var flashMessages = document.getElementById('flash-messages');
-            if (flashMessages) {
-                flashMessages.style.display = 'none'; // Hide the flash messages
-            }
-        }, 5000); // 5000 milliseconds = 5 seconds
-    });
+            if (flashMessages) { flashMessages.style.display = 'none'; }}, 5000); });
 </script>
 {% endblock %}
