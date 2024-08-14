@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
-
 {% block title %}
 <title>IT Asset Management System</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='workstation.css') }}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <style>
     body {
@@ -68,9 +66,7 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow for form */
     }
 </style>
-
 {% endblock %}
-
 {% block content %}
 <main>
     <div class="container-fluid">
@@ -117,8 +113,7 @@
     function showFloorImage() {
         var floorSelect = document.getElementById('floorSelect');
         var floorImage = document.getElementById('floorImage');
-        currentFloor = floorSelect.value; // Store the current floor
-        
+        currentFloor = floorSelect.value; // Store the current floor   
         var imageUrl = '';
         switch(currentFloor) {
             case '7th Floor':
@@ -142,11 +137,9 @@
             floorImage.style.display = 'none';
         }
     }
-
     function uploadImage() {
         var formData = new FormData(document.getElementById('uploadForm'));
         formData.append('floor', currentFloor); // Use the stored current floor
-
         fetch('/upload_floor_image', {
             method: 'POST',
             body: formData
@@ -167,7 +160,6 @@
             alert('Image upload failed!');
         });
     }
-
     function toggleFullScreen() {
         var floorImage = document.getElementById('floorImage');
         if (!document.fullscreenElement) {

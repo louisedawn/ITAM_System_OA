@@ -1,10 +1,7 @@
 {% extends 'base.html' %}
-
 {% block title %}
 <title>IT Asset Management System</title>
 {% endblock %}
-
-
 {% block content %}
 <main>
     <div class="container-fluid">
@@ -33,7 +30,6 @@
             <title>Asset Care FAQs</title>
         </head>
         <body>
-        
             <h6> 
             <!-- 1st Q -->
             <div>
@@ -47,7 +43,6 @@
                     </p>
                 </div>
             </div>
-        
             <!-- 2nd Q -->
             <div>
                 <p class="faq-question">
@@ -56,11 +51,8 @@
                 </p>
                 <div class="dropdown" id="dropdownContent2">
                     <p class="dropdown-content">
-                        Proper asset care helps prolong the lifespan of company equipment, ensures operational efficiency, and helps maintain compliance with company policies and legal regulations.
-                    </p>
-                </div>
-            </div>
-        
+                        Proper asset care helps prolong the lifespan of company equipment, ensures operational efficiency, and helps maintain compliance with company policies and legal regulations.</p>
+                </div></div>
             <!-- 3rd Q -->
             <div>
                 <p class="faq-question">
@@ -73,7 +65,6 @@
                     </p>
                 </div>
             </div>
-        
             <!-- 4th Q -->
             <div>
                 <p class="faq-question">
@@ -82,11 +73,8 @@
                 </p>
                 <div class="dropdown" id="dropdownContent4">
                     <p class="dropdown-content">
-                        Yes, you can request additional or upgraded equipment through the Asset Management System. All requests are subject to approval based on necessity and budget considerations.
-                    </p>
-                </div>
-            </div>
-        
+                        Yes, you can request additional or upgraded equipment through the Asset Management System. All requests are subject to approval based on necessity and budget considerations.</p>
+                </div> </div>
             <!-- 5th Q -->
             <div>
                 <p class="faq-question">
@@ -95,32 +83,19 @@
                 </p>
                 <div class="dropdown" id="dropdownContent5">
                     <p class="dropdown-content">
-                        Open Access BPO employs several security measures, including asset tagging, regular audits, and restricted access areas. Employees are also trained on proper asset care and security protocols.
-                    </p>
-                </div>
-            </div>
-        
+                        Open Access BPO employs several security measures, including asset tagging, regular audits, and restricted access areas. Employees are also trained on proper asset care and security protocols.</p>
+                </div> </div>
             <!-- 6th Q -->
             <div>
                 <p class="faq-question">
                     <br><b>Who do I contact for more information about asset care?</b>
-                    <i class="fa fa-caret-down" onclick="toggleDropdown('dropdownContent6')" style="cursor: pointer;"></i>
-                </p>
+                    <i class="fa fa-caret-down" onclick="toggleDropdown('dropdownContent6')" style="cursor: pointer;"></i></p>
                 <div class="dropdown" id="dropdownContent6">
                     <p class="dropdown-content">
-                        For more information, contact the Asset Management Team via email at assetcare@openaccessbpo.com or call the IT Helpdesk at (123) 456-7890.
-                    </p>
-                </div>
-            </div>
-        
+                        For more information, contact the Asset Management Team via email at assetcare@openaccessbpo.com or call the IT Helpdesk at (123) 456-7890.</p></div></div>
             <script>
-                function toggleDropdown(id) {
+                    function toggleDropdown(id) {
                     var dropdown = document.getElementById(id);
                     dropdown.style.display = dropdown.style.display === "none" || dropdown.style.display === "" ? "block" : "none";
-                }
-            </script> </h6>
-           
-
-</div>
-</main>
+                }  </script> </h6> </div> </main>
 {% endblock %}

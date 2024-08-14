@@ -1,9 +1,7 @@
 {% extends 'base.html' %}
-
 {% block title %}
 <title>Delete Asset</title>
 {% endblock %}
-
 {% block content %}
 <main>
     <div class="container-fluid">
@@ -23,9 +21,7 @@
             <li class="breadcrumb-item"><a href="/index">Dashboard</a></li>
             <li class="breadcrumb-item"><a href="/inventory">Inventory</a></li>
             <li class="breadcrumb-item active">Delete Asset</li>
-        </ol>
-        <p><b>Are you sure you want to delete this IT Asset?</b></p>
-
+        </ol> <p><b>Are you sure you want to delete this IT Asset?</b></p>
         <!-- Display the selected asset details -->
         <div class="asset-details">
             <table class="table table-bordered">
@@ -75,11 +71,7 @@
                         <td>{{ asset.win_ver }}</td>
                         <td>{{ asset.last_upd }}</td>
                         <td>{{ asset.completed_by }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
+                    </tr> </tbody> </table> </div>
         <form action="{{ url_for('delete_asset', asset_id=asset.id) }}" method="POST">
             <div class="form-group">
                 <label for="password">Enter your password to confirm:</label>
