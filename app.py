@@ -83,7 +83,7 @@ def index():
     print("Assets:", assets)
 
     # Count the number of assets in the Storage Room
-    storage_room_count = conn.execute('SELECT COUNT(*) FROM assets WHERE station_no = "Storage Room"').fetchone()[0]
+    storage_room_count = conn.execute('SELECT COUNT(*) FROM assets WHERE station_no OR campaign = "Storage Room"').fetchone()[0]
     seventh_floor_count = conn.execute('SELECT COUNT(*) FROM assets WHERE location = "7th Floor"').fetchone()[0]
     nineteenth_floor_count = conn.execute('SELECT COUNT(*) FROM assets WHERE location = "19th Floor"').fetchone()[0]
     twenty_first_floor_count = conn.execute('SELECT COUNT(*) FROM assets WHERE location = "21st Floor"').fetchone()[0]
