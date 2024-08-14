@@ -1,48 +1,37 @@
 {% extends 'base.html' %}
-
 {% block title %}
 <title>IT Asset Management System</title>
 {% endblock %}
-
 {% block content %}
 <main>
     <div class="container-fluid">
-        <h1 class="mt-4"><i class="fas fa-home"></i> Dashboard</h1>
-        <br>
-
+        <h1 class="mt-4"><i class="fas fa-home"></i> Dashboard</h1><br>
         <div class="row">
-            <!-- Assets Counter Table -->
             <div class="col-lg-6 mb-4">
                 <div class="card mb-4 shadow-lg">
                     <div class="card-header bg-primary text-white">
-                        <h6 class="m-0"><b>Assets Overview</b></h6>
-                    </div>
+                        <h6 class="m-0"><b>Assets Overview</b></h6></div>
                     <div class="card-body bg-white">
                         <div class="table-responsive">
                             <table class="table table-bordered" id="assetsCounterTable" width="100%">
                                 <thead>
                                     <tr>
                                         <th><b>Location</b></th>
-                                        <th><b>Asset Count</b></th>
-                                    </tr>
+                                        <th><b>Asset Count</b></th></tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td>Storage Room</td>
-                                        <td id="storageRoomCount" class="font-weight-normal text-dark">{{ storage_room_count }}</td>
-                                    </tr>
+                                        <td id="storageRoomCount" class="font-weight-normal text-dark">{{ storage_room_count }}</td></tr>
                                     <tr>
                                         <td>7th Floor</td>
-                                        <td id="seventhFloorCount" class="font-weight-normal text-dark">{{ seventh_floor_count }}</td>
-                                    </tr>
+                                        <td id="seventhFloorCount" class="font-weight-normal text-dark">{{ seventh_floor_count }}</td></tr>
                                     <tr>
                                         <td>19th Floor</td>
-                                        <td id="nineteenthFloorCount" class="font-weight-normal text-dark">{{ nineteenth_floor_count }}</td>
-                                    </tr>
+                                        <td id="nineteenthFloorCount" class="font-weight-normal text-dark">{{ nineteenth_floor_count }}</td></tr>
                                     <tr>
                                         <td>21st Floor</td>
-                                        <td id="twentyFirstFloorCount" class="font-weight-normal text-dark">{{ twenty_first_floor_count }}</td>
-                                    </tr>
+                                        <td id="twentyFirstFloorCount" class="font-weight-normal text-dark">{{ twenty_first_floor_count }}</td></tr>
                                     <tr>
                                         <td>32nd Floor</td>
                                         <td id="thirtySecondFloorCount" class="font-weight-normal text-dark">{{ thirty_second_floor_count }}</td>
@@ -75,36 +64,18 @@
                 <div class="card mb-4 shadow-lg">
                     <div class="card-header bg-primary text-white"><b>Assets Distribution by Location</b></div>
                     <div class="card-body">
-                        <canvas id="assetsPieChart" height="300"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+                        <canvas id="assetsPieChart" height="300"></canvas></div></div></div></div>
         <div class="card mb-4 shadow-lg">
             <div class="card-header">
                 <i class="fas fa-table mr-1"></i>
-                Latest IT Assets Movement
-            </div>
+                Latest IT Assets Movement</div>
             <div class="card-body">
                 <div class="table-responsive">
                     {% if assets|length < 1 %}
                     <h4>There are no assets, you may add one in the Inventory</h4>
                     {% else %}
                     <table class="table table-bordered table-hover" id="dashboardTable" width="100%" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th>Site</th>
-                                <th>Asset Type</th>
-                                <th>Brand</th>
-                                <th>Serial Number</th>
-                                <th>Location</th>
-                                <th>Campaign</th>
-                                <th>Station Number</th>
-                                <th>Model</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                        <thead><tr><th>Site</th><th>Asset Type</th><th>Brand</th><th>Serial Number</th><th>Location</th><th>Campaign</th><th>Station Number</th><th>Model</th></tr></thead><tbody>
                             {% for asset in assets %}
                             {% if session['user_role'] in ['Super-Admin', 'Admin'] %}
                             <tr data-serial="{{ asset.serial_no }}" onclick="redirectToInventory('{{ asset.serial_no }}')">
@@ -115,43 +86,19 @@
                             {% if session['user_role'] in ['User'] %}
                             <tr>
                             {% endif %}
-                                <td>{{ asset.site }}</td>
-                                <td>{{ asset.asset_type }}</td>
-                                <td>{{ asset.brand }}</td>
-                                <td>{{ asset.serial_no }}</td>
-                                <td>{{ asset.location }}</td>
-                                <td>{{ asset.campaign }}</td>
-                                <td>{{ asset.station_no }}</td>
-                                <td>{{ asset.model }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
+                                <td>{{ asset.site }}</td><td>{{ asset.asset_type }}</td><td>{{ asset.brand }}</td><td>{{ asset.serial_no }}</td><td>{{ asset.location }}</td><td>{{ asset.campaign }}</td><td>{{ asset.station_no }}</td><td>{{ asset.model }}</td></tr>
+                            {% endfor %}</tbody></table>{% endif %}</div></div></div></div>
 </main>
-
-<!-- Include Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const checkboxes = document.querySelectorAll(".form-check-input");
         const table = document.getElementById("dashboardTable");
         const rows = table.querySelectorAll("tbody tr");
-
-        // Function to redirect to inventory
         window.redirectToInventory = function(serialNo) {
-            // Redirect to the inventory section with the asset's serial number
             window.location.href = `/inventory?serial_no=${serialNo}`;
         };
-
-        // Function to redirect to Super-User Inventory
         window.redirectToRequestInventory = function(serialNo) {
-            // Redirect to the inventory section with the asset's serial number
             window.location.href = `/request-inventory?serial_no=${serialNo}`;
         };
 
@@ -181,79 +128,15 @@ const locations = [
 ];
 
         const assetsPieChart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: locations,
-                datasets: [{
+            type: 'pie',data: {labels: locations,datasets: [{
                     label: 'Asset Distribution',
                     data: assetCounts,
-                    backgroundColor: [
-                        '#FF6384',
-                        '#36A2EB',
-                        '#FFCE56',
-                        '#4BC0C0',
-                        '#9966FF'
-                    ],
-                    borderColor: '#fff',
-                    borderWidth: 2,
-                    hoverBackgroundColor: [
-                        '#FF7394',
-                        '#46B2FB',
-                        '#FFD366',
-                        '#5BD0D0',
-                        '#AA76FF'
-                    ]
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'right',
-                        align: 'center',
-                        labels: {
-                            boxWidth: 20,
-                            padding: 20,
-                            font: {
-                                size: 14,
-                                family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-                                weight: 'bold',
-                            },
-                            color: '#333',
-                        }
-                    },
-                    tooltip: {
-                        enabled: true,
-                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                        titleFont: {
-                            size: 16,
-                            weight: 'bold',
-                        },
-                        bodyFont: {
-                            size: 14,
-                        },
-                        callbacks: {
-                            label: function(tooltipItem) {
-                                return `${tooltipItem.label}: ${tooltipItem.raw} assets`;
-                            }
-                        }
-                    }
-                },
-                layout: {
-                    padding: {
-                        top: 10,
-                        bottom: 10,
-                        left: 10,
-                        right: 10
-                    }
-                },
-                animation: {
-                    animateRotate: true,
-                    animateScale: true
-                }
-            }
-        });
-    });
+                    backgroundColor: ['#FF6384','#36A2EB','#FFCE56','#4BC0C0','#9966FF'],
+                    borderColor: '#fff', borderWidth: 2, hoverBackgroundColor: ['#FF7394','#46B2FB','#FFD366','#5BD0D0','#AA76FF']}]},
+            options: {responsive: true,maintainAspectRatio: false,
+                plugins: {legend: {position: 'right',align: 'center',labels: {boxWidth: 20,padding: 20,font: {size: 14,family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",weight: 'bold',},color: '#333',}},tooltip: {enabled: true,backgroundColor: 'rgba(0, 0, 0, 0.7)',titleFont: {size: 16,weight: 'bold',},
+                        bodyFont: {size: 14,},callbacks: {label: function(tooltipItem) {return `${tooltipItem.label}: ${tooltipItem.raw} assets`;}}}},
+                layout: {padding: {top: 10,bottom: 10,left: 10,right: 10}},
+                animation: {animateRotate: true,animateScale: true}}});});
     </script>
 {% endblock %}
