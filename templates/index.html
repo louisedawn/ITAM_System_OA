@@ -28,48 +28,23 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="storageRoom" name="location" value="Storage Room">
-                                                <label class="form-check-label" for="storageRoom">Storage Room</label>
-                                            </div>
-                                        </td>
+                                        <td>Storage Room</td>
                                         <td id="storageRoomCount" class="font-weight-normal text-dark">{{ storage_room_count }}</td>
                                     </tr>
                                     <tr>
-                                        <td>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="7thFloor" name="location" value="7th Floor">
-                                                <label class="form-check-label" for="7thFloor">7th Floor</label>
-                                            </div>
-                                        </td>
+                                        <td>7th Floor</td>
                                         <td id="seventhFloorCount" class="font-weight-normal text-dark">{{ seventh_floor_count }}</td>
                                     </tr>
                                     <tr>
-                                        <td>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="19thFloor" name="location" value="19th Floor">
-                                                <label class="form-check-label" for="19thFloor">19th Floor</label>
-                                            </div>
-                                        </td>
+                                        <td>19th Floor</td>
                                         <td id="nineteenthFloorCount" class="font-weight-normal text-dark">{{ nineteenth_floor_count }}</td>
                                     </tr>
                                     <tr>
-                                        <td>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="21stFloor" name="location" value="21st Floor">
-                                                <label class="form-check-label" for="21stFloor">21st Floor</label>
-                                            </div>
-                                        </td>
+                                        <td>21st Floor</td>
                                         <td id="twentyFirstFloorCount" class="font-weight-normal text-dark">{{ twenty_first_floor_count }}</td>
                                     </tr>
                                     <tr>
-                                        <td>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="32ndFloor" name="location" value="32nd Floor">
-                                                <label class="form-check-label" for="32ndFloor">32nd Floor</label>
-                                            </div>
-                                        </td>
+                                        <td>32nd Floor</td>
                                         <td id="thirtySecondFloorCount" class="font-weight-normal text-dark">{{ thirty_second_floor_count }}</td>
                                     </tr>
                                 </tbody>
@@ -250,34 +225,6 @@
                 }
             }
         });
-
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener("change", function() {
-                filterTable();
-            });
-        });
-
-        function filterTable() {
-            const checkedBoxes = Array.from(checkboxes).filter(checkbox => checkbox.checked);
-            const filterValues = checkedBoxes.map(checkbox => checkbox.value.trim().toLowerCase());
-
-            rows.forEach(row => {
-                const locationCell = row.querySelector("td:nth-child(5)").textContent.trim().toLowerCase();
-                const campaignCell = row.querySelector("td:nth-child(6)").textContent.trim().toLowerCase();
-                const stationNoCell = row.querySelector("td:nth-child(7)").textContent.trim().toLowerCase();
-
-                const matchesLocation = filterValues.includes(locationCell);
-                const matchesStorageRoomCamp = filterValues.includes('storage room') && campaignCell === 'storage room';
-                const matchesStorageRoom = filterValues.includes('storage room') && stationNoCell === 'storage room';
-
-                if (filterValues.length === 0 || matchesLocation || matchesStorageRoomCamp ||matchesStorageRoom) {
-                    row.style.display = "";
-                } else {
-                    row.style.display = "none";
-                }
-            });
-        }
     });
-</script>
-
+    </script>
 {% endblock %}
